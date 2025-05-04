@@ -1,0 +1,586 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title_block %}Authentication{% endblock %}
+
+{% block head_block %}
+<link rel="icon" type="image/x-icon" href="{% static 'assets/logos/leaf.png' %}">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<style>
+        :root {
+            --primary-color: #212A2F;
+            --secondary-color: #F7F7F7;
+            --accent-color: #4D5559;
+            --toggle-height: 40px;
+            --form-width: 480px;
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            min-height: 100vh;
+            font-family: 'Vollkorn', serif;
+            color: var(--primary-color);
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .leaf {
+            position: absolute;
+            width: 25px;
+            height: 25px;
+            background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23212A2F' opacity='0.15'%3E%3Cpath d='M12 2L8 6H4l4 4-4 4h4l4 4 4-4h4l-4-4 4-4h-4z'/%3E%3C/svg%3E") no-repeat;
+            pointer-events: none;
+            animation: falling linear infinite;
+            z-index: -1;
+        }
+        @keyframes falling {
+            0% {
+                transform: translateY(-100px) translateX(0) rotate(0deg);
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: translateY(100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            background-color: rgba(255, 255, 255, 0.95);
+            position: relative;
+            z-index: 1;
+            flex: 1;
+            padding: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+            width: 100%;
+            max-width: var(--form-width);
+            overflow: visible;
+            position: relative;
+            padding: 30px;
+            height: 100%;
+        }
+
+        .toggle-container {
+            width: 100%;
+            padding: 4px;
+            position: relative;
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .toggle-options {
+            display: flex;
+            position: relative;
+            height: var(--toggle-height);
+        }
+
+        .toggle-option {
+            transition: color 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            flex: 1;
+            text-align: center;
+            line-height: var(--toggle-height);
+            cursor: pointer;
+            position: relative;
+            z-index: 2;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            font-size: 1rem;
+            color: var(--accent-color);
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+            background-color: var(--primary-color);
+            border-radius: 6px;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .auth-card.show-signup .toggle-slider {
+            transform: translateX(100%);
+        }
+
+        .toggle-option.active {
+            color: white;
+        }
+
+        .form-control {
+            height: 44px;
+            border: 1.5px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 0 14px;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(33, 42, 47, 0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border: none;
+            height: 44px;
+            font-weight: 600;
+            width: 100%;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--accent-color);
+            transform: translateY(-1px);
+        }
+
+        .form-label {
+            color: var(--primary-color);
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .auth-footer {
+            text-align: center;
+            margin-top: 18px;
+            color: var(--accent-color);
+            font-size: 0.85rem;
+        }
+
+        .auth-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .auth-footer a:hover {
+            color: var(--accent-color);
+        }
+
+        .form-check-label {
+            font-size: 0.85rem;
+            color: var(--accent-color);
+        }
+
+        .form-check-input:checked {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .forms-container {
+            position: relative;
+            height: auto;
+            min-height: 350px;
+            overflow: visible;
+        }
+
+        .footer .container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+        }
+
+        .form-section {
+            position: absolute;
+            width: 100%;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 1;
+            padding: 0 15px;
+            transform-origin: center;
+        }
+
+        .login-form {
+            transform: rotateY(0deg);
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .signup-form {
+            transform: rotateY(90deg);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .auth-card.show-signup .login-form {
+            transform: rotateY(-90deg);
+            opacity: 0;
+            z-index: 1;
+        }
+
+        .auth-card.show-signup .signup-form {
+            transform: rotateY(0deg);
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .forms-container {
+            perspective: 1000px;
+            transform-style: preserve-3d;
+        }
+
+        /* Messages styling */
+        .messages {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .messages li {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+
+        .messages .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .messages .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        /* Updated Footer Styles */
+        .footer {
+            background-color: #000 !important;
+            padding: 15px 0 !important;
+            margin-top: auto;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            position: relative;
+            width: 100%;
+            z-index: 2;
+            height: auto;
+            max-height: 180px;
+        }
+
+        .footer-column {
+            min-width: 120px !important;
+            margin: 0 5px !important;
+        }
+
+        .footer-column h3 {
+            font-size: 12px !important;
+            color: white !important;
+            margin-bottom: 8px !important;
+        }
+
+        .footer-column ul {
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .footer-column ul li {
+            margin: 2px 0 !important;
+            font-size: 11px !important;
+            line-height: 1.2 !important;
+        }
+
+        .footer-column ul li a {
+            color: #ffffff80 !important;
+            text-decoration: none;
+        }
+
+        .flags {
+            margin: 5px 0 !important;
+            padding: 5px 0 !important;
+        }
+
+        .flags img {
+            width: 20px !important;
+            height: 20px !important;
+        }
+
+        .footer-bottom {
+            padding: 5px !important;
+            background-color: #000 !important;
+            font-size: 10px !important;
+            color: #ffffff80 !important;
+        }
+
+        .footer-column h3,
+        .footer-column ul li,
+        .footer-bottom {
+            font-size: 16px !important;
+        }
+
+        .btn-primary {
+            background-color: #212A2F !important;
+        }
+
+        .btn-primary:hover {
+            background-color: #4D5559 !important;
+        }
+
+        /* Password strength meter styles */
+        .password-strength-meter {
+            margin-bottom: 1rem;
+        }
+
+        .strength-bar {
+            height: 6px;
+            background-color: #e5e7eb;
+            border-radius: 3px;
+            margin-bottom: 0.5rem;
+            overflow: hidden;
+        }
+
+        .strength-indicator {
+            height: 100%;
+            width: 0;
+            transition: width 0.3s ease, background-color 0.3s ease;
+        }
+
+        .strength-indicator.weak {
+            background-color: #ef4444;
+        }
+
+        .strength-indicator.medium {
+            background-color: #f59e0b;
+        }
+
+        .strength-indicator.strong {
+            background-color: #10b981;
+        }
+
+        .strength-text {
+            font-size: 0.875rem;
+            color: #6b7280;
+            text-align: right;
+        }
+
+        .input-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .eye-icon {
+            font-size: 1.25rem;
+            opacity: 0.6;
+            transition: opacity 0.2s ease;
+        }
+
+        .toggle-password:hover .eye-icon {
+            opacity: 1;
+        }
+</style>
+{% endblock %}
+
+{% block main_block %}
+<div class="auth-container d-flex align-items-center justify-content-center">
+    <div class="auth-card">
+        <div class="p-3 p-md-4">
+            <!-- Display Django messages -->
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %} 
+
+            <div class="toggle-container">
+                <div class="toggle-options">
+                    <div class="toggle-option active" onclick="toggleForm('login')">Sign In</div>
+                    <div class="toggle-option" onclick="toggleForm('signup')">Sign Up</div>
+                    <div class="toggle-slider"></div>
+                </div>
+            </div>
+
+            <div class="forms-container">
+                <!-- Login Form -->
+                <div class="form-section login-form">
+                    <form id="loginForm" method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
+                        <div class="mb-1">
+                            <label for="email" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+                        <div class="mb-1">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" name="password" required>
+                        </div>
+                        <div class="mb-2 form-check">
+                            <input type="checkbox" class="form-check-input" id="remember" name="remember">
+                            <label class="form-check-label" for="remember">Remember me</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign In</button>
+                        <div class="auth-footer">
+                            <a href="{% url 'change_password' %}?source=forgot">Forgot password?</a>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Signup Form -->
+                <div class="form-section signup-form">
+                    <form id="signupForm" method="post" action="{% url 'register' %}">
+                        {% csrf_token %}
+                        <div class="mb-1">
+                            <label for="signup-name" class="form-label">Full Name</label>
+                            <input type="text" class="form-control" id="signup-name" name="name" required>
+                        </div>
+                        <div class="mb-1">
+                            <label for="signup-email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="signup-email" name="email" required>
+                        </div>
+                        <div class="mb-1">
+                            <label for="signup-phone" class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="signup-phone" name="phone_number">
+                        </div>
+                        <div class="mb-1">
+                            <label for="signup-password" class="form-label">Password</label>
+                            <div class="input-container">
+                                <input type="password" class="form-control" id="signup-password" name="password1" required>
+                                <span class="toggle-password" onclick="togglePasswordVisibility('signup-password')">
+                                    <span class="eye-icon">🔑</span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="mb-1">
+                            <label for="signup-password2" class="form-label">Confirm Password</label>
+                            <div class="input-container">
+                                <input type="password" class="form-control" id="signup-password2" name="password2" required>
+                                <span class="toggle-password" onclick="togglePasswordVisibility('signup-password2')">
+                                    <span class="eye-icon">🔑</span>
+                                </span>
+                            </div>
+                        </div>
+                        <!-- Password strength meter -->
+                        <div class="password-strength-meter">
+                            <div class="strength-bar">
+                                <div class="strength-indicator" id="strength-indicator"></div>
+                            </div>
+                            <div class="strength-text" id="strength-text">Password strength</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Create falling leaf animation
+    function createLeaf() {
+        const container = document.querySelector('.auth-container');
+        const leaf = document.createElement('div');
+        leaf.className = 'leaf';
+        leaf.style.left = Math.random() * container.offsetWidth + 'px';
+        leaf.style.animationDuration = Math.random() * 3 + 2 + 's';
+        container.appendChild(leaf);
+
+        setTimeout(() => {
+            leaf.remove();
+        }, 5000);
+    }
+
+    setInterval(createLeaf, 300);
+
+    function toggleForm(formType) {
+        const card = document.querySelector('.auth-card');
+        const options = document.querySelectorAll('.toggle-option');
+
+        if (formType === 'signup') {
+            card.classList.add('show-signup');
+            options[1].classList.add('active');
+            options[0].classList.remove('active');
+        } else {
+            card.classList.remove('show-signup');
+            options[0].classList.add('active');
+            options[1].classList.remove('active');
+        }
+    }
+
+    // Toggle password visibility
+    function togglePasswordVisibility(inputId) {
+        const input = document.getElementById(inputId);
+        if (input.type === "password") {
+            input.type = "text";
+        } else {
+            input.type = "password";
+        }
+    }
+
+    // Password strength meter
+    document.addEventListener('DOMContentLoaded', function () {
+        const passwordInput = document.getElementById('signup-password');
+        if (passwordInput) {
+            passwordInput.addEventListener('input', function () {
+                updatePasswordStrength(this.value);
+            });
+        }
+    });
+
+    function updatePasswordStrength(password) {
+        const indicator = document.getElementById('strength-indicator');
+        const text = document.getElementById('strength-text');
+
+        if (!password) {
+            indicator.style.width = '0%';
+            indicator.className = 'strength-indicator';
+            text.textContent = 'Password strength';
+            return;
+        }
+
+        // Simple password strength calculation
+        let strength = 0;
+
+        // Length check
+        if (password.length >= 8) strength += 25;
+
+        // Character variety checks
+        if (/[A-Z]/.test(password)) strength += 25;
+        if (/[0-9]/.test(password)) strength += 25;
+        if (/[^A-Za-z0-9]/.test(password)) strength += 25;
+
+        // Update UI
+        indicator.style.width = strength + '%';
+
+        if (strength < 50) {
+            indicator.className = 'strength-indicator weak';
+            text.textContent = 'Weak password';
+        } else if (strength < 75) {
+            indicator.className = 'strength-indicator medium';
+            text.textContent = 'Medium password';
+        } else {
+            indicator.className = 'strength-indicator strong';
+            text.textContent = 'Strong password';
+        }
+    }
+</script>
+
+{% endblock %}

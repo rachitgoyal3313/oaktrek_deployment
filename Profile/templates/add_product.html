@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block main_block %}
+<div class="container mt-4">
+    <h1>{% if is_edit %}Edit Product{% else %}Add New Product{% endif %}</h1>
+    
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="product_name" class="form-label">Product Name</label>
+            <input type="text" class="form-control" id="product_name" name="product_name" value="{{ product.product_name|default:'' }}" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="category" class="form-label">Category</label>
+            <select class="form-select" id="category" name="category" required>
+                {% for value, display in categories %}
+                    <option value="{{ value }}" {% if product.category == value %}selected{% endif %}>{{ display }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label for="gender" class="form-label">Gender</label>
+            <select class="form-select" id="gender" name="gender" required>
+                {% for value, display in gender_choices %}
+                    <option value="{{ value }}" {% if product.gender == value %}selected{% endif %}>{{ display }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" step="0.01" class="form-control" id="price" name="price" value="{{ product.price|default:'' }}" required>
+        </div>
+        
+        <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3">{{ product.description|default:'' }}</textarea>
+        </div>
+        
+        <div class="mb-3">
+            <label for="image_1" class="form-label">Main Image</label>
+            <input type="file" class="form-control" id="image_1" name="image_1" {% if is_edit %}accept="image/*"{% else %}required{% endif %}>
+            {% if is_edit and product.image_1 %}
+                <small>Current image: <img src="/static/assets/products/{{ product.image_1 }}" alt="{{ product.product_name }}" style="width: 50px; height: 50px; object-fit: cover;"></small>
+            {% endif %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">{% if is_edit %}Update Product{% else %}Add Product{% endif %}</button>
+        <a href="{% url 'adminProducts' %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

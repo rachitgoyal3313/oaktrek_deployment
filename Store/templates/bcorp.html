@@ -1,0 +1,478 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title_block %} BCorp {% endblock %}
+
+{% block style_block %}
+<style>
+
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+
+* {
+  font-family: "Poppins", sans-serif;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  color: #212529;
+  line-height: 1.6;
+  background-color: #ffffff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Banner Section */
+#banner {
+  width: 100%;
+  height: 600px;
+  object-fit: cover;
+  margin-top: 100px;
+  margin-bottom: 80px;
+  border-radius: 12px;
+}
+
+/* Content Sections */
+.content-section {
+  max-width: 750px;
+  margin: 0 auto 80px;
+  text-align: center;
+}
+
+.content-section p {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  margin-bottom: 40px;
+  color: #555;
+  font-weight: 300;
+}
+
+h1 {
+  font-size: 2.2rem;
+  line-height: 1.4;
+  margin-bottom: 60px;
+  text-align: center;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: 600;
+  color: #333;
+}
+
+h2 {
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 30px;
+}
+
+.product-section {
+  margin-bottom: 100px;
+}
+
+.product-image {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  margin: 0 auto 60px;
+  display: block;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+}
+
+/* Email Signup Section */
+.emailnotify {
+  background-color: #f7f7f7;
+  width: 100%;
+  max-width: 100%;
+  margin: 120px 0;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.emailnotify h2 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.emailnotify p {
+  font-size: 1.1rem;
+  max-width: 650px;
+  margin: 0 auto 30px;
+  color: #555;
+}
+
+.emailnotify form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+#email {
+  flex: 1;
+  min-width: 250px;
+  height: 50px;
+  border: 1px solid #e0e0e0;
+  border-radius: 4px;
+  padding: 0 15px;
+  font-size: 1rem;
+  margin-right: 10px;
+}
+
+.btn-dark {
+  background-color: #212529;
+  color: white;
+  border: none;
+  height: 50px;
+  padding: 0 30px;
+  border-radius: 4px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn-dark:hover {
+  background-color: #343a40;
+}
+
+/* Initiatives Section */
+#initiativeheading {
+  text-align: center;
+  margin: 100px 0 40px;
+  font-size: 2rem;
+  color: #333;
+}
+
+.initiatives {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: center;
+  gap: 20px;
+  padding: 0 20px;
+  max-width: 1200px;
+  margin: 0 auto 80px;
+  overflow-x: auto; /* For smaller screens */
+}
+
+.member {
+  flex: 0 0 auto;
+  width: calc(25% - 15px);
+  min-width: 250px;
+}
+
+.card {
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  transition: transform 0.3s ease-in-out;
+}
+
+.card-body {
+  padding: 20px;
+  text-align: center;
+}
+
+.card-body h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.card-text {
+  color: #666;
+  font-size: 0.95rem;
+}
+
+.disnon {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  height: 100%;
+}
+
+/* Approach Section */
+#approachhead {
+  margin-top: 100px;
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.parentpara {
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 30px;
+  margin: 0 auto 100px;
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+.childpara {
+  flex: 1;
+  padding: 30px;
+  background-color: #f8f9fa;
+  border-radius: 12px;
+  text-align: center;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.childpara:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+.childpara h4 {
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  color: #333;
+}
+
+.childpara p {
+  color: #555;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .initiatives {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 992px) {
+  .parentpara {
+    flex-wrap: wrap;
+  }
+  
+  .childpara {
+    min-width: calc(50% - 15px);
+  }
+  
+  .member {
+    width: calc(50% - 10px);
+  }
+}
+
+@media (max-width: 768px) {
+  #banner {
+    height: 400px;
+    margin-top: 80px;
+    margin-bottom: 60px;
+  }
+
+  .content-section {
+    margin-bottom: 60px;
+  }
+
+  .content-section p {
+    font-size: 1.05rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+    margin-bottom: 40px;
+  }
+  
+  h2 {
+    font-size: 1.6rem;
+  }
+
+  .emailnotify {
+    margin: 80px 0;
+    padding: 40px 20px;
+  }
+
+  .emailnotify h2 {
+    font-size: 1.7rem;
+  }
+  
+  .emailnotify form {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  #email {
+    width: 100%;
+    margin-right: 0;
+    margin-bottom: 15px;
+  }
+  
+  .btn-dark {
+    width: 100%;
+  }
+  
+  .childpara {
+    min-width: 100%;
+    margin-bottom: 20px;
+  }
+  
+  .member {
+    width: 100%;
+    max-width: 350px;
+    margin-bottom: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  #banner {
+    height: 300px;
+  }
+
+  .content-section p {
+    font-size: 1rem;
+  }
+
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  .emailnotify h2 {
+    font-size: 1.5rem;
+  }
+  
+  .initiatives {
+    padding: 0 10px;
+  }
+  
+  .card-img-top {
+    height: 160px;
+  }
+}
+
+</style>
+{% endblock %}
+
+
+
+
+{% block main_block %}
+<div class="container">
+  <img src="{% static 'assets/products/bcrop0.png' %}" id="banner" alt="Sheep on hillside">
+
+  <div class="content-section">
+    <p>A team of innovators, Divyansh, Pushkar, Rachit, and Pawni, embarked on a journey to build a seamless integration
+      of front-end and back-end technologies. Driven by curiosity and a vision for innovation, we questioned why
+      creating a dynamic, user-friendly website couldn't be both efficient and scalable. With that spirit of
+      exploration, our project began. After extensive research and development, we combined our skills to craft a
+      platform that bridges functionality with an intuitive design. The outcome? A well-integrated website with a strong
+      foundation—one that will continue to evolve as we add more features in the future.</p>
+  </div>
+
+  <div class="product-section">
+    <img src="{% static 'assets/products/bcorp1.png' %}" class="product-image" alt="Product features">
+  </div>
+
+  <h1>The journey to making better things in a better way is a long one, and we're just getting started. Here are a few
+    of our proudest moments so far:</h1>
+</div>
+
+<div class="emailnotify">
+  <div>
+    <h2><b>Sign in the Loop of Our Progress</b></h2>
+    <br />
+    <p>
+      <b>Sign up for email updates and we'll keep you posted as we continue to work towards <br />
+        our long-term sustainability goals.</b>
+    </p>
+  </div>
+  <br />
+  <div>
+    <form action="#" method="POST">
+      {% csrf_token %}
+      <input type="email" name="email" id="email" placeholder="Enter your email" />
+      <input type="submit" value="SIGNUP" class="btn btn-dark" />
+    </form>
+  </div>
+</div>
+
+<h2 id="initiativeheading"><b>OakTrek Sustainability Initiatives</b></h2>
+<div class="initiatives">
+  <div class="member">
+    <a href="{% url 'sustainability' %}" class="disnon">
+      <div class="card">
+        <img src="{% static 'assets/products/member1.png' %}" class="card-img-top cardimage" alt="MO.ONSHOT" />
+        <div class="card-body">
+          <h3><b>Introducing MO.ONSHOT</b></h3>
+          <p class="card-text">Learn more about the World's first net zero carbon shoe...</p>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="member">
+    <a href="{% url 'bcorp' %}" class="disnon">
+      <div class="card">
+        <img src="{% static 'assets/products/member3.png' %}" class="card-img-top cardimage" alt="MO.ONSHOT" />
+        <div class="card-body">
+          <h3><b>We're a Certified B Corp</b></h3>
+          <p class="card-text">From the very beginning, the environment...</p>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="member">
+    <a href="{% url 'moonshot' %}" class="disnon">
+      <div class="card">
+        <img src="{% static 'assets/products/member4.png' %}" class="card-img-top cardimage" alt="MO.ONSHOT" />
+        <div class="card-body">
+          <h3><b>Giving Mother Nature a seat at the Table</b></h3>
+          <p class="card-text">We're prioritizing the planet...</p>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="member">
+    <a href="{% url 'adidasxoaktrek' %}" class="disnon">
+      <div class="card">
+        <img src="{% static 'assets/products/member5.png' %}" class="card-img-top cardimage" alt="MO.ONSHOT" />
+        <div class="card-body">
+          <h3><b>Adidas X Oaktrek</b></h3>
+          <p class="card-text">We teamed up with Adidas...</p>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<h2 id="approachhead"><b>The OakTree Approach</b></h2>
+<div class="parentpara">
+  <div class="childpara">
+    <h4><b>Wear All Day Comfort</b></h4>
+    <p>Lightweight, bouncy, and wildly comfortable, Allbirds shoes make any outing feel effortless. Slip in, lace up, or
+      slide them on and enjoy the comfy support</p>
+  </div>
+  <div class="childpara">
+    <h4><b>Sustainability in Every Step</b></h4>
+    <p>From materials to transport, we're working to reduce our carbon footprint to near zero. Holding ourselves
+      accountable and striving for climate goals isn't a 30-year goal—it's now.</p>
+  </div>
+  <div class="childpara">
+    <h4><b>Materials from the Earth</b></h4>
+    <p>We replace petroleum-based synthetics with natural alternatives wherever we can. Like using wool, tree fiber, and
+      sugar cane. They're soft, breathable, and better for the planet—win, win, win.</p>
+  </div>
+</div>
+
+{% endblock %}

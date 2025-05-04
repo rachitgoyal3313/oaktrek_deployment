@@ -1,0 +1,1046 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style_block %}
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Font Awesome for Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    .thumbnail-button {
+        width: 60px;
+        height: 60px;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 2px solid #e5e5e5;
+        cursor: pointer;
+        padding: 0;
+        background: none;
+        transition: border-color 0.3s ease;
+    }
+
+    .thumbnail-button img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .thumbnail-button.selected {
+        border-color: #212529;
+    }
+
+    .main-image-container {
+        position: relative;
+        overflow: hidden;
+        cursor: zoom-in;
+    }
+
+    .main-image-container img {
+        transition: transform 0.3s ease;
+        width: 100%;
+        height: auto;
+    }
+
+    .zoomed {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(255, 255, 255, 0.95);
+        z-index: 1000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: zoom-out;
+    }
+
+    .zoomed img {
+        max-height: 90vh;
+        max-width: 90vw;
+        object-fit: contain;
+    }
+
+    .thumbnail-button {
+        width: 60px;
+        height: 60px;
+        border-radius: 6px;
+        overflow: hidden;
+        border: 2px solid #e5e5e5;
+        cursor: pointer;
+        padding: 0;
+        background: none;
+    }
+
+    .thumbnail-button img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .thumbnail-button.selected {
+        border-color: #212529;
+    }
+
+    .size-button {
+        padding: 0.75rem;
+        border: 2px solid #e5e5e5;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-align: center;
+        min-width: 50px;
+        background: white;
+        font-weight: 500;
+    }
+
+    .size-button:hover {
+        border-color: #212529;
+    }
+
+    .size-button.selected {
+        background-color: #212529;
+        color: white;
+        border-color: #212529;
+    }
+
+    .color-swatch {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        border: 2px solid #e5e5e5;
+        cursor: pointer;
+        margin-right: 0.5rem;
+    }
+
+    .color-swatch.selected {
+        border-color: #212529;
+    }
+
+    .reviews-link {
+        text-decoration: none;
+        color: #666;
+        font-size: 0.9rem;
+    }
+
+    .reviews-link:hover {
+        color: #212529;
+        text-decoration: underline;
+    }
+
+    .add-to-cart {
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .product-features {
+        border-top: 1px solid #e5e5e5;
+        margin-top: 2rem;
+        padding-top: 2rem;
+    }
+
+    .feature-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 1rem;
+    }
+
+    .feature-icon {
+        width: 24px;
+        margin-right: 1rem;
+        opacity: 0.7;
+    }
+
+    .feature-card {
+        border: none;
+        background: transparent;
+    }
+
+    .feature-card img {
+        width: 100%;
+        aspect-ratio: 4/3;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .feature-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.75rem;
+        color: #333;
+    }
+
+    .feature-description {
+        color: #666;
+        line-height: 1.6;
+        font-size: 1rem;
+    }
+
+    .features-section {
+        padding: 5rem 0;
+        background-color: #f8f8f8;
+    }
+
+    .accordion-section {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+    }
+
+    .accordion-button {
+        padding: 1.5rem 0;
+        font-weight: 600;
+        font-size: 1.25rem;
+        color: #333;
+        background: none;
+    }
+
+    .accordion-button:not(.collapsed) {
+        color: #333;
+        background: none;
+        box-shadow: none;
+    }
+
+    .accordion-button:focus {
+        box-shadow: none;
+        border-color: rgba(0, 0, 0, .125);
+    }
+
+    .accordion-item {
+        border-left: 0;
+        border-right: 0;
+        border-color: #dee2e6;
+    }
+
+    .accordion-body {
+        padding: 1rem 0 2rem 0;
+    }
+
+    .info-banner {
+        background: #f8f8f8;
+        padding: 4rem 0;
+        margin-top: 3rem;
+    }
+
+    .info-banner h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+    }
+
+    .info-banner p {
+        color: #666;
+        margin-bottom: 0;
+    }
+
+    .info-divider {
+        width: 1px;
+        background-color: #dee2e6;
+        height: 40px;
+        margin: 0 5rem;
+    }
+
+    .shoe-card {
+        transition: transform 0.2s;
+    }
+
+    .shoe-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .scroll-container {
+        position: relative;
+        overflow: hidden;
+    }
+
+    .scroll-wrapper {
+        overflow-x: auto;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .scroll-wrapper::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* .nav-link{
+        font-size: 13.6px;
+    } */
+
+    .prod {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .nav-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 100;
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-prev {
+        left: 10px;
+    }
+
+    .nav-next {
+        right: 10px;
+    }
+
+    .reviews-section {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 4rem 1rem;
+    }
+
+    .reviews-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .reviews-header h2 {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .rating-big {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-right: 0.5rem;
+    }
+
+    .stars {
+        color: #333;
+        font-size: 1.25rem;
+    }
+
+    .review-filters {
+        margin-bottom: 3rem;
+    }
+
+    .filter-select {
+        width: 100%;
+        padding: 0.75rem;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        background-color: white;
+        cursor: pointer;
+    }
+
+    .review-card {
+        border-bottom: 1px solid #dee2e6;
+        padding: 2rem 0;
+    }
+
+    .review-title {
+        font-size: 1.25rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .review-image {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+        border-radius: 4px;
+        margin-top: 1rem;
+    }
+
+    .review-content {
+        color: #333;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    /* New styles for validation messages */
+    .validation-message {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+        display: none;
+    }
+</style>
+
+<style>
+    .star-rating {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+    }
+
+    .star-rating input {
+        display: none;
+    }
+
+    .star-rating label {
+        cursor: pointer;
+    }
+
+    .star-rating i {
+        font-size: 2rem;
+        color: inherit;
+        transition: all 0.2s ease;
+    }
+
+    /* Set all to empty by default */
+    .star-rating label i::before {
+        content: "\f006"; /* Unicode for far fa-star (empty) */
+        font-family: "Font Awesome 5 Free";
+        font-weight: 400;
+    }
+
+    /* On checked or hover, make stars filled */
+    .star-rating input:checked ~ label i::before,
+    .star-rating label:hover i::before,
+    .star-rating label:hover ~ label i::before {
+        content: "\f005"; /*Unicode for fas fa-star (solid) */
+        font-family: "Font Awesome 5 Free";
+        font-weight: 900;
+    }
+</style>
+
+
+{% endblock %}
+
+{% block main_block %}
+<!-- Product Display Section -->
+<div class="container py-5">
+    <div class="row g-5">
+        <!-- Product Images Column -->
+        <div class="col-lg-7">
+            <div class="d-flex">
+                <div class="d-flex flex-column me-3">
+                    {% for image_field in product_images %}
+                        {% if image_field %}
+                            <button class="thumbnail-button mb-2 {% if forloop.first %}selected{% endif %}"
+                                    onclick="selectImage('{{ forloop.counter0 }}', '{{ image_field.url|escapejs }}')">
+                                <img src="{{ image_field.url }}"
+                                    alt="{{ product.product_name }} - View {{ forloop.counter }}" width="60" height="60">
+                            </button>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="flex-grow-1 main-image-container" id="mainImageContainer">
+                    {% if product.image_1 %}
+                        <img id="mainImage" src="{{ product.image_1.url }}"
+                            alt="{{ product.product_name }}" class="img-fluid rounded">
+                    {% else %}
+                        <img id="mainImage" src="{% static 'assets/products/placeholder.jpg' %}"
+                            alt="{{ product.product_name }}" class="img-fluid rounded">
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Details Column -->
+        <div class="col-lg-5">
+            <div class="product-details">
+                <h1>{{ product.product_name }}</h1>
+                <div class="price mb-4">₹{{ product.price }}</div>
+
+                <!-- Color Selection -->
+                <div class="mb-4">
+                    <div class="text-muted mb-2">Color: <span id="selectedColor">Natural Black</span></div>
+                    <div class="d-flex">
+                        <button type="button" class="color-swatch selected" style="background-color: #212529;"
+                                onclick="selectColor('Natural Black', this)"></button>
+                        <button type="button" class="color-swatch" style="background-color: #f5f5f5;"
+                                onclick="selectColor('Blizzard', this)"></button>
+                        <button type="button" class="color-swatch" style="background-color: #666;"
+                                onclick="selectColor('Thunder', this)"></button>
+                        <button type="button" class="color-swatch" style="background-color: #ff4d4d;"
+                                onclick="selectColor('Flare', this)"></button>
+                    </div>
+                    <div id="colorError" class="validation-message">Please select a color</div>
+                </div>
+
+                <!-- Size Selection -->
+                <div class="mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="text-muted">Select Size</div>
+                        <a href="#" class="reviews-link">Size Guide</a>
+                    </div>
+                    <div class="d-flex flex-wrap gap-2">
+                        {% for size in sizes %}
+                            <button type="button" class="size-button" onclick="selectSize('{{ size }}')">{{ size }}</button>
+                            {% if size != 14 %}
+                                <button type="button" class="size-button" onclick="selectSize('{{ size }}.5')">{{ size }}.5</button>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div id="sizeError" class="validation-message">Please select a size</div>
+                </div>
+
+                <!-- Add to Cart Form -->
+                <form action="{% url 'cart' %}" method="POST" id="addToCartForm">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_name" value="{{ product.product_name }}">
+                    <input type="hidden" name="price" value="{{ product.price }}">
+                    <input type="hidden" name="quantity" value="1">
+                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                    <input type="hidden" name="selected_color" id="selectedColorInput" value="Natural Black">
+                    <input type="hidden" name="selected_size" id="selectedSizeInput" value="">
+                    <button type="button" onclick="validateAndSubmit()" class="btn btn-dark w-100 py-3 add-to-cart mb-4">Add to Cart</button>
+                </form>
+
+                <!-- Product Features -->
+                <div class="product-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">🌱</span>
+                        <div>
+                            <strong>Sustainable Materials</strong><br>
+                            Made with natural and recycled materials
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">👟</span>
+                        <div>
+                            <strong>Performance Comfort</strong><br>
+                            Engineered for natural movement
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🔄</span>
+                        <div>
+                            <strong>30-Day Trial</strong><br>
+                            Return unworn shoes within 30 days
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Rest of your HTML remains unchanged -->
+<section class="features-section">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <img src="https://cdn.allbirds.com/image/upload/f_auto,q_auto,w_631/cms/G6952Lx3ixomTmbahfssy/4f3e6712eb38d47218381d82f52c5f0f/FINAL1M.jpg"
+                         alt="Active person wearing sneakers" class="feature-image">
+                    <h3 class="feature-title">Comfy, Breezy, Active Sneaker</h3>
+                    <p class="feature-description">
+                        Our proprietary knit feels lightweight, breathable, and pleasantly cool for long walks, gym
+                        sessions, workout classes, and light jogs thanks to a tree fiber material blend.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <img src="https://cdn.allbirds.com/image/upload/f_auto,q_auto,w_631/cms/bFjWWLHpVzSMFvZ6yqhOl/4c51cf1337dc32ade56de677f4d85d2c/FINAL2M.jpg"
+                         alt="Person wearing sneakers casually" class="feature-image">
+                    <h3 class="feature-title">Wear-All-Day Support</h3>
+                    <p class="feature-description">
+                        Engineered for the urban explorer seeking cushion, stability, and energy return, the Tree
+                        Dashers is your go-to for conquering city streets, from morning jogs to evening strolls.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="feature-card">
+                    <img src="https://cdn.allbirds.com/image/upload/f_auto,q_auto,w_631/cms/2lOX1blw95zY27LmbimF19/a3ffdaee5ab3b404b61f502978698837/FINAL3MW.jpg"
+                         alt="Clean white sneakers" class="feature-image">
+                    <h3 class="feature-title">Easy to Clean</h3>
+                    <p class="feature-description">
+                        Our shoes are machine washable—just remove the insoles and hand wash them separately—to keep
+                        every step as fresh as the first.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="accordion-section">
+    <div class="accordion" id="productAccordion">
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#innovations">
+                    Innovations
+                </button>
+            </h2>
+            <div id="innovations" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                <div class="accordion-body">
+                    <h4>Revolutionary Tree Material</h4>
+                    <p>Our proprietary knit uses sustainably sourced eucalyptus tree fiber, creating a breathable
+                        and cooling effect that's perfect for active wear. The material naturally wicks moisture and
+                        reduces odor.</p>
+
+                    <h4>Bio-Based Midsole</h4>
+                    <p>The SweetFoam™ midsole is made from sustainably sourced sugarcane, providing optimal
+                        cushioning while reducing our carbon footprint.</p>
+
+                    <h4>ZQ Merino Wool Lining</h4>
+                    <p>Premium ZQ Merino wool lining ensures temperature regulation and moisture management, while
+                        being ethically sourced from New Zealand farms.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#testing">
+                    Testing & Specs
+                </button>
+            </h2>
+            <div id="testing" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                <div class="accordion-body">
+                    <h4>Performance Testing</h4>
+                    <ul>
+                        <li>5,000+ miles of running tests</li>
+                        <li>300+ hours of athletic activity trials</li>
+                        <li>Certified for 500+ wash cycles</li>
+                    </ul>
+
+                    <h4>Technical Specifications</h4>
+                    <ul>
+                        <li>Weight: 10.5 oz (Men's size 9)</li>
+                        <li>Drop: 7mm (Heel: 15.5mm, Forefoot: 8.5mm)</li>
+                        <li>Breathability Rating: 9/10</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#sizing">
+                    Size & Fit Guidance
+                </button>
+            </h2>
+            <div id="sizing" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                <div class="accordion-body">
+                    <h4>Finding Your Perfect Fit</h4>
+                    <p>Our shoes are designed to fit true to size. For the best fit:</p>
+                    <ul>
+                        <li>If you're between sizes, we recommend sizing up</li>
+                        <li>For wide feet, consider going up half a size</li>
+                        <li>The shoe should feel snug but not tight around the midfoot</li>
+                    </ul>
+
+                    <h4>Measurement Guide</h4>
+                    <p>To measure your foot:</p>
+                    <ol>
+                        <li>Stand on a piece of paper</li>
+                        <li>Trace your foot outline</li>
+                        <li>Measure the length from heel to longest toe</li>
+                        <li>Use our size chart to find your perfect fit</li>
+                    </ol>
+
+                    <h4>Break-in Period</h4>
+                    <p>Allow 1-2 days of wear for the shoes to adapt to your foot shape. The knit material will
+                        naturally stretch slightly for a custom fit.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#care">
+                    Care Guide
+                </button>
+            </h2>
+            <div id="care" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                <div class="accordion-body">
+                    <h4>Machine Washing Instructions</h4>
+                    <ul>
+                        <li>Remove laces and insoles before washing</li>
+                        <li>Wash on cold, gentle cycle (max 30°C/86°F)</li>
+                        <li>Use mild detergent, avoid bleach</li>
+                        <li>Do not tumble dry</li>
+                        <li>Air dry away from direct heat/sunlight</li>
+                    </ul>
+
+                    <h4>Regular Maintenance</h4>
+                    <ul>
+                        <li>Brush off dry dirt with a soft brush</li>
+                        <li>Spot clean small stains with mild soap and water</li>
+                        <li>Allow shoes to dry completely between wears</li>
+                        <li>Store in a cool, dry place</li>
+                    </ul>
+
+                    <h4>What to Avoid</h4>
+                    <ul>
+                        <li>Don't use harsh chemicals or bleach</li>
+                        <li>Avoid direct heat when drying</li>
+                        <li>Don't store in damp conditions</li>
+                        <li>Don't machine wash insoles</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="accordion-item">
+            <h2 class="accordion-header">
+                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#shipping">
+                    Shipping & Returns
+                </button>
+            </h2>
+            <div id="shipping" class="accordion-collapse collapse" data-bs-parent="#productAccordion">
+                <div class="accordion-body">
+                    <h4>Shipping Information</h4>
+                    <ul>
+                        <li>Free standard shipping on orders over ₹999</li>
+                        <li>Standard Shipping (5-7 business days): ₹199</li>
+                        <li>Express Shipping (2-3 business days): ₹499</li>
+                        <li>Same-day delivery available in select cities</li>
+                    </ul>
+
+                    <h4>Return Policy</h4>
+                    <ul>
+                        <li>30-day return window for unworn items</li>
+                        <li>Free returns on all domestic orders</li>
+                        <li>Original tags must be attached</li>
+                        <li>Return shipping label provided</li>
+                    </ul>
+
+                    <h4>Exchange Process</h4>
+                    <p>Need a different size or color? Our hassle-free exchange process lets you:</p>
+                    <ul>
+                        <li>Request exchange through your account</li>
+                        <li>Use our prepaid shipping label</li>
+                        <li>Receive your new item within 7-10 days</li>
+                        <li>No additional shipping costs for exchanges</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="info-banner">
+    <div class="container-fluid">
+        <div class="d-flex justify-content-center align-items-center">
+            <div class="text-center">
+                <h3>FREE SHIPPING</h3>
+                <p>on orders over ₹999</p>
+            </div>
+            <div class="info-divider"></div>
+            <div class="text-center">
+                <h3>EASY RETURNS</h3>
+                <p>within 30 days</p>
+            </div>
+            <div class="info-divider"></div>
+            <div class="text-center">
+                <h3>VISIT US</h3>
+                <p><a href="{% url 'stores' %}" class="text-decoration-underline">Find a store near you</a></p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="reviews-section">
+    <div class="reviews-header">
+        <h2>{{ product.gender }}'s {{ product.product_name }} Reviews</h2>
+        <div class="d-flex align-items-center justify-content-center">
+            <span class="rating-big">{{ product.rating }}</span>
+            <div class="stars">
+                {% for i in star_range %}
+                        <i class="{{ i }}"></i>
+                {% endfor %}
+
+            </div>
+        </div>
+        <div class="text-muted mt-2">{{ product.reviews.count }} Reviews</div>
+    </div>
+
+    <!-- Review Filters -->
+    <div class="review-filters">
+        <div class="row g-3">
+            <div class="col-md">
+                <select class="filter-select">
+                    <option>Typical Size</option>
+                </select>
+            </div>
+            <div class="col-md">
+                <select class="filter-select">
+                    <option>Size Purchased</option>
+                </select>
+            </div>
+            <div class="col-md">
+                <select class="filter-select">
+                    <option>Activity</option>
+                </select>
+            </div>
+            <div class="col-md">
+                <select class="filter-select">
+                    <option>Typical Width</option>
+                </select>
+            </div>
+            <div class="col-md">
+                <select class="filter-select">
+                    <option>Overall Fit</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Review Cards -->
+    <div class="review-cards">
+    {% if reviews %}
+            <!-- Review card content -->
+            {% if product.reviews.exists %}
+            {% for review in product.reviews.all %}
+                <div class="review-card">
+                    <div class="stars mb-2">
+                        {% for i in "12345" %}
+                            {% if forloop.counter <= review.rating %}
+                                <i class="fas fa-star"></i>
+                            {% else %}
+                                <i class="far fa-star"></i>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <h3 class="review-title">Review by {{ review.user.username }}</h3>
+                    <p class="review-content">{{ review.comment }}</p>
+                    <small class="text-muted">{{ review.created_at|date:"F d, Y" }}</small>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="alert alert-info">No reviews yet for this product.</div>
+        {% endif %}
+
+        
+        
+        <!-- Pagination -->
+        <div class="pagination">
+            <span class="step-links">
+                {% if reviews.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ reviews.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ reviews.number }} of {{ reviews.paginator.num_pages }}.
+                </span>
+
+                {% if reviews.has_next %}
+                    <a href="?page={{ reviews.next_page_number }}">next</a>
+                    <a href="?page={{ reviews.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+            </span>
+        </div>
+    {% else %}
+        <div class="alert alert-info">No reviews yet for this product.</div>
+    {% endif %}
+</div>
+
+{% if user.is_authenticated %}
+    <div class="review-form mt-4">
+        <h3>Leave a Review</h3>
+        <form method="post" action="{% url 'add_review' product.category_slug product.slug %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="rating">Rating</label>
+                <div class="star-rating">
+                    {% for i in "54321" %}
+                        <input type="radio" id="star{{ i }}" name="rating" value="{{ i }}" required>
+                        <label for="star{{ i }}"><i></i></label>
+                    {% endfor %}
+                </div>
+            </div>            
+            <div class="mb-3">
+                <label for="comment">Your Review</label>
+                <textarea name="comment" id="comment" class="form-control" rows="4" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-dark w-100 py-3 add-to-cart mb-4">Submit Review</button>
+        </form>
+    </div>
+{% else %}
+    <p class="mt-4">Please <a href="{% url 'login' %}">login</a> to leave a review.</p>
+{% endif %}
+
+</section>
+
+
+<!-- Trending Products Section -->
+<div class="container-fluid py-5">
+    <h2 class="mb-4 ps-3">What's Trending</h2>
+    <div class="scroll-container">
+        <div class="scroll-wrapper">
+            <div class="d-flex gap-4 px-3">
+                <div class="shoe-card" style="min-width: 300px;">
+                    <a class="prod"
+                       href="{% url 'product_page' collection_name='active-shoes' product_slug='tree-flyer' %}">
+                        <img src="{% static 'assets/products/10image1.png' %}"
+                             alt="Men's Tree Flyer - Medium Grey" class="img-fluid mb-3">
+                        <h5>Men's Tree Flyer</h5>
+                        <p class="text-muted">Medium Grey</p>
+                        <p class="fw-bold">₹160</p>
+                    </a>
+                </div>
+                <div class="shoe-card" style="min-width: 300px;">
+                    <a class="prod"
+                       href="{% url 'product_page' collection_name='active-shoes' product_slug='tree-dasher-2' %}">
+                        <img src="{% static 'assets/products/9image1.png' %}"
+                             alt="Tree Dasher 2 - Blizzard" class="img-fluid mb-3">
+                        <h5>Tree Dasher 2</h5>
+                        <p class="text-muted">Blizzard</p>
+                        <p class="fw-bold">₹135</p>
+                    </a>
+                </div>
+                <div class="shoe-card" style="min-width: 300px;">
+                    <a class="prod"
+                       href="{% url 'product_page' collection_name='everyday-sneakers' product_slug='tree-runner-classic' %}">
+                        <img src="{% static 'assets/products/2image1.png' %}"
+                             alt="Men's Tree Runners - Mist" class="img-fluid mb-3">
+                        <h5>Men's Tree Runner Classic</h5>
+                        <p class="text-muted">Mist</p>
+                        <p class="fw-bold">₹98</p>
+                    </a>
+                </div>
+                <div class="shoe-card" style="min-width: 300px;">
+                    <a class="prod"
+                       href="{% url 'product_page' collection_name='slip-ons' product_slug='tree-lounger' %}">
+                        <img src="{% static 'assets/products/21image1.png' %}"
+                             alt="Men's Tree Lounger - Natural Black" class="img-fluid mb-3">
+                        <h5>Men's Tree Lounger</h5>
+                        <p class="text-muted">Natural Black</p>
+                        <p class="fw-bold">₹98</p>
+                    </a>
+                </div>
+                <div class="shoe-card" style="min-width: 300px;">
+                    <a class="prod"
+                       href="{% url 'product_page' collection_name='slip-ons' product_slug='cloud-loafer' %}">
+                        <img src="{% static 'assets/products/22image1.png' %}"
+                             alt="Men's Cloud Loafer - Natural Black" class="img-fluid mb-3">
+                        <h5>Men's Cloud Loafer</h5>
+                        <p class="text-muted">Natural Black</p>
+                        <p class="fw-bold">₹105</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <h2 class="mb-5">The OakTrek Approach</h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <h4>Wear-All-Day Comfort</h4>
+            <p>Lightweight, bouncy, and wildly comfortable. OakTrek shoes make any outing feel effortless. Slip in,
+                lace up, or slide them on and enjoy the comfy support.</p>
+        </div>
+        <div class="col-md-4">
+            <h4>Sustainability In Every Step</h4>
+            <p>From materials to transport, we're working to reduce our carbon footprint to near zero. Holding
+                ourselves accountable and striving for climate goals isn't a 30-year goal—it's now.</p>
+        </div>
+        <div class="col-md-4">
+            <h4>Materials From The Earth</h4>
+            <p>We replace petroleum-based synthetics with natural alternatives wherever we can. Like using wool,
+                tree fiber, and sugar cane. They're soft, breathable, and better for the planet—win, win, win.</p>
+        </div>
+    </div>
+</div>
+<br><br>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    let selectedImage = 0;
+
+    function selectImage(index, imageUrl) {
+        selectedImage = index;
+        document.getElementById('mainImage').src = imageUrl;
+
+        document.querySelectorAll('.thumbnail-button').forEach((btn, i) => {
+            btn.classList.toggle('selected', i === Number(index));
+        });
+    }
+
+    let selectedSize = null;
+    let selectedColor = "Natural Black"; 
+
+    function selectSize(size) {
+        selectedSize = size;
+        document.querySelectorAll('.size-button').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        event.target.classList.add('selected');
+        document.getElementById('selectedSizeInput').value = size;
+        
+        document.getElementById('sizeError').style.display = 'none';
+    }
+
+    function selectColor(color, element) {
+        selectedColor = color;
+        document.getElementById('selectedColor').textContent = color;
+        document.querySelectorAll('.color-swatch').forEach(swatch => {
+            swatch.classList.remove('selected');
+        });
+        element.classList.add('selected');
+        document.getElementById('selectedColorInput').value = color;
+        
+        document.getElementById('colorError').style.display = 'none';
+    }
+
+    function validateAndSubmit() {
+        let isValid = true;
+        
+        if (!selectedSize) {
+            document.getElementById('sizeError').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('sizeError').style.display = 'none';
+        }
+        
+        if (!selectedColor) {
+            document.getElementById('colorError').style.display = 'block';
+            isValid = false;
+        } else {
+            document.getElementById('colorError').style.display = 'none';
+        }
+        
+        if (isValid) {
+            document.getElementById('addToCartForm').submit();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const scrollContainer = document.querySelector('.scroll-wrapper');
+        const prevBtn = document.querySelector('.nav-prev');
+        const nextBtn = document.querySelector('.nav-next');
+
+        if (prevBtn && nextBtn && scrollContainer) {
+            prevBtn.addEventListener('click', () => {
+                scrollContainer.scrollBy({
+                    left: -300,
+                    behavior: 'smooth'
+                });
+            });
+
+            nextBtn.addEventListener('click', () => {
+                scrollContainer.scrollBy({
+                    left: 300,
+                    behavior: 'smooth'
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

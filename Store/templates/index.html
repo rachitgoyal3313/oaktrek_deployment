@@ -1,0 +1,1176 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title_block %} OakTrek {% endblock %}
+
+{% block style_block %}
+<style>
+    .hero-section {
+        width: 100%;
+        height: 90vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-container {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    .hero-slide {
+        position: absolute;
+        width: 100%;
+        height: 90vh;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        background-size: cover;
+        background-position: center;
+    }
+
+
+    [data-bg] {
+        background-image: var(--bg-image);
+    }
+
+    .hero-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .hero-slide.active {
+        opacity: 1;
+    }
+
+    .hero-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 2;
+        text-align: end;
+        color: white;
+        margin-top: 40vh;
+        width: 90%;
+    }
+
+    .hero-title {
+        font-size: 4rem;
+        font-family: serif;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        margin-bottom: 2rem;
+    }
+
+    /* Category Sections */
+    .category-section {
+        padding: 60px 0;
+        margin-top: 100vh;
+        position: relative;
+    }
+
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding: 0 20px;
+    }
+
+    .category-card {
+        position: relative;
+        height: 500px;
+        overflow: hidden;
+    }
+
+    .category-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        /* Add transition for hover effect */
+    }
+
+    .category-card:hover img {
+        transform: scale(1.05);
+        /* Slight zoom on hover */
+    }
+
+    .category-content {
+        position: absolute;
+        bottom: 30px;
+        left: 30px;
+        color: white;
+        z-index: 1;
+        /* Ensure text is above image */
+    }
+
+    /* Buttons */
+    .btn-allbirds {
+        background-color: white;
+        color: black;
+        padding: 12px 24px;
+        margin: 5px;
+        text-decoration: none;
+        display: inline-block;
+        min-width: 150px;
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 500;
+        border: none;
+        transition: background-color 0.3s ease, color 0.3s ease;
+        /* Smooth transition */
+        cursor: pointer;
+    }
+
+    .btn-allbirds:hover {
+        background-color: #f8f8f8;
+        color: black;
+        text-decoration: none;
+    }
+
+    .btn-light-outline {
+        background-color: transparent;
+        border: 2px solid white;
+        color: white;
+    }
+
+    .btn-light-outline:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        /* Slight background on hover */
+        color: white;
+    }
+
+    /* Main Carousel Section */
+    .carousel-container {
+        width: 100%;
+        height: 50vh;
+        /* Adjust height as needed */
+        position: relative;
+        overflow: hidden;
+        margin-top: 40px;
+        /* Add some space */
+        margin-bottom: 40px;
+    }
+
+    .carousel {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-slide {
+        flex: 0 0 50%;
+        /* Show two slides at a time */
+        height: 100%;
+        position: relative;
+        display: block;
+        /* Make the link a block element */
+        text-decoration: none;
+        /* Remove underline from link */
+        overflow: hidden;
+        /* Hide overflow */
+    }
+
+    .carousel-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .carousel-slide:hover img {
+        transform: scale(1.03);
+        /* Slight zoom on hover */
+    }
+
+
+    .slide-content {
+        position: absolute;
+        bottom: 2rem;
+        left: 2rem;
+        color: white;
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 1.25rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        /* Stronger shadow */
+        z-index: 1;
+    }
+
+    .carousel-dots {
+        position: absolute;
+        bottom: 2rem;
+        right: 2rem;
+        display: flex;
+        gap: 0.5rem;
+        z-index: 10;
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        border: none;
+        padding: 0;
+        transition: background-color 0.3s ease;
+    }
+
+    .dot.active {
+        background: white;
+    }
+
+    /* Product Showcase Section */
+    .product-showcase {
+        background-color: #fff;
+        margin-top: 60px;
+        /* Add margin */
+        margin-bottom: 60px;
+    }
+
+    /* .lifestyle-section {  -- Not directly used, styling applied to bg-navy */
+    /* min-height: 600px; */
+    /* display: flex; */
+    /* flex-direction: column; */
+    /* justify-content: space-between; */
+    /* } */
+
+    .product-card {
+        position: relative;
+        transition: transform 0.3s ease;
+        overflow: hidden;
+        /* Important for hover overlay */
+        margin-bottom: 30px;
+        text-align: center;
+        /* Center align text */
+        text-decoration: none;
+        /* Remove default link underline */
+        color: inherit;
+        /* Inherit text color */
+        display: block;
+        /* Ensure it behaves like a block */
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .bg-navy {
+        background-color: #1a394f;
+        /* Assuming this is the navy color */
+        min-height: 600px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        /* For image opacity effect */
+    }
+
+    .bg-navy img {
+        opacity: 0.9;
+        /* Slight opacity as in example */
+        transition: opacity 0.3s ease;
+    }
+
+    .bg-navy:hover img {
+        opacity: 1;
+    }
+
+
+    .price {
+        font-weight: 600;
+        color: #1a394f;
+        /* Match navy color? Or keep black? */
+    }
+
+    /* Product Carousel Styles */
+    .product-carousel {
+        width: 90%;
+        max-width: 1400px;
+        margin: 40px auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .carousel-track {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+        min-width: 100%;
+        /* Each slide takes full width */
+        display: flex;
+        gap: 24px;
+        /* Gap between cards */
+        padding: 0 12px;
+        /* Padding for visual spacing at edges */
+        box-sizing: border-box;
+    }
+
+    .product-carousel-card {
+        width: calc(25% - 18px);
+        /* 4 cards per slide, adjust for gap (24px * 3 gaps / 4 cards = 18px) */
+        text-decoration: none;
+        color: inherit;
+        flex-shrink: 0;
+        /* Prevent cards from shrinking */
+        display: block;
+        transition: transform 0.3s ease;
+        box-sizing: border-box;
+    }
+
+    .product-carousel-card:hover {
+        transform: translateY(-5px);
+        text-decoration: none;
+        color: inherit;
+    }
+    
+
+    .product-image {
+        width: 100%;
+        background-color: #f7f7f7;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        overflow: hidden;
+        aspect-ratio: 1 / 1;
+        /* Make image container square */
+        display: flex;
+        /* Center image vertically */
+        align-items: center;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: auto;
+        /* Maintain aspect ratio */
+        /* height: 100%; / / If you want to force fill */
+        /* object-fit: cover; / / Use cover if forcing fill */
+        display: block;
+    }
+
+    .product-info {
+        padding: 0 8px;
+        text-align: left;
+        /* Align text left */
+    }
+
+    .product-info h3 {
+        font-size: 16px;
+        font-weight: 500;
+        margin: 0 0 4px 0;
+        color: #000;
+        line-height: 1.2;
+        /* Adjust line height */
+        height: 2.4em;
+        /* Approx 2 lines */
+        overflow: hidden;
+        /* Hide overflow */
+    }
+
+    .product-info .color {
+        font-size: 14px;
+        color: #666;
+        margin: 0 0 4px 0;
+    }
+
+    .carousel-controls {
+        position: absolute;
+        top: 40%;
+        /* Position controls vertically */
+        width: calc(100% - 40px);
+        /* Adjust width to prevent overlap with content */
+        left: 20px;
+        /* Align with padding */
+        transform: translateY(-50%);
+        display: flex;
+        justify-content: space-between;
+        padding: 0;
+        /* Remove padding here */
+        pointer-events: none;
+        /* Allow clicks through controls div */
+        z-index: 10;
+    }
+
+    .carousel-controls label {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        pointer-events: auto;
+        /* Enable pointer events for labels */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        color: #333;
+        font-size: 20px;
+        border: 1px solid #eee;
+    }
+
+    .carousel-controls label:hover {
+        background: white;
+    }
+
+
+    /* Product hover overlay styles */
+    .product-hover-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        /* Adjust height to not cover text/price, subtract approx height of info section */
+        height: calc(100% - 80px);
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+        /* Initially not clickable */
+        z-index: 5;
+        /* Above image, below card content if needed */
+    }
+
+    .product-card:hover .product-hover-overlay {
+        opacity: 1;
+        pointer-events: auto;
+        /* Clickable on hover */
+    }
+
+    .hover-btn {
+        background: white;
+        color: black;
+        border: none;
+        padding: 12px 24px;
+        min-width: 160px;
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .hover-btn:hover {
+        background: #f8f8f8;
+    }
+
+    /* Final Promo Section */
+    .promo-section {
+        margin-top: 60px;
+        /* Space above promo */
+        margin-bottom: 40px;
+        /* Space below promo */
+    }
+
+    .promo-card {
+        position: relative;
+        height: 600px;
+        overflow: hidden;
+        cursor: pointer;
+    }
+
+    .promo-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.5s ease;
+    }
+
+    .promo-card:hover img {
+        transform: scale(1.05);
+    }
+
+    .promo-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 2rem;
+        /* Smoother gradient */
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 20%, rgba(0, 0, 0, 0) 100%);
+        opacity: 0;
+        transition: opacity 0.4s ease, transform 0.4s ease;
+        /* Add transform transition */
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        /* Align buttons to bottom */
+        transform: translateY(20px);
+        /* Start slightly lower */
+        pointer-events: none;
+        /* Allow hover on card itself */
+    }
+
+    .promo-card:hover .promo-overlay {
+        opacity: 1;
+        transform: translateY(0);
+        /* Move up into view */
+        pointer-events: auto;
+        /* Enable button clicks */
+    }
+
+    .button-group {
+        display: flex;
+        gap: 1rem;
+    }
+
+
+
+    @media (max-width: 768px) {
+
+        /* Standard mobile breakpoint */
+        .hero-title {
+            font-size: 2.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 0.8rem;
+        }
+
+        .hero-section {
+            height: 70vh;
+        }
+
+        /* Shorter hero */
+
+        .category-grid {
+            grid-template-columns: 1fr;
+            /* 1 column */
+        }
+
+        .category-card {
+            height: 400px;
+        }
+
+        .carousel-container {
+            height: 60vh;
+            /* Adjust height for mobile */
+        }
+
+        .carousel-slide {
+            flex: 0 0 100%;
+            /* Show one slide at a time */
+        }
+
+        .carousel-dots {
+            bottom: 1rem;
+            right: 1rem;
+        }
+
+        /* Adjust carousel JS logic or CSS for 1 slide view if needed */
+        .carousel.one-slide-view .carousel-slide {
+            flex: 0 0 100%;
+        }
+
+
+        .product-showcase .row>div[class^="col-"] {
+            flex-basis: 100%;
+            /* Stack columns */
+            max-width: 100%;
+        }
+
+        .bg-navy {
+            min-height: 400px;
+        }
+
+        .product-showcase .p-4 {
+            padding: 1.5rem !important;
+        }
+
+        /* Reduce padding */
+
+
+        .product-carousel-card {
+            /* Still show 2 cards per slide on mobile? Or switch to 1? */
+            /* Option 1: Keep 2 cards */
+            width: calc(50% - 12px);
+            /* Option 2: Show 1 card */
+            /* width: calc(100% - 12px); / / Adjust padding if 1 card */
+        }
+
+        .slide {
+            /* Adjust gap if needed for mobile */
+            gap: 16px;
+        }
+
+        .product-carousel {
+            width: 95%;
+        }
+
+        /* More width */
+        .carousel-controls {
+            width: calc(100% - 20px);
+            left: 10px;
+        }
+
+        .carousel-controls label {
+            width: 35px;
+            height: 35px;
+            font-size: 18px;
+        }
+
+        .promo-section .row>div[class^="col-"] {
+            flex-basis: 100%;
+            max-width: 100%;
+        }
+
+        .promo-card {
+            height: 400px;
+        }
+
+        .button-group {
+            flex-direction: column;
+            width: 100%;
+            max-width: 200px;
+            /* Limit button width */
+            gap: 0.5rem;
+            /* Reduce gap */
+        }
+
+        .btn-allbirds {
+            width: 100%;
+        }
+
+        /* Full width buttons in column */
+        .promo-overlay {
+            padding: 1.5rem;
+        }
+
+        /* Adjust product carousel for potentially 1 slide view or fewer items */
+        #slide1:checked~.carousel-track {
+            transform: translateX(0);
+        }
+
+        #slide2:checked~.carousel-track {
+            transform: translateX(-100%);
+        }
+
+        /* Might need adjustment based on items per view */
+
+    }
+</style>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+<link rel="icon" type="image/x-icon" href="{% static 'assets/logos/leaf.png' %}">
+<link rel="stylesheet" href="{% static 'css/header.css' %}">
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+
+{% endblock %}
+
+{% block title %} Oaktrek {% endblock %}
+
+{% block main_block %}
+<div class="hero-slide active" data-bg="{% static 'assets/products/landingpage2.avif' %}">
+    <img src="{% static 'assets/products/landingpage2.avif' %}" alt="Blue sneakers with flowers">
+        </div>
+        <div class=" hero-slide" data-bg="{% static 'assets/products/landingpage.avif' %}">
+    <img src="{% static 'assets/products/landingpage.avif' %}" alt="Person with flowers">
+        </div>
+
+        <div class=" hero-content">
+    <h1 class="hero-title">Bring it, Spring</h1>
+    <p class="hero-subtitle">NEW LIMITED-EDITION HUES ARE HERE FOR SPRING.</p>
+    <div>
+        <a href="{% url 'products' collection_name='men' %}" class="btn-allbirds">Shop Men &NonBreakingSpace;&NonBreakingSpace;&NonBreakingSpace;</a>
+        <a href="{% url 'products' collection_name='women' %}" class="btn-allbirds">Shop Women</a>
+    </div>
+</div>
+</div>
+</section>
+
+
+<!-- Category Section -->
+<section class="category-section">
+    <div class="category-grid">
+        <div class="category-card">
+            <img src="{% static 'assets/products/landingpageflex1.png' %}" alt="Men's Shoes">
+            <div class="category-content">
+                <h3>Men's Shoes</h3>
+                <a href="{% url 'products' collection_name='men' %}" class="btn-allbirds btn-light-outline">Shop Now</a>
+            </div>
+        </div>
+        <div class="category-card">
+            <img src="{% static 'assets/products/landingpageflex2.png' %}" alt="Women's Shoes">
+            <div class="category-content">
+                <h3>Women's Shoes</h3>
+                <a href="{% url 'products' collection_name='women' %}" class="btn-allbirds btn-light-outline">Shop
+                    Now</a>
+            </div>
+        </div>
+        <div class="category-card">
+            <img src="{% static 'assets/products/landingpageflex3.png' %}" alt="New Arrivals">
+            <div class="category-content">
+                <h3>New Arrivals</h3>
+                <a href="{% url 'coming_soon' %}" class="btn-allbirds btn-light-outline">Shop Now</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Carousel Section -->
+<div class="carousel-container">
+    <div class="carousel">
+        <a href="{% url 'products' collection_name='active-shoes' %}" class="carousel-slide">
+            <img src="{% static 'assets/products/landingpagecrousel1.png' %}" alt="Men's Active Shoes">
+            <div class="slide-content">Men's Active Shoes</div>
+        </a>
+        <a href="{% url 'products' collection_name='active-shoes' %}" class="carousel-slide">
+            <img src="{% static 'assets/products/landingpagecrousel2.png' %}" alt="Urban Collection">
+            <div class="slide-content">Women's Active Shoes</div>
+        </a>
+        <a href="{% url 'products' collection_name='men' %}" class="carousel-slide">
+            <img src="{% static 'assets/products/landingpagecrousel3.png' %}" alt="Women's Active Shoes">
+            <div class="slide-content">Men's Season Ready Style</div>
+        </a>
+        <a href="{% url 'products' collection_name='everyday-sneakers' %}" class="carousel-slide">
+            <img src="{% static 'assets/products/landingpagecrousel4.png' %}" alt="Women's Active Shoes">
+            <div class="slide-content">Women's Essential Everyday</div>
+        </a>
+        <a href="{% url 'products' collection_name='men' %}" class="carousel-slide">
+            <img src="{% static 'assets/products/landingpagecrousel5.png' %}" alt="Women's Active Shoes">
+            <div class="slide-content">Men's Weather Ready Collection</div>
+        </a>
+        <a href="{% url 'products' collection_name='women' %}" class="carousel-slide">
+            <img src="{% static 'assets/products/landingpagecrousel6.png' %}" alt="Women's Active Shoes">
+            <div class="slide-content">Women's Weather Ready Collection</div>
+        </a>
+    </div>
+</div>
+
+
+<!-- Product Showcase Section -->
+<section class="product-showcase my-5">
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Left Side - Lifestyle Image -->
+            <div class="col-lg-6 d-flex"> {# Changed to col-lg-6 for better stacking control #}
+                <div class="bg-navy w-100 position-relative overflow-hidden">
+                    <img src="{% static 'assets/products/landingpageblues1.png' %}"
+                        alt="New And Beautiful Blues Collection" class="w-100 h-100 object-fit-cover">
+                    <div class="position-absolute bottom-0 start-0 p-4 text-white" style="z-index: 1;"> 
+                        <h2 class="display-4 mb-2">New And Beautiful Blues</h2>
+                        <p class="mb-4">Cool classics to put spring in your step.</p>
+                        <div class="d-flex gap-2 flex-wrap"> 
+                            <a href="{% url 'products' collection_name='men' %}">
+                                <button class="btn btn-light text-dark px-4 btn-allbirds">Shop men</button> 
+                            </a>
+                            <a href="{% url 'products' collection_name='women' %}">
+                                <button class="btn btn-outline-light px-4 btn-allbirds btn-light-outline">Shop
+                                    women</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Product Grid -->
+            <div class="col-lg-6 d-flex"> {# Changed to col-lg-6 #}
+                <div class="row g-4 p-4 w-100">
+                    <!-- Product Cards -->
+                    <div class="col-6">
+                        <a href="{% url 'product_page' collection_name='men' product_slug='tree-runner-go' %}"
+                            class="product-card text-center">
+
+                            <div class="product-hover-overlay">
+                                <button class="hover-btn">Shop</button> {# Button inside overlay #}
+                            </div>
+                            <img src="{{ MEDIA_URL }}assets/products/1image1.png" alt="Tree Runner Go"
+                                class="img-fluid mb-3">
+                            <h5 class="mb-1">Tree Runner Go</h5>
+                            <p class="text-muted small mb-1">Natural Navy/Light</p> {# Reduced margin #}
+                            <p class="price">₹115</p>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{% url 'product_page' collection_name='men' product_slug='tree-flyer' %}"
+                            class="product-card text-center">
+                            <div class="product-hover-overlay">
+                                <button class="hover-btn">Shop</button>
+                            </div>
+                            <img src="{{ MEDIA_URL }}assets/products/10image1.png" alt="Tree Flyer"
+                                class="img-fluid mb-3">
+                            <h5 class="mb-1">Tree Flyer</h5>
+                            <p class="text-muted small mb-1">White/Natural Light</p>
+                            <p class="price">₹160</p>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{% url 'product_page' collection_name='men' product_slug='tree-dasher-2' %}"
+                            class="product-card text-center">
+                            <div class="product-hover-overlay">
+                                <button class="hover-btn">Shop</button>
+                            </div>
+                            <img src="{{ MEDIA_URL }}assets/products/9image1.png" alt="Tree Dasher 2"
+                                class="img-fluid mb-3">
+                            <h5 class="mb-1">Tree Dasher 2</h5>
+                            <p class="text-muted small mb-1">White/Navy</p>
+                            <p class="price">₹135</p>
+                        </a>
+                    </div>
+                    <div class="col-6">
+                        <a href="{% url 'product_page' collection_name='men' product_slug='wool-runner' %}"
+                            class="product-card text-center">
+                            <div class="product-hover-overlay">
+                                <button class="hover-btn">Shop</button>
+                            </div>
+                            <img src="{{ MEDIA_URL }}assets/products/3image1.png" alt="Wool Runner"
+                                class="img-fluid mb-3">
+                            <h5 class="mb-1">Wool Runner</h5>
+                            <p class="text-muted small mb-1">Natural Navy</p>
+                            <p class="price">₹110</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Final Promo Section -->
+<section class="promo-section container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-md-6">
+            {# Wrap promo card content in an anchor tag if the whole card should be clickable #}
+            <a href="{% url 'products' collection_name='men' %}" class="d-block promo-card">
+                <img src="{% static 'assets/products/landingpagemoonshot.png' %}" alt="Moonshot Collection Promo"
+                    class="w-100 h-100 object-fit-cover">
+                <div class="promo-overlay">
+                    <button class="btn-allbirds">Explore Now</button>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-6">
+            {# This card has multiple actions, so linking the whole card is not ideal #}
+            <div class="promo-card">
+                <img src="{% static 'assets/products/landingpagechaelsea.png' %}" alt="Chelsea Boots Promo"
+                    class="w-100 h-100 object-fit-cover">
+                <div class="promo-overlay">
+                    <div class="button-group">
+                        <a href="{% url 'products' collection_name='men' %}"><button class="btn-allbirds">Shop
+                                Men</button></a>
+                        <a href="{% url 'products' collection_name='women' %}"><button class="btn-allbirds">Shop
+                                Women</button></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- Product Carousel Section -->
+<div class="product-carousel">
+
+    <div class="carousel-track">
+        {# Slide 1 Content #}
+        <div class="slide">
+            <a href="{% url 'product_page' collection_name='everyday-sneakers' product_slug='tree-runner-go' %}"
+                class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{ MEDIA_URL }}assets/products/1image1.png" alt="Men's Tree Runner Go">
+                </div>
+                <div class="product-info">
+                    <h3>Men's Tree Runner Go</h3>
+                    <p class="color">Hanami Night</p>
+                    <p class="price">₹120</p>
+                </div>
+            </a>
+            <a href="{% url 'product_page' collection_name='active-shoes' product_slug='tree-dasher-2-womens' %}"
+                class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{ MEDIA_URL }}assets/products/29image1.png" alt="Women's Tree Dasher 2">
+                </div>
+                <div class="product-info">
+                    <h3>Women's Tree Dasher 2</h3>
+                    <p class="color">Blizzard/Hanami Night</p>
+                    <p class="price">₹135</p>
+                </div>
+            </a>
+            <a href="{% url 'product_page' collection_name='slip-ons' product_slug='tree-lounger' %}"
+                class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{ MEDIA_URL }}assets/products/21image1.png" alt="Men's Tree Loungers">
+                </div>
+                <div class="product-info">
+                    <h3>Men's Tree Loungers</h3>
+                    <p class="color">Hanami Night</p>
+                    <p class="price">₹100</p>
+                </div>
+            </a>
+            <a href="{% url 'product_page' collection_name='everyday-sneakers' product_slug='tree-runner-go-womens' %}"
+                class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{ MEDIA_URL }}assets/products/24image1.png" alt="Tree Runner Go Women's">
+                </div>
+                <div class="product-info">
+                    <h3>Tree Runner Go Women's</h3>
+                    <p class="color">Natural White/Hanami Night</p>
+                    <p class="price">₹120</p>
+                </div>
+            </a>
+        </div>
+        
+            <a href="{% url 'product_page' collection_name='everyday-sneakers' product_slug='zen-walker' %}"
+                class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{ MEDIA_URL }}assets/products/8image1.png" alt="Men's Zen Walker">
+                </div>
+                <div class="product-info">
+                    <h3>Men's Zen Walker</h3>
+                    <p class="color">Natural White/Hanami Night</p>
+                    <p class="price">₹125</p>
+                </div>
+            </a>
+            <a href="{% url 'product_page' collection_name='everyday-sneakers' product_slug='wool-breeze' %}"
+                class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{ MEDIA_URL }}assets/products/26image1.png" alt="Women's Wool Breeze">
+                </div>
+                <div class="product-info">
+                    <h3>Women's Wool Breeze</h3>
+                    <p class="color">Natural White/Hanami Night</p>
+                    <p class="price">₹105</p>
+                </div>
+            </a>
+            <a href="{% url 'product_page' collection_name='everyday-sneakers' product_slug='cloud-walker' %}"
+                class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{ MEDIA_URL }}assets/products/5image1.png" alt="Men's Cloud Walker">
+                </div>
+                <div class="product-info">
+                    <h3>Men's Cloud Walker</h3>
+                    <p class="color">Natural White/Hanami Night</p>
+                    <p class="price">₹130</p>
+                </div>
+            </a>
+            <a href="{% url 'product_page' collection_name='hiking-shoes' product_slug='mountain-trekker' %}"
+                class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{ MEDIA_URL }}assets/products/36image1.png" alt="Women's Mountain Trekker">
+                </div>
+                <div class="product-info">
+                    <h3>Women's Mountain Trekker</h3>
+                    <p class="color">Natural White/Hanami Night</p>
+                    <p class="price">₹105</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const heroSlides = document.querySelectorAll('.hero-slide');
+        let currentHeroSlide = 0;
+
+        function showHeroSlide(index) {
+            heroSlides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === index);
+                // Set background image from data attribute
+                if (slide.dataset.bg) {
+                    slide.style.setProperty('--bg-image', `url(${slide.dataset.bg})`);                }
+                // Preload next image
+                if (heroSlides.length > 1) {
+                    const nextIndex = (index + 1) % heroSlides.length;
+                    const nextSlide = heroSlides[nextIndex];
+                    if (nextSlide.dataset.bg) {
+                        const img = new Image();
+                        img.src = nextSlide.dataset.bg;
+                    }
+                }
+            });
+        }
+
+        function nextHeroSlide() {
+            currentHeroSlide = (currentHeroSlide + 1) % heroSlides.length;
+            showHeroSlide(currentHeroSlide);
+        }
+
+        if (heroSlides.length > 1) {
+            setInterval(nextHeroSlide, 5000); // Change slide every 5 seconds
+            showHeroSlide(currentHeroSlide); // Show initial slide
+        } else if (heroSlides.length === 1) {
+            showHeroSlide(0); // Ensure the single slide is active
+        }
+
+
+        // --- Main Content Carousel (Multi-item) ---
+        const contentCarousel = document.querySelector('.carousel-container .carousel');
+        const contentSlides = document.querySelectorAll('.carousel-container .carousel-slide');
+        const contentDots = document.querySelectorAll('.carousel-container .dot');
+        let currentContentSlideIndex = 0;
+        let contentAutoPlayInterval;
+
+        if (contentCarousel && contentSlides.length > 0) {
+            // Determine slides per view based on window width
+            const getSlidesPerView = () => window.innerWidth < 768 ? 1 : 2;
+            let slidesPerView = getSlidesPerView();
+
+            // Calculate the maximum index based on slides per view
+            // Total scrollable "pages" = total slides - slides per view + 1
+            // Max index = total scrollable pages - 1
+            const getMaxSlideIndex = () => Math.max(0, contentSlides.length - slidesPerView);
+            let maxSlideIndex = getMaxSlideIndex();
+
+            function updateContentCarousel() {
+                slidesPerView = getSlidesPerView(); // Recalculate on update
+                maxSlideIndex = getMaxSlideIndex(); // Recalculate max index
+
+                // Ensure current index is not out of bounds after resize
+                currentContentSlideIndex = Math.min(currentContentSlideIndex, maxSlideIndex);
+
+                // Calculate translation: slide index * (100% / slides per view)
+                const translation = currentContentSlideIndex * (100 / slidesPerView);
+                contentCarousel.style.transform = `translateX(-${translation}%)`;
+
+                // Update dots (only if number of dots matches max index + 1)
+                if (contentDots.length === maxSlideIndex + 1) {
+                    contentDots.forEach((dot, index) => {
+                        dot.classList.toggle('active', index === currentContentSlideIndex);
+                    });
+                } else {
+                    // Regenerate or hide dots if mismatch (simple hide shown)
+                    document.querySelector('.carousel-container .carousel-dots').style.display = 'none';
+                    console.warn("Dot count mismatch for content carousel");
+                }
+            }
+
+            function setContentSlide(index) {
+                currentContentSlideIndex = Math.min(Math.max(0, index), maxSlideIndex);
+                updateContentCarousel();
+                resetAutoPlay(); // Reset timer when user interacts
+            }
+
+            function nextContentSlide() {
+                currentContentSlideIndex = (currentContentSlideIndex + 1) % (maxSlideIndex + 1); // Loop back
+                updateContentCarousel();
+            }
+
+            function startAutoPlay() {
+                // Clear existing interval before starting a new one
+                clearInterval(contentAutoPlayInterval);
+                if (contentSlides.length > slidesPerView) { // Only autoplay if slides can scroll
+                    contentAutoPlayInterval = setInterval(nextContentSlide, 5000);
+                }
+            }
+
+            function resetAutoPlay() {
+                clearInterval(contentAutoPlayInterval);
+                startAutoPlay();
+            }
+
+
+            // Event Listeners for Dots
+            contentDots.forEach(dot => {
+                dot.addEventListener('click', () => {
+                    // Use dataset attribute if available, otherwise parse index
+                    const index = parseInt(dot.dataset.slideIndex, 10);
+                    if (!isNaN(index)) {
+                        setContentSlide(index);
+                    }
+                });
+            });
+
+            // Pause on Hover
+            const carouselContainer = document.querySelector('.carousel-container');
+            carouselContainer.addEventListener('mouseenter', () => clearInterval(contentAutoPlayInterval));
+            carouselContainer.addEventListener('mouseleave', startAutoPlay);
+
+
+            // Touch Support
+            let touchStartX = 0;
+            let touchEndX = 0;
+
+            contentCarousel.addEventListener('touchstart', (e) => {
+                touchStartX = e.touches[0].clientX;
+                clearInterval(contentAutoPlayInterval); // Pause autoplay on touch
+            }, { passive: true });
+
+            contentCarousel.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].clientX;
+                handleSwipe();
+                startAutoPlay(); // Resume autoplay after swipe
+            }, { passive: true });
+
+            function handleSwipe() {
+                const swipeThreshold = 50;
+                const difference = touchStartX - touchEndX;
+
+                if (Math.abs(difference) > swipeThreshold) {
+                    if (difference > 0) { // Swipe left
+                        setContentSlide(Math.min(currentContentSlideIndex + 1, maxSlideIndex));
+                    } else { // Swipe right
+                        setContentSlide(Math.max(currentContentSlideIndex - 1, 0));
+                    }
+                }
+            }
+
+            // Recalculate on Resize
+            window.addEventListener('resize', () => {
+                // Debounce resize event if needed
+                updateContentCarousel();
+                resetAutoPlay(); // Restart autoplay with potentially new settings
+            });
+
+
+            // Initial setup
+            updateContentCarousel();
+            startAutoPlay();
+
+        } // End if contentCarousel exists
+
+
+        // --- Product Carousel (Bottom) ---
+const productCarouselTrack = document.querySelector('.product-carousel .carousel-track');
+const productSlides = document.querySelectorAll('.product-carousel .slide'); 
+const prevButton = document.querySelector('.product-carousel .prod-carousel-prev');
+const nextButton = document.querySelector('.product-carousel .prod-carousel-next');
+let currentProductSlide = 0;
+
+if (productCarouselTrack && productSlides.length > 1 && prevButton && nextButton) {
+    const totalProductSlides = productSlides.length;
+
+    function showProductSlide(index) {
+        currentProductSlide = (index + totalProductSlides) % totalProductSlides;
+        const translation = currentProductSlide * 100; 
+        productCarouselTrack.style.transform = `translateX(-${translation}%)`;
+    }
+
+    prevButton.addEventListener('click', () => {
+        showProductSlide(currentProductSlide - 1);
+    });
+
+    nextButton.addEventListener('click', () => {
+        showProductSlide(currentProductSlide + 1);
+    });
+
+    // Initial setup
+    showProductSlide(0);
+
+} else if (productSlides.length <= 1 && prevButton && nextButton) {
+    prevButton.style.display = 'none';
+    nextButton.style.display = 'none';
+}
+</script>
+{% endblock %}

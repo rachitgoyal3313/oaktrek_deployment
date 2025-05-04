@@ -1,0 +1,353 @@
+{% extends "base.html" %}
+{% block title_block %} Terms & Conditions {% endblock %}
+
+{% block style_block %}
+<style>
+    /* Terms & Privacy Page Specific Styles */
+    .hero-section {
+        background-color: #111;
+        color: white;
+        padding: 4rem 1rem; /* Added horizontal padding */
+        text-align: center;
+        margin-top: 60px; /* Added margin to prevent overlap with fixed navbar if applicable */
+    }
+
+    .hero-section h1 {
+        font-size: 2.5rem; /* Adjusted size */
+        margin-bottom: 0.5rem;
+    }
+     .hero-section .lead {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+     }
+
+
+    .section {
+        padding: 3rem 1rem; /* Adjusted padding */
+    }
+
+    .policy-card {
+        border: 1px solid #eee; /* Subtle border */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); /* Softer shadow */
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+        padding: 2rem 2.5rem; /* Adjusted padding */
+        background-color: white;
+    }
+
+    .policy-card:hover {
+        transform: translateY(-3px); /* Subtle lift */
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .policy-section {
+        margin-bottom: 2.5rem; /* Adjusted spacing */
+        padding-top: 1rem; /* Add space for anchor links */
+    }
+    .policy-section:last-of-type {
+        margin-bottom: 0; /* Remove margin from last section inside card */
+    }
+
+
+    .policy-section h2 {
+        color: #111;
+        margin-bottom: 1.5rem;
+        font-weight: 600; /* Adjusted weight */
+        font-size: 1.8rem; /* Adjusted size */
+        border-bottom: 1px solid #eee; /* Separator */
+        padding-bottom: 0.5rem;
+    }
+
+    .policy-section h3 {
+        color: #333;
+        margin: 1.5rem 0 0.8rem; /* Adjusted margin */
+        font-size: 1.2rem; /* Adjusted size */
+        font-weight: 600;
+    }
+
+    .policy-section p {
+        color: #555; /* Adjusted color */
+        margin-bottom: 1rem;
+        line-height: 1.7; /* Increased line height */
+    }
+
+    .policy-section ul {
+        color: #555; /* Match paragraph color */
+        margin-bottom: 1rem; /* Consistent margin */
+        padding-left: 20px; /* Standard indent */
+        list-style: disc; /* Ensure disc is used */
+    }
+
+    .policy-section ul li {
+        margin-bottom: 0.5rem; /* Adjusted spacing */
+        /* position: relative; */ /* Not needed for standard disc */
+    }
+
+    /* Sticky Navigation */
+    .policy-nav-wrapper {
+        position: sticky;
+        top: 80px; /* Adjust based on navbar height + desired offset */
+        height: calc(100vh - 100px); /* Limit height */
+        overflow-y: auto; /* Allow scrolling if needed */
+    }
+    .policy-nav {
+        padding: 1.5rem;
+        background-color: #f8f9fa; /* Use standard light bg */
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+
+    .policy-nav h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #333;
+    }
+
+    .policy-nav ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .policy-nav li {
+        margin-bottom: 0.5rem; /* Reduced spacing */
+    }
+
+    .policy-nav a {
+        color: #555;
+        text-decoration: none;
+        transition: color 0.2s;
+        font-size: 0.95rem;
+        display: block; /* Make link clickable area larger */
+        padding: 0.25rem 0;
+    }
+
+    .policy-nav a:hover,
+    .policy-nav a.active { /* Style for active link (requires JS) */
+        color: #111;
+        font-weight: 500;
+    }
+
+    /* Contact Section */
+    .contact-section {
+        background-color: #f8f9fa;
+        padding: 3rem 1rem;
+        text-align: center;
+        margin-top: 2rem; /* Reduced margin */
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+    .contact-section h2 {
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #111;
+    }
+
+    .contact-section .lead {
+        color: #555;
+        max-width: 600px; /* Adjusted width */
+        margin: 0 auto 1.5rem;
+        font-size: 1rem;
+    }
+    .contact-section .btn-dark {
+        background-color: #333;
+        border-color: #333;
+        padding: 0.6rem 1.5rem;
+        font-size: 0.95rem;
+        transition: background-color 0.2s;
+    }
+    .contact-section .btn-dark:hover {
+        background-color: #555;
+        border-color: #555;
+    }
+
+     /* Responsive Adjustments */
+     @media (max-width: 991px) {
+        .policy-nav-wrapper {
+            position: static; /* Remove sticky position */
+            height: auto;
+            overflow-y: visible;
+            margin-bottom: 2rem; /* Add space below nav */
+        }
+        .policy-card {
+            padding: 1.5rem;
+        }
+     }
+      @media (max-width: 767px) {
+        .hero-section {
+            padding: 3rem 1rem;
+        }
+        .hero-section h1 {
+            font-size: 2rem;
+        }
+        .section {
+            padding: 2rem 1rem;
+        }
+         .policy-section h2 {
+             font-size: 1.5rem;
+         }
+         .policy-section h3 {
+             font-size: 1.1rem;
+         }
+         .contact-section {
+             padding: 2rem 1rem;
+         }
+         .contact-section h2 {
+            font-size: 1.4rem;
+         }
+      }
+
+</style>
+{% endblock %}
+
+{% block title %}Terms, Privacy & Accessibility - Oaktrek{% endblock %}
+
+{% block main_block %}
+{# Removed <br> tags, use CSS margin/padding for spacing #}
+
+<div class="hero-section">
+    <div class="container">
+        <h1>Terms, Privacy & Accessibility</h1>
+        <p class="lead">Our commitments to transparency, protecting your data, and inclusive design.</p>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                {# Added a wrapper div for better sticky positioning control #}
+                <div class="policy-nav-wrapper">
+                    <nav class="policy-nav">
+                        <h4 class="mb-3">On this page</h4>
+                        <ul>
+                            <li><a href="#terms">Terms of Service</a></li>
+                            <li><a href="#privacy">Privacy Policy</a></li>
+                            <li><a href="#accessibility">Accessibility Statement</a></li>
+                            <li><a href="#contact">Contact Information</a></li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="policy-card">
+                    {# --- Terms of Service --- #}
+                    <section id="terms" class="policy-section">
+                        <h2>Terms of Service</h2>
+                        <p>Welcome to OakTrek! These Terms of Service ("Terms") govern your use of our website (the "Site") and the services offered through it. By accessing or using the Site, you agree to be bound by these Terms.</p>
+
+                        <h3>1. Use of Our Site</h3>
+                        <p>You agree to use the Site only for lawful purposes and in a way that does not infringe the rights of, restrict, or inhibit anyone else's use and enjoyment of the Site.</p>
+                        <ul>
+                            <li>You must be at least 18 years old or have parental consent to make purchases.</li>
+                            <li>If you create an account, you must provide accurate information and keep it updated.</li>
+                            <li>You are responsible for maintaining the confidentiality of your account password and for all activities that occur under your account.</li>
+                        </ul>
+
+                        <h3>2. Product Orders & Policies</h3>
+                        <p>All orders placed through the Site are subject to acceptance by OakTrek.</p>
+                        <ul>
+                            <li>We offer a 30-day return policy for items in new, unworn condition with original packaging. See our full <a href="#">Return Policy</a> for details. {# Add link to return policy page #}</li>
+                            <li>Our products may be covered by a limited warranty against manufacturing defects. Please refer to specific product documentation.</li>
+                            <li>Shipping costs and delivery times vary. Please review our <a href="#">Shipping Information</a> page. {# Add link to shipping page #}</li>
+                            <li>We reserve the right to limit order quantities or refuse service.</li>
+                        </ul>
+
+                         <h3>3. Intellectual Property</h3>
+                         <p>All content on this Site, including text, graphics, logos, images, and software, is the property of OakTrek or its content suppliers and protected by international copyright laws. You may not reproduce, distribute, or create derivative works from any content without express written permission.</p>
+
+                         <h3>4. Disclaimer of Warranties & Limitation of Liability</h3>
+                         <p>The Site and its content are provided "as is." OakTrek makes no representations or warranties of any kind, express or implied. To the fullest extent permissible by law, OakTrek disclaims all warranties and will not be liable for any damages arising from the use of this Site.</p>
+
+                         <h3>5. Governing Law</h3>
+                         <p>These Terms shall be governed by and construed in accordance with the laws of [Your Jurisdiction, e.g., the State of California], without regard to its conflict of law principles.</p>
+
+                         <h3>6. Changes to Terms</h3>
+                         <p>We reserve the right to update these Terms at any time. We will notify you of any changes by posting the new Terms on the Site. Your continued use of the Site after such changes constitutes your acceptance of the new Terms.</p>
+                         <p><em>Last Updated: [Date]</em></p> 
+                    </section>
+
+                    <section id="privacy" class="policy-section">
+                        <h2>Privacy Policy</h2>
+                        <p>OakTrek ("we", "us", "our") respects your privacy and is committed to protecting your personal data. This policy explains how we collect, use, and safeguard your information when you visit our Site.</p>
+
+                        <h3>1. Information We Collect</h3>
+                        <p>We may collect the following types of information:</p>
+                        <ul>
+                            <li><strong>Personal Information:</strong> Name, email address, shipping/billing address, phone number, payment details (processed securely by third-party providers).</li>
+                            <li><strong>Usage Data:</strong> IP address, browser type, pages visited, time spent on pages, referring URLs, collected via cookies and similar technologies.</li>
+                            <li><strong>Communication Data:</strong> Information you provide when contacting customer support or subscribing to newsletters.</li>
+                        </ul>
+
+                        <h3>2. How We Use Your Information</h3>
+                        <p>We use your information for purposes including:</p>
+                        <ul>
+                            <li>Processing and fulfilling your orders.</li>
+                            <li>Communicating with you about your orders or inquiries.</li>
+                            <li>Improving our Site, products, and services.</li>
+                            <li>Sending marketing communications (if you opt-in).</li>
+                            <li>Preventing fraud and ensuring security.</li>
+                            <li>Complying with legal obligations.</li>
+                        </ul>
+
+                         <h3>3. Cookies and Tracking Technologies</h3>
+                         <p>We use cookies to enhance your browsing experience, analyze site traffic, and personalize content. You can manage your cookie preferences through your browser settings. For more details, see our <a href="#">Cookie Policy</a>.</p> 
+
+                        <h3>4. Data Sharing and Disclosure</h3>
+                        <p>We do not sell your personal information. We may share it with:</p>
+                         <ul>
+                             <li>Service providers who assist with operations (e.g., payment processors, shipping carriers, marketing platforms).</li>
+                             <li>Legal authorities if required by law or to protect our rights.</li>
+                         </ul>
+
+
+                        <h3>5. Data Security</h3>
+                        <p>We implement technical and organizational measures (like SSL encryption) to protect your data, but no method is 100% secure. We strive to use commercially acceptable means to protect your Personal Information.</p>
+
+                         <h3>6. Your Rights</h3>
+                         <p>Depending on your jurisdiction, you may have rights such as accessing, correcting, deleting, or restricting the use of your personal data. Please contact us to exercise these rights.</p>
+
+                         <h3>7. Changes to This Policy</h3>
+                         <p>We may update this Privacy Policy periodically. The latest version will always be posted on this page.</p>
+                         <p><em>Last Updated: [Date]</em></p> 
+                    </section>
+
+                    <section id="accessibility" class="policy-section">
+                        <h2>Accessibility Statement</h2>
+                        <p>OakTrek is committed to ensuring digital accessibility for people with disabilities. We are continually improving the user experience for everyone and applying the relevant accessibility standards.</p>
+
+                        <h3>Conformance Status</h3>
+                        <p>We aim to conform to the Web Content Accessibility Guidelines (WCAG) 2.1 Level AA. These guidelines explain how to make web content more accessible for people with diverse abilities.</p>
+
+                        <h3>Accessibility Features Implemented</h3>
+                        <ul>
+                            <li><strong>Keyboard Navigation:</strong> The site can be navigated using a keyboard.</li>
+                            <li><strong>Screen Reader Compatibility:</strong> We strive to ensure compatibility with popular screen readers.</li>
+                            <li><strong>Alternative Text:</strong> Images have descriptive alt text.</li>
+                            <li><strong>Semantic Structure:</strong> Content is structured using appropriate headings and landmarks.</li>
+                            <li><strong>Color Contrast:</strong> Text and background colors generally meet contrast requirements.</li>
+                            <li><strong>Resizable Text:</strong> Text can be resized using browser controls without loss of content or functionality.</li>
+                        </ul>
+
+                         <h3>Ongoing Efforts</h3>
+                         <p>Accessibility is an ongoing effort. We regularly review our site and work with accessibility experts to identify and fix potential barriers.</p>
+
+                         <h3>Feedback</h3>
+                         <p>We welcome your feedback on the accessibility of OakTrek. If you encounter accessibility barriers or have suggestions, please contact us using the information below.</p>
+                    </section>
+                </div>
+
+                <section id="contact" class="contact-section">
+                    <h2>Contact Us</h2>
+                    <p class="lead">If you have questions about these terms, our privacy practices, or website accessibility, please reach out.</p>
+                  
+                    <a href="{% url 'oaktrek_help' %}" class="btn btn-dark">Contact Support</a>
+                    <br><br><br><br>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

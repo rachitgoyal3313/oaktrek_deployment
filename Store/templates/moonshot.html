@@ -1,0 +1,587 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}MoonShot - Oaktrek{% endblock %}
+
+{% block style_block %}
+<style>@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+  /* Base Styles */
+  * {
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+  }
+  
+  body {
+    line-height: 1.5;
+    color: #333;
+  }
+  
+  /* Banner */
+  #banner {
+    width: 100%;
+    height: 500px;
+    object-fit: cover;
+    margin-bottom: 50px;
+  }
+  
+  /* Typography */
+  h1, h2 {
+    font-weight: bold;
+    line-height: 1.2;
+  }
+  
+  p {
+    margin-bottom: 1rem;
+  }
+  
+  /* Introduction Section */
+  .intro-section {
+    max-width: 900px;
+    margin: 80px auto;
+    text-align: center;
+    padding: 0 20px;
+  }
+  
+  .intro-section h1 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  .intro-section p {
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto 1rem;
+    color: #4a4a4a;
+  }
+  
+  /* Grid Layout */
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin: 80px auto;
+    max-width: 1400px;
+    padding: 0 50px;
+    gap: 50px;
+  }
+  
+  .grid-item {
+    padding: 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+  
+  .grid-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .grid-item.image-container {
+    padding: 0;
+  }
+  
+  .grid-item h1, 
+  .grid-item h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  .grid-item p {
+    font-size: 1.125rem;
+  }
+  
+  .dark-section {
+    background-color: #000;
+    color: #fff;
+  }
+  
+  /* Email Notification */
+  .emailnotify {
+    background-color: rgba(235, 235, 235, 0.738);
+    width: 90%;
+    max-width: 800px;
+    margin: 100px auto 50px;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+  }
+  
+  .emailnotify h2 {
+    margin-bottom: 0.5rem;
+  }
+  
+  .emailnotify form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  #email {
+    width: 60%;
+    max-width: 300px;
+    border: 1px solid black;
+    border-radius: 3px;
+    padding: 10px;
+  }
+  
+  .btn {
+    padding: 10px 20px;
+  }
+  
+  /* Initiative Section */
+  #initiativeheading {
+    text-align: center;
+    margin: 70px 0 30px;
+    font-size: 2rem;
+  }
+  
+  .initiatives {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px;
+    padding: 20px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .member {
+    flex: 1;
+    min-width: 250px;
+    max-width: 300px;
+  }
+  
+  /* Card Styles */
+  .card {
+    height: 100%;
+    text-align: center;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .card .card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .card h3 {
+    font-size: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+  
+  .card p {
+    font-size: 0.95rem;
+    color: #555;
+  }
+  
+  .card-img-top {
+    transition: transform 0.3s ease;
+    height: 200px;
+    object-fit: cover;
+    width: 100%;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  }
+  
+  .card:hover .card-img-top {
+    transform: scale(1.05);
+  }
+  
+  .disnon {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+  }
+  
+  /* Approach Section */
+  #approachhead {
+    margin-top: 70px;
+    text-align: center;
+  }
+  
+  .parentpara {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 30px;
+    margin: 50px auto;
+    max-width: 1200px;
+    padding: 0 20px;
+  }
+  
+  .childpara {
+    flex: 1;
+    min-width: 300px;
+    padding: 30px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    text-align: center;
+    height: 100%;
+  }
+  
+  .childpara h4 {
+    margin-bottom: 15px;
+    font-size: 1.4rem;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 1200px) {
+    .grid-container {
+      padding: 0 30px;
+      gap: 30px;
+    }
+  
+    .grid-item {
+      padding: 3rem;
+    }
+    
+    .grid-item h1,
+    .grid-item h2 {
+      font-size: 2.2rem;
+    }
+  }
+  
+  @media (max-width: 992px) {
+    .intro-section h1 {
+      font-size: 2.3rem;
+    }
+  
+    .initiatives {
+      gap: 20px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    #banner {
+      height: 400px;
+      margin-bottom: 30px;
+    }
+    
+    .intro-section {
+      margin: 50px auto;
+    }
+    
+    .intro-section h1 {
+      font-size: 2.2rem;
+    }
+    
+    .grid-container {
+      grid-template-columns: 1fr;
+      padding: 0 20px;
+      gap: 20px;
+      margin: 50px auto;
+    }
+  
+    .grid-item {
+      padding: 2rem;
+    }
+  
+    .grid-item h1,
+    .grid-item h2 {
+      font-size: 2rem;
+    }
+    
+    .emailnotify {
+      width: 95%;
+      margin: 50px auto;
+      padding: 20px;
+    }
+  
+    .emailnotify form {
+      flex-direction: column;
+      width: 100%;
+    }
+  
+    #email {
+      width: 90%;
+      max-width: none;
+      margin-bottom: 10px;
+    }
+  
+    .btn {
+      width: 60%;
+    }
+    
+    .initiatives {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .member {
+      width: 90%;
+      max-width: 350px;
+    }
+    
+    .parentpara {
+      flex-direction: column;
+      align-items: center;
+    }
+  
+    .childpara {
+      width: 90%;
+      max-width: 400px;
+    }
+  }
+  
+  @media (max-width: 576px) {
+    #banner {
+      height: 300px;
+    }
+  
+    .intro-section {
+      margin: 40px auto;
+    }
+  
+    .intro-section h1 {
+      font-size: 1.8rem;
+    }
+  
+    .intro-section p {
+      font-size: 1rem;
+    }
+    
+    .grid-item {
+      padding: 1.5rem;
+    }
+    
+    .grid-item h1,
+    .grid-item h2 {
+      font-size: 1.7rem;
+    }
+    
+    #initiativeheading {
+      font-size: 1.5rem;
+    }
+  
+    .emailnotify h2 {
+      font-size: 1.5rem;
+    }
+  }</style>
+{% endblock %}
+
+{% block main_block %}
+
+<img src="{% static 'assets/products/moonshot.png' %}" id="banner" alt="Moonshot banner">
+
+<div class="intro-section">
+  <h1>Meet M0.0NSHOT Zero</h1>
+  <p>Since day one, we've been a company born on the belief of utilizing the planet's best to do what's best for the
+    planet. And reducing our carbon emissions has been our number one endeavor.</p>
+  <br>
+  <p>Nearly a decade in, we aimed for the impossible and created the incredible: M0.0NSHOT Zero, the world's first net
+    zero carbon shoe. Built with a meticulous combination of regenerative wool and a minimalist design, M0.0NSHOT Zero
+    is made to change the footwear industry for the better—in an effort to change the world for the better</p>
+</div>
+
+<div class="grid-container">
+  <!-- Top Section -->
+  <div class="grid-item">
+    <h1>Our Loftiest Goal? Zilch.</h1>
+    <p>Zero isn't just a number. It's a direction and a promise that our biggest leap forward is one that leaves nothing
+      behind.</p>
+    <p>Our landmark net 0.0 kg CO₂e carbon footprint—versus a standard sneaker, which is about 14 kg CO₂e based on our
+      calculations—is achieved without using a single carbon offset. This may seem like rocket science, but really, no
+      carbon emissions are the best carbon emissions.</p>
+    <p>Curious about how we calculated the carbon footprint? </p>
+  </div>
+  <div class="grid-item image-container">
+    <img src="{% static 'assets/products/moonshot1.png' %}" alt="Person in beige coat with sheep">
+  </div>
+
+  <!-- Bottom Section -->
+  <div class="grid-item image-container dark-section">
+    <img src="{% static 'assets/products/moonshot2.png' %}" alt="Carbon reduction graphic">
+  </div>
+  <div class="grid-item">
+    <h2>Sharing The Secret Sauce</h2>
+    <p>On June 27, 2023, we unveiled our groundbreaking MOONSHOT Zero prototype to the world at the Global Fashion
+      Summit, the premier international forum for sustainability in fashion.</p>
+    <p>During the event, we also shared our journey to zero: Our Recipe Book, an open-sourced toolkit of how we created
+      a net zero
+      carbon shoe. It's our open invitation to the industry, made free for the taking. Because when it comes to
+      reversing climate change, copycats aren't just welcome—they're essential.</p>
+  </div>
+
+  <!-- Top Section -->
+  <div class="grid-item">
+    <h1>Wondrous Wool</h1>
+    <p>We knew that building a net-zero carbon shoe meant starting with an age-old material sourced in pioneering
+      ways—wool made carbon-negative through innovative farming practices. This led us to Lake Hawea Station in New
+      Zealand, a regenerative farm that produces premium merino wool and, impressively, sequesters more carbon than it
+      emits. To achieve this distinction, they’ve created a best-in-class program that focuses on native plantings,
+      protecting large areas of regenerating forest, new pasture species, and more.</p>
+    <!-- Missing closing </p> added -->
+  </div>
+  <div class="grid-item image-container">
+    <img src="{% static 'assets/products/moonshot3.png' %}" alt="Person in beige coat with sheep">
+  </div>
+
+  <!-- Bottom Section -->
+  <div class="grid-item image-container dark-section">
+    <img src="{% static 'assets/products/moonshot4.png' %}" alt="Carbon reduction graphic">
+  </div>
+  <div class="grid-item">
+    <h2>Maximized Minimalist Design</h2>
+    <p>At Allbirds, we’re all about designs that reflect the perfect amount of nothing—just like the natural world, we
+      see beauty in simplicity. And M0.0NSHOT Zero embodies that ethos to the fullest.<br><br>
+
+      But to minimize climate impact, we had to maximize our carbon-negative material. Namely, the regenerative wool. So
+      we applied the material around the entirety of the shoe, allowing us to counteract more carbon-intensive parts of
+      a shoe’s lifecycle to level out at net zero.</p>
+  </div>
+  <!-- Top Section -->
+  <div class="grid-item">
+    <h1>Sweeter on the Planet</h1>
+    <p>Our SuperLight midsole foam is made from carbon-negative, sugarcane-derived green EVA that boasts approximately
+      70% bio-based content. That means a minimized use of petroleum-based synthetics, which are often the main
+      ingredient in conventional midsole foam. Bonus? Our midsole is not only kinder on Mother Nature but unbelievably
+      supportive for the feet too.</p>
+  </div>
+  <div class="grid-item image-container">
+    <img src="{% static 'assets/products/moonshot5.png' %}" alt="Person in beige coat with sheep">
+  </div>
+
+  <!-- Bottom Section -->
+  <div class="grid-item image-container dark-section">
+    <img src="{% static 'assets/products/moonshot6.png' %}" alt="Carbon reduction graphic">
+  </div>
+  <div class="grid-item">
+    <h2>Less is More</h2>
+    <p>To truly serve Mother Nature, we’ve produced only 500 pairs of M0.0NSHOT Zero. Available in select Allbirds
+      stores, each pair is labeled with a unique production number to signify their rare nature and this historic
+      achievement.<br><br>
+
+      While M0.0NSHOT Zero is a first-of-a-kind, it’s definitely not the last. And now that we’re here, we have zero
+      doubts about what’s possible. One step for Allbirds. A giant step for footwear.</p>
+  </div>
+
+  <!-- Top Section -->
+  <div class="grid-item">
+    <h1>How to Shop</h1>
+    <p>M00NSHOT Zero will be sold exclusively in five of our stores worldwide:
+      New York: February 6 at Allbirds SoHo
+      London: February 6 at Allbirds Covent Garden and Selfridges
+      Dubai: February 7 at Allbirds Dubai Mall
+      Seoul: April 1 at Allbirds Parnas Mall Store
+      Tokyo: Spring 2025 at Allbirds Marunouchi</p> <!-- Removed closing </a> that wasn't opened -->
+  </div>
+  <div class="grid-item image-container">
+    <img src="{% static 'assets/products/moonshot7.png' %}" alt="Person in beige coat with sheep">
+  </div>
+
+</div>
+
+<div class="emailnotify">
+  <div>
+    <h2><b>Sign in the Loop of Our Progress</b></h2>
+    <br />
+    <p>
+      <b>Sign up for email updates and we'll keep you posted as we continue to work towards <br />
+        our long-term sustainability goals.</b>
+    </p>
+  </div>
+  <br />
+  <div>
+    <!-- Make sure you handle the CSRF token if this form submits to a Django view -->
+    <form action="#" method="POST">
+      {% csrf_token %} <!-- Added CSRF token for security -->
+      <input type="email" name="email" id="email" placeholder="Enter your email" required />
+      <!-- Added required attribute -->
+      <input type="submit" value="SIGNUP" class="btn btn-dark" />
+    </form>
+  </div>
+</div>
+
+<h2 id="initiativeheading"><b>OakTrek Sustainability Initiatives</b></h2>
+<div class="initiatives">
+  <div class="member">
+    <!-- Assumes you have a URL named 'sustainability' in urls.py -->
+    <a href="{% url 'sustainability' %}" class="disnon">
+      <div class="card">
+        <img src="{% static 'assets/products/member1.png' %}" class="card-img-top cardimage" alt="MO.ONSHOT" />
+        <div class="card-body">
+          <h3><b>Introducing MO.ONSHOT</b></h3>
+          <p class="card-text">Learn more about the World's first net zero carbon shoe...</p>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="member">
+    <!-- Assumes you have a URL named 'bcorp' in urls.py -->
+    <a href="{% url 'bcorp' %}" class="disnon">
+      <div class="card">
+        <img src="{% static 'assets/products/member3.png' %}" class="card-img-top cardimage"
+          alt="B Corp Certification" /> <!-- Improved alt text -->
+        <div class="card-body">
+          <h3><b>We're a Certified B Corp</b></h3>
+          <p class="card-text">From the very beginning, the environment...</p>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="member">
+    <!-- Assumes you have a URL named 'moonshot' in urls.py -->
+    <!-- Note: This link might be pointing back to the current page if 'moonshot' is the name for this view -->
+    <a href="{% url 'moonshot' %}" class="disnon">
+      <div class="card">
+        <img src="{% static 'assets/products/member4.png' %}" class="card-img-top cardimage" alt="Mother Nature" />
+        <!-- Improved alt text -->
+        <div class="card-body">
+          <h3><b>Giving Mother Nature a seat at the Table</b></h3>
+          <p class="card-text">We're prioritizing the planet...</p>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="member">
+    <!-- Assumes you have a URL named 'adidasxoaktrek' in urls.py -->
+    <a href="{% url 'adidasxoaktrek' %}" class="disnon">
+      <div class="card">
+        <img src="{% static 'assets/products/member5.png' %}" class="card-img-top cardimage"
+          alt="Adidas X Oaktrek collaboration" /> <!-- Improved alt text -->
+        <div class="card-body">
+          <h3><b>Adidas X Oaktrek</b></h3>
+          <p class="card-text">We teamed up with Adidas...</p>
+        </div>
+      </div>
+    </a>
+  </div>
+
+</div>
+
+<h2 id="approachhead"><b>The OakTree Approach</b></h2>
+<div class="parentpara">
+  <div class="childpara">
+    <h4><b>Wear All Day Comfort</b></h4>
+    <p>Lightweight, bouncy, and wildly comfortable, Allbirds shoes make any outing feel effortless. Slip in, lace up, or
+      slide them on and enjoy the comfy support</p>
+  </div>
+  <div class="childpara">
+    <h4><b>Sustainability in Every Step</b></h4>
+    <p>From materials to transport, we're working to reduce our carbon footprint to near zero. Holding ourselves
+      accountable and striving for climate goals isn't a 30-year goal—it's now.</p>
+  </div>
+  <div class="childpara">
+    <h4><b>Materials from the Earth</b></h4>
+    <p>We replace petroleum-based synthetics with natural alternatives wherever we can. Like using wool, tree fiber, and
+      sugar cane. They're soft, breathable, and better for the planet—win, win, win.</p>
+  </div>
+</div>
+{% endblock %}

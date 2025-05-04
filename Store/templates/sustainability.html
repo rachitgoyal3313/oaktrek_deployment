@@ -1,0 +1,1115 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title_block %}Sustainable Practices | OakTrek{% endblock %}
+
+{% block style_block %}
+<style>
+  /* Sustainable Practices CSS */
+
+  /* Global Styles */
+  :root {
+    --primary-color: #111111;
+    --secondary-color: #8da67e;
+    --light-color: #f7f7f2;
+    --dark-color: #161916;
+    --accent-color: #dca45e;
+    --text-color: #333333;
+    --light-grey: #f5f5f5;
+    --medium-grey: #e0e0e0;
+    --dark-grey: #1a1818;
+    --section-padding: 80px 0;
+    --section-padding-mobile: 50px 0;
+  }
+
+  /* Typography */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--dark-color);
+  }
+
+  h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 1.2rem;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+  }
+
+  p {
+    font-size: 1rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+  }
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+  /* Button Styles */
+  .btn {
+    display: inline-block;
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+  }
+
+  .btn-primary {
+    background-color: var(--primary-color);
+    color: white;
+    border: 2px solid var(--primary-color);
+  }
+
+  .btn-primary:hover {
+    background-color: transparent;
+    color: var(--primary-color);
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+  }
+
+  .btn-secondary:hover {
+    background-color: var(--primary-color);
+    color: white;
+  }
+
+  /* Section Header */
+  .section-header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 60px;
+  }
+
+  /* Hero Section */
+  .hero-section {
+    background-image: url('../assets/sustainability/hero-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    padding: 150px 0;
+    color: white;
+    text-align: center;
+  }
+
+  .hero-section:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(1, 1, 1, 1);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .hero-content h1 {
+    color: white;
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero-content p {
+    color: white;
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Stats Section */
+  .stats-section {
+    background-color: var(--light-color);
+    padding: var(--section-padding);
+  }
+
+  .stats-wrapper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    text-align: center;
+  }
+
+  .stat-item {
+    flex: 1;
+    min-width: 200px;
+    padding: 30px 20px;
+  }
+
+  .stat-item h2 {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+  }
+
+  .stat-item p {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  /* Mission Section */
+  .mission-section {
+    padding: var(--section-padding);
+    background-color: white;
+  }
+
+  .mission-content {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  /* Materials Section */
+  .materials-section {
+    padding: var(--section-padding);
+    background-color: var(--light-color);
+  }
+
+  .materials-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+    gap: 30px;
+  }
+
+  .material-card {
+    background-color: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .material-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+
+  .material-image {
+    height: 200px;
+    overflow: hidden;
+  }
+
+  .material-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .material-card:hover .material-image img {
+    transform: scale(1.05);
+  }
+
+  .material-info {
+    padding: 20px;
+  }
+
+  /* Carbon Section */
+  .carbon-section {
+    padding: var(--section-padding);
+    background-color: white;
+  }
+
+  .carbon-content {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+  }
+
+  .carbon-text {
+    flex: 1;
+  }
+
+  .carbon-image {
+    flex: 1;
+  }
+
+  .carbon-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .progress-container {
+    margin-top: 30px;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .progress-bar-container {
+    height: 12px;
+    background-color: var(--medium-grey);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 15px;
+  }
+
+  .progress-bar {
+    height: 100%;
+    background-color: var(--primary-color);
+    width: 0;
+    transition: width 1.5s ease-in-out;
+  }
+
+  .progress-info {
+    margin-top: 15px;
+  }
+
+  /* Practices Section */
+  .practices-section {
+    padding: var(--section-padding);
+    background-color: var(--light-color);
+  }
+
+  .practices-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+  }
+
+  .practice-item {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease;
+  }
+
+  .practice-item:hover {
+    transform: translateY(-5px);
+  }
+
+  .practice-icon {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 20px;
+  }
+
+  .practice-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Certifications Section */
+  .certifications-section {
+    padding: var(--section-padding);
+    background-color: white;
+  }
+
+  .certifications-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 30px;
+    margin-top: 50px;
+  }
+
+  .certification-item {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .certification-item img {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px;
+  }
+
+  /* Goals Section */
+  .goals-section {
+    padding: var(--section-padding);
+    background-color: var(--light-color);
+  }
+
+  .goals-content {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+  }
+
+  .goals-image {
+    flex: 1;
+  }
+
+  .goals-image img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  .goals-text {
+    flex: 1;
+  }
+
+  .goals-list {
+    list-style: none;
+    padding: 0;
+    margin: 30px 0 0;
+  }
+
+  .goals-list li {
+    margin-bottom: 25px;
+    position: relative;
+    padding-left: 30px;
+  }
+
+  .goals-list li:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 10px;
+    width: 12px;
+    height: 12px;
+    background-color: var(--primary-color);
+    border-radius: 50%;
+  }
+
+  .goals-list h3 {
+    margin-bottom: 5px;
+  }
+
+  .goals-list p {
+    margin: 0;
+  }
+
+  /* CTA Section */
+  .cta-section {
+    padding: var(--section-padding);
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+  }
+
+  .cta-content {
+    max-width: 700px;
+    margin: 0 auto;
+  }
+
+  .cta-content h2,
+  .cta-content p {
+    color: white;
+  }
+
+  .cta-buttons {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .cta-section .btn-primary {
+    background-color: white;
+    color: var(--primary-color);
+    border-color: white;
+  }
+
+  .cta-section .btn-primary:hover {
+    background-color: transparent;
+    color: white;
+  }
+
+  .cta-section .btn-secondary {
+    border-color: white;
+    color: white;
+  }
+
+  .cta-section .btn-secondary:hover {
+    background-color: white;
+    color: var(--primary-color);
+  }
+
+  /* FAQ Section */
+  .faq-section {
+    padding: var(--section-padding);
+    background-color: white;
+  }
+
+  .faq-container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    border-bottom: 1px solid var(--medium-grey);
+  }
+
+  .faq-question {
+    padding: 20px 0;
+    position: relative;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1.1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .faq-icon {
+    font-size: 1.5rem;
+    transition: transform 0.3s ease;
+  }
+
+  .faq-question.active .faq-icon {
+    transform: rotate(45deg);
+  }
+
+  .faq-answer {
+    padding: 0 0 20px;
+    display: none;
+  }
+
+  .faq-answer.show {
+    display: block;
+  }
+
+  /* Responsive Styles */
+  @media (max-width: 992px) {
+    h1 {
+      font-size: 3rem;
+    }
+
+    h2 {
+      font-size: 2.2rem;
+    }
+
+    .carbon-content,
+    .goals-content {
+      flex-direction: column;
+      gap: 40px;
+    }
+
+    .carbon-image,
+    .goals-image {
+      order: -1;
+    }
+
+    .certifications-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2.5rem;
+    }
+
+    h2 {
+      font-size: 2rem;
+    }
+
+    h3 {
+      font-size: 1.3rem;
+    }
+
+    .hero-section {
+      padding: 120px 0;
+    }
+
+    .stats-wrapper {
+      flex-direction: column;
+    }
+
+    .stat-item {
+      margin-bottom: 30px;
+    }
+
+    .materials-grid,
+    .practices-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .section-padding {
+      padding: var(--section-padding-mobile);
+    }
+
+    .cta-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  @media (max-width: 576px) {
+    h1 {
+      font-size: 2rem;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+    }
+
+    .hero-content p {
+      font-size: 1rem;
+    }
+
+    .certifications-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .btn {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+  }
+</style>
+{% endblock %}
+
+{% block main_block %}
+<!-- Hero Section -->
+<section class="hero-section">
+  <div class="container">
+    <div class="hero-content" img="https://cdn.allbirds.com/image/upload/f_auto,q_auto,w_2000/cms/66JpOaSFz7NHUSm9ubslcE/bfcd92f970d9f07538fbffab843ebb94/Landing_Hero_-_Desktop___1_.jpg">
+      <h1>Our Commitment to Sustainability</h1>
+      <p>From regenerative materials to renewable energy, we're on a mission to leave the planet better than we found
+        it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-wrapper">
+      <div class="stat-item">
+        <h2>72%</h2>
+        <p>Reduction in our carbon footprint since 2019</p>
+      </div>
+      <div class="stat-item">
+        <h2>100%</h2>
+        <p>Renewable energy in our owned operations</p>
+      </div>
+      <div class="stat-item">
+        <h2>90%</h2>
+        <p>Of our materials come from natural or recycled sources</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Mission Statement -->
+<section class="mission-section">
+  <div class="container" img="https://cdn.allbirds.com/image/upload/f_auto,q_auto,w_2000/cms/66JpOaSFz7NHUSm9ubslcE/bfcd92f970d9f07538fbffab843ebb94/Landing_Hero_-_Desktop___1_.jpg">
+    <div class="mission-content">
+      <h2>Our Sustainability Mission</h2>
+      <p>At OakTrek, we believe that sustainability isn't just a feature of our products—it's the foundation of
+        everything we do. We're focused on reducing our environmental impact through responsible sourcing, ethical
+        manufacturing, and innovative design that puts the planet first.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Materials Section -->
+<section class="materials-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Sustainable Materials</h2>
+      <p>We choose materials that minimize environmental impact without compromising on comfort or durability.</p>
+    </div>
+    <div class="materials-grid">
+      <div class="material-card">
+        <div class="material-image">
+          <img src="https://cdn.allbirds.com/image/upload/f_auto,q_auto/cms/5PoqFJtVGqrC0zmaZOxJOC/63057011024911caa57be56330e2d918/1.gif" alt="Merino Wool">
+        </div>
+        <div class="material-info">
+          <h3>ZQ Certified Merino Wool</h3>
+          <p>Responsibly sourced from sheep living in humane conditions with a focus on sustainable land management.</p>
+        </div>
+      </div>
+      
+      
+      <div class="material-card">
+        <div class="material-image">
+          <img src="https://cdn.allbirds.com/image/upload/f_auto,q_auto/cms/46sJpOzuxXw6tpdPbTlU5Q/260a2972ec4638b8473a811733392b3b/3.png" alt="Sugarcane SweetFoam">
+        </div>
+        <div class="material-info">
+          <h3>SugarFoam™ Soles</h3>
+          <p>Our revolutionary shoe soles made from carbon-negative, renewable sugarcane.</p>
+        </div>
+      </div>
+      <div class="material-card">
+        <div class="material-image">
+          <img src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw8QDxAPDxAQDw8PDxAQDxAVEA8QDw8PFRIWFhURFRUYHSggGBolGxUVITEhJSkrLi4uFx8zODMtNygtLisBCgoKDg0OFxAQGy8mHx8tLS0rKy0tLS0tKy0tLS0tLSstKy0tLS0tLS0tLS0tLS0rLS0rLS0tKy8tLS0tLS0tLf/AABEIALcBEwMBIgACEQEDEQH/xAAcAAACAwEBAQEAAAAAAAAAAAAAAQIDBAUGBwj/xAA7EAACAgECAwQJAgUDBAMAAAAAAQIRAwQhEjFBBVFhcQYTIjKBkbHB8COhBxRC0eFicpNDc5LxM1Jj/8QAGQEBAQEBAQEAAAAAAAAAAAAAAAECAwQF/8QAIBEBAQEBAAICAwEBAAAAAAAAAAERAhIhAzETUWFCQf/aAAwDAQACEQMRAD8A9EWRkOUSFAXRZJFMWWpgMAAAE0SERUaAnRFoAiTRWiyIDCgGBFojRMQAhiQyKBNDAoSGABASREaAZFkmRYAIBFRYhSQIbApZNCYIAkRRJiAAAAFRFxJIdAUtDTLXEg4gSiySK0WRYDoKGU63WYsGOWbNNY8cFcpO6W9dN3uyC6hUeWl/EXsu6WXJLywZfukTh6fdnvk83/FX3A9I0SRw8XpdoZtfqSjffCVLzaujuxQUDHQgARKhUAgHQUAhjEAgGACGgAAYhiATESIlRJMdiQAKREkxAIAABiAAIwZNFKZZFgTEwHQEGhOaXMm0Z9SuXxJVjTCcX3kO0OysGqxSwZ1KWOdcSUnFuna3W/NIjhNuEztXHn8X8M+yF/0Mn/Pn/ub8X8PeyV/0JLx9dn+jkd7EbMQHn8P8Puy1ywy3/wD2yv7nfh2NiSSXEkkkt72RqhFF0Yr8ZWXMn2NHpJrz3R5H02xZ4aTUQwKcs1KMPVqTnu17teB9DcWcnUr9WXw+iGkfnGPZva9+3j7Qfn/Ms6GLs7tJb+p1l+MM7P0JiRogNXHyX0H0+tjmazY9RGDxv345FHiTVc/ie2eOS5p/JnqYpdxLhXcNR5Fis6/buJLhaSV3ZyGVQAgAAAAAAAICLGBQJjsQgGxAIAAGKwGBGxlFVEkwoKILIsmUxZYmBIz6rnH4/Y0GbV84/El+lieI3YTBhN+Ew02YjXjMuJmrGVGrGXxM8C+JWU2zk6pfqy+H0R1DnayNZPNIlIliRfEpxF8UFWxZYmQiWpFRyO317MH/AKn9DhtHoO3o/pr/AHL6M4DKRECQgpAMAEAAAgGCKhCGAEQAAExEmRAAACgoGidCaIIUSQ6CgGijV818S9FGqe8fiS/SxLCb8Jhwm3EvMw03YzVja8DHiX4zXjb7vsEaofEviZ4S8GXRkvH5M0ytOfrvfj5fc3cXiY9ct4vzQEcbL4vyKcZdEgth+bF0SmJYmWDB26v0vKSPPs9F2xG8T8Gn+550pCAACkAwAQhgAhDEwEwARUAAIBkSQgABgUToKJNESBUFDABUZtR7y8jUZtT7y8vuSrFmI24jFhNuFGGm3EasZlxRZqx/m5UacZogZ4F8WVlY0Ydf/T8fsbLMmv8A6X4sIrxtl0W+79ynGXRCrYy/KZYmVxLoosRi7W/+GXw+p5w9L2qv0Z+X3PMhYBMGxBTEKwTAYAFgAmArKAQmxWA2IBAMaEkSQQAAFFnEhNlSJgSAQEDsy6j3l5fc0mbUe8vL7kqxbhZuwmHCbsLMNNmNGvGZcRpxlRpgXIpgXRKykijWL2fijSjPrPdfw+pUZoMuiyiBbEir4MuiUQZbFlRV2kv0p/7WeWZ6rV745f7X9DzTRVikTLqChi6zgaOFBwjBQI0cIcKGIziNPChUi4MshGvhQuFDBmoaRo4UHCMFFAX0LhGCoRbwgMFSQyFj4iiYWV8YcZBZZl1Hv/BF6kZ8z9v4Iz19LGjCjbiMWE24jDTZiRpxozYjVjKi+H5sXxvwKcZfArKVMo1Xuv8AOppKNX7kvIqMUZFsZFEGWxZBojJFkZFMWXQ+BoGdXGS8H9DzR6bLXC/Jnl55EnXXuLJpsn2kJNMoya1Kkq3f4xRypW078eaXg6On47jl+aa0g3Rjlq3dLbvu0/kXQ4nfXa9+avlyH47Ptfyy/S5K+QUSwQVO3f0Mzk42vHbuHgfkXCM+PUu6afPuLXk8v8EvNjU+TmrKAfE6ViW7S7yZV84QDkhEaIBiAQwAqMDkRbKXMXrDDS6w4ilTJKYVaplbftBxojxe0SjdhNuEw4WbsBhW3EaYIzYjVjKi+BdEqgWosZSspzq4vyf0LaIT5P6mkcqEy+EzwfZHppkz5nhhoNQnG+KbcFjik6u769KR3Z9sZ4p1p+Leq9bGL891/ks5qXqR6RT7+RGXaEFdPenvWyfS/A4X8/OcU2nG+S5NeaKs2Z1SaT503z8Dc4c73+nV1Otc17Ldcne1X0deRx56lLaC3vdu+S/ORRm1CbUYPa97M2TI3fDfs1ezuR154ceu9R1GeKa5yfhW39jXgnJKXs1xJPot/Ln8znrE1J26k1crrZdU+9laz7tR3T236rpVHXN9OP1ddVTe69yLpyvZNLkWQc1zmnsq2p1vyf5zMGPNOlNqruk96SZoWpU+bXFykupLGpddGWdqlXApJNW/ej0kZM2RprufVbl+mlD9Pi3hCafkrt1/YXacPeeJR4ZOVdyTe1/sZkmtW3NUTze1ya9nn0rwLp45KMZbuLjadbJrZo5uHHkupL67/wCTow1TaUGqjjVVypPpuXqZ9Jz1v2FmTj1u9+qZZjyrlXk+Tvr9jKoqSbx81fs99c1HvI4sfFcoybT2carre5fGYW3XSxtt20pJW2rravz5A+XxMcHNO7tLb4L8XzOjJXGMm0rSXm+uxz65dOO6jnx8HDunxRUl4X0IF83cak4qtlXd+fUzTnVeJz8XafJ+zoDXHSRaT46v/Tf3AmN7HmWmKjX6sfqTGOjGBs9SL+XJgxNlcs3Dub5aWzPm0YwV4u2IR95NeK3Roj6U6GDUcmpxYpNXU5KDrv8Aa8jj6vRzfuxX1PL9s+jE88lKadpUmtqVt/ceI+p6b0l7PlutZp2vDNjf3Na9Juz0res0yX/dh/c+Fv0DydJS+KTJ4/QLP/8AZf8Aj/keCa+4S9NOyo3et0+3Opp18jFm/ib2RF1HPLK/9GLJL96o+X4/4e5HC55HGSa5JU1+50Oz/QbDjdyblJb7uzU4Z19MXpfCa/Txvwc3X7IyajtTJl2m6T/pjtFr7nPwaJRVJE543yjSd9Vt+xuSRm60adPem1vvtzXcZ9XqXG4xfE3y93ZeJB5J04K3vVLy/cIYeH2ptWt+DZt3tvXJb2dJMefq+SPrm6tuL70o/cp102lFN3Orb79lvXxRZLGo3JNNOXdb27+5mTM25cUtuFcMbdKl1r4G5jnZWjBCo3L3n4cl5Fi4Un7Svbhpu2/M5D1PFLgbaTi137cL6d1lOCLdtSkmpeylW9LZbm/H9sW/p1882o8m63bpRteDez+ZXGEajJJLbltV3tdPyFLPCt1wuqXOm+u5j9XJtK7jdbO9u8s5LWmee3wzbSVcLvbYzZdpOUOlLiT3L9XpoQULab91b1xbt/fl5lSwPi4uXx6UamT2x179V6Xs7FDJiioJqUk6viu1fP5JfE5+LWveMVxQk1s1un0afeT02tpeza+asnqNVKXhHivhXuxfWvgcpPd11tmTFuk7Qly7uTardJpNPybJdl4vX5JQ5cNPncu7bv6GaGKG6cp1Trhq776f0HoVn00ss4Ti4uPA7VSXE7SSfXbn4mvGe8Z87636T1S4MkobqnUejST2e3UqmuFrgm25btVVPv8AHqQztNbrhaW73tvu3MmXUzguJLiitn4WzXPNZ67k9urpG1FtpUpN103VP6DWoq1tzuL57dEUY9bCUN2oeykoX7Vrp9WVeti9oJv2bk+bTfLwQnH7L8kv1XS02qd3Nf0ypc1fJX+dxox03w7PiSrwfNVfwRgx6hPhVrZbR/OZbjyJte1TX7HPqOnN/qxfnP8AuA5yjbak42+SewE2NZVaQ6BEqPK94SHQDQDSITjbJkXzAh6nwIvTLyNESyI0Yf5LxBaM6UUiaiu4aOZHRLk6a2dPlsWw0kVySXXZHTUV3ElFdyLrOOfHC+iYsuidXS8rOnYpPYeRZrhZMUt1w7eFFS0LW7fnFrdruteB2ZY4vmit4d73+ZqdsX4443q5R2X/ALFLSXccktmtlzafnZ0c2BvuXzMstLlu+KL+DNc9M9cMGTQYovar4KTrfbx6meOilGNJptN20+af02OtLSSa3q1y6+ZlnoJJtxdO1uu9HWd/1y/F/HJ1GCNxbatvwt+LL4YVDZNvuk/3NkdG0ncbttva7e2/7FWbC90k13LevA3O9c78Vn/HL1OmjmftJ+ze/RI6Wh08VUbe3upu9uZlzcfVKvDmQyTl6v2bWRO4Sq9uqZ0+5muXhObes9uzkxyUfd9lc3XNhik9/aa8O/wOTh12Z7T3fSuT8K6GxT4atbyjbbuk693wMXmxeep17acbqfFL3VVb7on2rqIcDcW5PiT6reu8x4MblJOcnwveufwJ6nEsiTW0m2mv6WqVcupZmzS7lxzYcbk9222uFP61yR1NLglJvraXFvs0t2vIxY9BKLvip00qujbDLkgudt3vwpxqqp19Tp11vqOXPx576iM9Fck4pKSdJrbivv8A7nW7M0b50nSanF01S7vkcn1/DV78rX9jVxtpp3wyjwtKTTd9DHV6sx04455uyOZj7Xw5ssvVrgSm4xTb2u/l3mmTcZ1v0+Fooy+i2OL9Z7WOD25t8T7++jXqNJLGk3vF+7NU4P4m71x/licfJ78k03+WBGHE1srXeuQzLWOkgsAPnPrGmNAADsTAAJRLIgBBYmWRYABYmTQAEMjPkMAKkSYAAkkuZS8fdysYFRVKJW/IYGkQ4ROCACiuWCPciL00e5ABraliv+Sjexdi01Rrn+4wLeqz4TdReBVshfyy7gAm1fGHLTxezitvmRjpIrZcui7gAstTxgemVra/kJaZ3v33sADyqeEa80eJJO35lMcEUnHo+nT5AAlXIshipJJ0gAB5VPGP/9k=" alt="Recycled Plastic">
+        </div>
+        <div class="material-info">
+          <h3>Recycled Polyester</h3>
+          <p>Laces and certain fabric elements made from post-consumer recycled plastic bottles.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Carbon Section with Animated Progress -->
+<section class="carbon-section">
+  <div class="container">
+    <div class="carbon-content">
+      <div class="carbon-text">
+        <h2>Our Carbon Footprint</h2>
+        <p>We measure the carbon footprint of everything we make. By knowing our impact, we can work to reduce it.
+          Here's our progress so far:</p>
+
+        <div class="progress-container">
+          <div class="progress-label">
+            <span>2019</span>
+            <span>Now</span>
+            <span>2030 Goal</span>
+          </div>
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="carbon-progress"></div>
+          </div>
+          <div class="progress-info">
+            <p>We've reduced the average carbon footprint of our products by 72% since 2019, and we're aiming for carbon
+              neutrality by 2030.</p>
+          </div>
+        </div>
+      </div>
+      <div class="carbon-image">
+        <img src="https://cdn.allbirds.com/image/upload/f_auto,q_auto/cms/2e92PVyPF7jszo7B1rYxmr/d229f4403d0e36ba45771ec16ad2de05/3.jpg" alt="Carbon Reduction">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Practices Section -->
+<section class="practices-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Sustainable Practices</h2>
+      <p>Beyond our products, we're committed to operating sustainably across our entire business.</p>
+    </div>
+    <div class="practices-grid">
+      <div class="practice-item">
+        <div class="practice-icon">
+          <img src="https://cdn.allbirds.com/image/upload/f_auto,q_auto,w_1467/cms/232SGuQ19myuegQsIMFJm3/79ca90fcca8b92a810c80da44542d76d/Renewable_Materials_Hero_Desktop.jpg" style= ;" alt="Renewable Energy">
+        </div>
+        <h3>100% Renewable Energy</h3>
+        <p>All our owned facilities run on renewable energy, and we're working with our suppliers to help them do the
+          same.</p>
+      </div>
+      <div class="practice-item">
+        <div class="practice-icon">
+          <img src="https://cdn.allbirds.com/image/upload/f_auto,q_auto,w_1467/cms/66eCJytc3uhhWvUTQ1alIt/932b04d23abca952ac7280f48570b7ef/Regenerative_Practices_Hero_Desktop.jpg" alt="Regenerative Agriculture">
+        </div>
+        <h3>Regenerative Agriculture</h3>
+        <p>We're transitioning to wool from regenerative farming practices that actually improve soil health and
+          sequester carbon.</p>
+      </div>
+      <div class="practice-item">
+        <div class="practice-icon">
+          <img src="https://cdn.allbirds.com/image/upload/f_auto,q_auto,w_1467/cms/2Nyif5xKfahHpgWUgRIftV/1c4357b9b8f17a723642ec8d1067a15c/Ocean_shipping_Desktop.jpg" alt="Sustainable Packaging">
+        </div>
+        <h3>Sustainable Packaging</h3>
+        <p>Our boxes are made from 90% post-consumer recycled cardboard and are 100% recyclable.</p>
+      </div>
+      <div class="practice-item">
+        <div class="practice-icon">
+          <img src="data:image/png;base64,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" alt="Circular Economy">
+        </div>
+        <h3>Circular Economy</h3>
+        <p>Through our ReWalk program, we give old shoes new life by donating gently used pairs and recycling materials
+          from worn-out ones.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Certifications Section -->
+<section class="certifications-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Our Certifications</h2>
+      <p>We work with respected third-party organizations to verify our sustainability claims.</p>
+    </div>
+    <div class="certifications-grid">
+      <div class="certification-item">
+        <img src="https://cdn.allbirds.com/image/upload/f_auto,q_auto,w_467,b_rgb:f5f5f5/cms/6gcXEDpGP6erir9ZfbmkaY/6368024888f264b1711eb250278a77e9/2019_-_Reestablished_Bcorp.jpg" alt="B Corp Certification">
+        <h3>B Corporation</h3>
+        <p>We meet the highest standards of verified social and environmental performance.</p>
+      </div>
+      <div class="certification-item">
+        <img src="https://cdn.allbirds.com/image/upload/f_auto,q_auto,w_467,b_rgb:f5f5f5/cms/1mOc6sebv9X648fOuA82mE/6bf1ad5121ae38c47b00ae51fdbe1653/2020_-_Carbon_Footrprint_Labels.jpg" alt="Carbon Neutral">
+        <h3>Carbon Neutral Company</h3>
+        <p>We offset 100% of our carbon emissions while working to reduce our footprint.</p>
+      </div>
+      <div class="certification-item">
+        <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAABBVBMVEX///8NRoAQRYXa3OYAMnkNRoGEka4APYKTmqsNRn7//v////0NRYIAQn8APXwAP30ANXYAPH4AQXwAMnUAPnsAMnYAN3cAM3MAP4QAMHcAPXoAP4EANn0AN3sMR30AOXcAMnzk6fFuhKRfc5cwVIuaqL0AKnIAN4Hv8vXEydUALHBie5qMnbPt8fW2vs6Ck6lAYoyWpblVcZoyVYXX4ekxWpAAJ3e3wM/P0+B1jKlvgKUAK2YAP4kdTIWps8l6jKMjUX5PY4qMn75MaJh9krUAKHpmfqeMorU1YYxGY5Wfs8orVYHByt1efahdb5rZ3OsAGG12h7AAI34ACnAAFW+boLc0VpNLvsd9AAAdzElEQVR4nO1di1viyJavBAq2SOUJBIE8eBsUUAElOA1tq+OM3XbfO3d37v//p+ypgJpAQoKKcPfbM9+0CnnUr07VedWpUwjtjoTlT6fuTubt3tfGaXNBp42vvfZ84tad3OKK3Ms9ufXHHDLlUoNeo2WVSnlbVdVsldHRUVWW4Q/DtM18nraue4PUEpYgbH7cYZHjzh9ufjMNVRY5IIophh+YI95flHKEcOwTTZOM4snNQ9t1vPv+M0A63d55JW1IPKBiKJaY2A8G7AUhI/aDUlk2lcr5WdfZd9OTUOrvb0VFEjkC6PASHzBvgfAF78sXL38TLKpm/lt7vG8Am8nNkLwpUxwEsAWJUonLuAcobjwZkcrclCSPIW9HyEhNk8wYHZzg6V/MajLIEW96vQsgG9LV8uyivm9IAeo20yq1LGAeZvPtfTwE8WNZolprdvcNyyOYMs4cGxrHPUvHjyJRVvDcOQAbwOlVDM0TlB+MkD3RkM72rUDq07Kk0Y3QePgfy0ZJ9n2m6vly2STUYnfCmAy/E4P+VMvT+h7tgP60ZFgEbwAoKkoWfsinbn8ovnyYB1mZqw/OTUBYsFUxetrCozV7ui8+OpmaTMIax4NIpZSA1BGHrtPTeaz9ROhr1esJQrXZs1a/rWJ56t425ZpREZdmzxojLUvqZJx96I62nQ1tEjSKGKampbM8FZtwYa9G6Qyuz5IFfLPOpBMzXvocVQfsWfVJ786KZiWfrbQ/HV93pnPhoxNz+mhQh1HYUzG+YbLw1uYKApqYi+mm3iI01vLmSaM/42n+xUr7o0I03QRWrqtTeJHd+lzd0f9VjO5x82JxUa+Ccdr77axk9tFYWfCQsXBGYHirFZlSm3XW/WCcQ0OZDNFgaJthTwZHpDTsfx7AtgJ+w3ozqCcu9R5c0Z1P+ipwo9xHzMudXo1RXfFaTsWcUC+DfLKYiyGeI3RxYpol9Q7uZCO2P/+zvD44ACHVlL8/CV+qpYhrTQCyZ/cASvyBBGdUrNgdO31kpV3kjOCeBjR+wUPNQkKqxuQQs3yqMGS703O1VtAwLi5d/q4cMf71UeozLIBekYRaZdJ3hG4Ip8KPaxUb6bt2vSEztohD0GdjNjS9ZsoOcn5/RmhOvGfmxrcVTjxF6PvwCf4cG5TTpJCX4Hxvx+gEVB/pawoeYxEcvMIUhq/EKaDqiCXNWVdPTDYnH+2mp7KHVe9iE0TGNC2Kkk1B0NQFxzOxuzq24YtLyaxAZwxFcdirZENkjn5Z363+HxS1tQkomuqsBS6T7aC+Qkpj5AAn56w7+oZ0j1BTtB9Yq6bq4vJz+ONWVO9S4xIlSOhekWGvey9bKjDvSsJSA0STqqRQP2NW1iBSLT/YIT7hFFRbkIOY6H9OHI97Jrz6QdaBE+eyOGyPgH0j6Q70ukTUnzB92rbXRGzePj+vbcMAznT0rKprnAbI+retYgceMJRmjLP9jGcRBZhIafl0Z0wcj7J0rVMZl4AaMideIsEtahlw9a9kUS/CtLrQQdV/12FoPsBANJe3KKcLuT9X1Qum7W/viClTY6HwxgCtrnBEaTCMYNer668c7SjUMSmJK947sxrPmYHSmI40QvWxgIhVAY52W1fWHzAYTwsFhJ50uK3w5yVZjm9M5fxdptfACm9Pls8G84DCv93FHPsmWpjL3nhis38v4VWHU8xPopv5RoIXZ2qrnUkqYKHAuzhFr5m6TArAvnZFG774Ag2TE+9mmnefqPlUjKgVZNAPHNZ+TBfh0nYaBFXv6gcoo1vK7sBp4OkFMCsjUdtaEW44ffvhDkeumV+85bU7bautcEwyXmqnt5PJtIRtJNRNLC2ND/ccbG6syaHWK1kGTjVNTxfOM5NhB1SdJYK0cq/gSxDPf8KI7ZQars1rA6uwcrtlNz9UL4JUbK1OeS09zaFplTRerprYC1nDaeVh+3umlQ+1C1aYgZnsAc2hyffuWOH0J5SzWR/yjIWnBU5SqAFy+UFbvVMd9T+Si3VeXvFSJcuFz2H2lFMvVz2qMCm7YJwR2TZVfstgjaRolEowVn9qwF/5Et5aZt4z+y1H8KputOTCh8WqBOTqYuAFmJSBgSBbdY3ydq87nz52QHL+oZbB/AS5Euo1xhEhLAwJvuPABoR5YGEDjEBqdcbsN06c6SuPFUvuRwHs5vmgELU4JtkvbM0cgXsgGTVdZbrhTKuenlZATLwxYoNZrL80mgIPmUVePwEfmkogvsZpTlMc15aC19PSB3lUkw7GPj0If+hjECmjikSe0AhD3zfPh9/ZULKorC2XX7bmIl6sAhAsMknKBFhDYggxKJ8fIq6Bvercpf1zBXO0M0G590ucyUlQYlDQZ2B49aXaA7z8SbK408WFQynC59+eMMmB2rdASTDN11YsM+OJlV4+eB2Fr9+NcFIMtltqwdzT58wFhG/nJpV04B/KDUDvRTMO+/4NfhZOtNq+zvIUM+XatwkbtOgMMQM9IFQJLU/eF8ER0CQfBAivnJQoNT05Vj/XC7X2Ixn+fNQra5aHHwzlLK0qqUCmCf8UNM3C6xagnySZLVjZoFqHBT4LP87yLILlC9ktugK4+C6l0S0HAWKwwtBF0RunaG5rOpiI9bSsad46YGiTKWi7YrlDvzWnvXZ7Pp+3273p6ZB2ykVbEhePj+obtQ1NSBMmWNEwrymgb1PFoOFIT94hbkBNnKxOLWaHoq8mp7eZCKqxkIx7Eyo9gacUS2Z+9qs3SYVFPJ3U4HY4KxsSxVHC13ZRDvPphds7L2onjb7Fi3bwPfl3KI26HVDb3jq1zYyYoUSKME57/4Df79M0LKKPadUojc66keGj5fTpdzOjkhEhpLCZyUjggQlo6ggoReRqgcqP82LgGt5+o+oHU03mfeKArUUzXW6yHh1p4qN3lWvZoSNMzmuNSf8FSog08H3cnzQ0ZdX09IgUZDqDATAtE9ab55iIloO6sk9OgdGnvdGAy7U0H0DoqtTTCfPwSyBE+2AxgwgVpnlCVg1/sDZsbeuFXDdTsUMNWW2YA4HO0WIbjW3OkoBhLrDc91KLtN6mMpqSX6ITUPOoXYQH850n5iXRUj11Y9PVAYp5Nb1Y+RO2kOPswly3mZfEtSAQ0WZPMlPvyukPTAwwg8d5kfC8T7CRyvAtADP6CmOYjJkqBGR4wUH1PLMU14K32DJw72XqCduqqv4flrnmRcBsxJ4tI4s8kyp1eG1hNAtcl85sD3BSW+lNWmG2S1MFhDUXOSUQ1KurYlTUWwPfgNkSoMfI+chYw8gvgkOYOwHl54DDKY1yY8M/pnFx6/jUuLQuQMwpNOJcpbLpwPdrX1uy8sMfXXirrTEZKWL4imIRpr7zQ6byHVzmBhQjLm0rUEfrsx7TNLPPhlcyzIVpde1rnQb78W0I2cieUD1MQOdZkO68Ss2md+XgxP+lONournFq+swM/Cy5cJnxiA3Dp2IwaQZzmv2RC2Bt21qzWwtnAGGoUuMrXDCH3pwr/q/t020QDjr+tCXNXjKMWMXFMJyUVwwtXLx2Pi6oAA9yrk9CEKKGTstMH7c7SmrV1ShvMRXrpo9DVB32L6UFF8GbaXb/MRmWAiYoIcbsg9xtH7kzc2WF0m7cKjTtDZW6ptmgvaZ+n5gq9cSu1KO4SCRcDHAWJxkuA1EyVZSivjApXl6vlc4+HB+js1JQGGC5IILMBJMfJKHJLBk3gFAbJX1yT8fkNe0OYxce2jCYxAbNOs0yQwn7EErE3dGal0uCcQvsrVU5wysYqG6ZjJ4Mjr4aHATrCVemUvlAYItWO8zXvQVzV/4Bv6xOD+V0dyt6QjMgTDjMrGGnJReZB17RdIrlgKORT8U/E6j1GmZhsWdMLE9Mf++IGtjAzaCFjE92m0PQPvELbctSwT5zLLEzQBmVYJxufM+/soOIicZpW+deEBKsFktVgvN/sZCbAUp1agZ4qBU+XsQEyZWP/J4VNsGy6ota9adNqMzWFBoS//q1nqC/+35vyKpl6vWpjjHrOjbX2nmfx4i5ws3uswf6s4JPpFJeuWcWF7N6it7ygVPw9QC24xvU9FuFnuRCF0ZBK4yYvpuUfWqCgh75jDQe4VtgRYGUmJxRCGGTEQGgJ79WlGO8DBiKJV+H6VPv0/4/T4eGbdWZ/PL7U+b17uF5jWqYLy9lMjw/R6eq8sgM0cnJPKgVSfkp5mEz8spz8YaNh5HXUWNL1gaaz/HEvHL2aRl1Z7VnP8brYPWxUmOKIXeaF/N1VPd7CXi2+VFtv1OYBinS0rTFN67CGywJ4xkir+9GzYdTRiE+hFj+k60Cd6sSJTbI+Zl/FJsbhY3j0y6ErRjc62UYBj+5OnIqHH31+Sn5VIDARU8xYrxIUgG1KKDpCdhWfBVk609/ZidX2ZTKmFFfL+QZu90ZzNxeKd1FfYP3KSZqfi5AgGj69zMYGSYAWZezwNidHyFWM9Gzp9/xqx6ZxQ1zfZQqMkU617HPEGYxxU9OT7428aspQotgvZzrlNozQGP7LXRMy04kwq8BbhPP4ARn2C6PUc4Sfbm8hTdFft5Jd1n6KspFCzq4wfMNGJIDO+iDqNOoR9RXrrQKRXZtrtFjEhm/ItRu9rEXQmhxPmUlsaiRt7RWz66E+2g+PKKRQ/cmt0pLNqKnE99D8FsjsO+kvuZvhD1cSBS3sLbolZ2GT6F+0VqPjvA1L69D433G34n7GoOp/9euyccP1xeZIbQgZSbufAhO5ApCTPLh4rQnha2PUP3HGF1XfCIo71c4qavsbunK7xDNDT8QLJlpU/Tc1dWhF+ooOlrEEpdYaUg+c1Rq+u9KpfndUjrg8jUDshAv3DtuLR8bF8KYODdo1CKX/DrDCSaBKfjJCAWyHvYPWXzELAdnjXi2xBGO0EfEDjqEn4wQuflEORAWXYXH/FuaBKGxYst8NkJ0dhyxRyDIRLO7Iu4F8AsJic2DweJsRU18OkJhtmGLzSuJTbRC/RoXthK4SkV3RdN8OkLkFuMa6fFC6a/w4kKNvwuMmTWf9/MRouuIjWBBUi9WbpslSCTk8LpjsgeEju6LV0eSGPCEcyi1lh4bQpa67lzuASH6W7XiEeKiG5A1maMEHOTXRPB+ECKRT5A4JweXhUmClDSqhCzu7AGhgAbKWrppCEMs/01uMQFC8cc6wP3wEP0QE7Q3kH6aWU/5X+8TcxLiMu0FobCaThhKqn+YJjBmKBmFOYX7QYhukkwr7vWOcSmBIWSELrHuZ5SigZmAJ8rrrX+b8T3Cc6Fu854QIiuB/vYt03wL3xMRIGnVRtgvwl4CG0z+9ny1k48HiPPhizr7QujkY5vMcS/BjC6LJ28WpmxXdmjwaV8I0am8scEeKc/JtR7HNyPE+qq/tV+E4M/qGxvskfTszJ4nmLVaRIR7bzzMrWf4rZGXbIjYcky85NW+hr9nfwjRVym21Zy9DKkW4xEWo5br94cwmLm3sdltI/ZKGjVI94gQFeI1gLHQiNdyXGcQsREVxt8bQgE11tIj1xjjLZ+BjbcWglxDaEbuSt0jwslxHEIi3nhZgL9xceympX5URvMeR2k/z8e0m8O/sdmVUmJnrJedenAIw7J8V8kzvgfra2qrxFb0IybiPhFm4vUF27ebxIY1o7cW7RNhV4ltucoWoa5DN6sEKMLq3jfCfjm25TIL8LZi5yvdkISzT4RoFqsRxRZML0uMK5EX5VfsGaGAfsWKGrYW6JRiawBKtweKsBcvasBFrMcjtDckwe91lE7smJYDwnoSA7a44SV7RZhK47hVmryLBscxCFmO0UGOUjDHanEIsTFBg3h12Nmw32avCFEnVpjCDGvHmjTra+IHg5CP9WyliwQmjfZtwzv2i/AuNpQh9YIba8IRnh4swmY8win4v3EXyZGpfntHOI1v/DVq8jEZGFjdtNdmvwh7YWXrAiQ+oKYci3BT4vR+EbbjEGJxGI+Qkw4ZYQwLOa2ZAKEdliN2GAjnsWbbAmHMRf+PcJ8IYxcvEiE8ZEkTb678X0e4lKVxCA9YH8YilB/QdWh2t5+kA7ZpYrWF3GCFAWMuOmC79DTeLv0KjI5FuGmDzD4RCmgYu6iU7cFkjV2XOVT/UEA0tn5hto3msZOVdjYU8Th0H1+do4G56WwDD2G5f6AInfjEfXuCXCM29/1wY22xCLHponoxFqG9oWrvfuOloWVsAghLdeQUY0apF+s4xFEqgB6IR+ignBW7y+Jg1y2asesWIskhNIrfR/Kfu/akteCyay026Fg+0PXD+Ow9b4NI+LbDAB3qGnD8+rznNQzMWKWiRdd72+s6foL1+QHM11R+c6lUIBJd9uXgczG8fJpYhFzEvtr9IozPp8Hcb96xZiMubhGOqJGlbPeZE2XE+gysdglQY/1QjrUrDzOvLQ4h9VIxhHjvgotOoN3jKM1p8dNQXYQJ3QT5xJG1eg87v1RZNNux4xM15ahSJvtDmIlNvuSItpSQ5/Fp70Q7NIS5SmyjX/K8E+3OiM3Vp/T5F+93GtXiAMGF1fBLMW9cPmYjEbKCVvGNfomDJsiA4wpre6P9COmXmvHSUNUwjWwyhPzRY1ML/+a4l7luq1EIc6gZG4Ty2LIgZ62Q5jrhk017ZqoZ120tm/al7bru92wyhLqDZkeh0O+a37+3ptWoUdrPJ9iM9myoCOhbgg0X4cU0lgjVizp6rC7aJs1dN1cvJ0QoRCDkG/+eD7K3kQgTJHxx4iLFIpcTUDs2GgDa0wp903IeGg/ocomQqsf/TNXDBFB1/SPucSiHAsRS+/Gx14reu5Zki+Xrgss4yTYpc9P+w6MGujyu1Wow/zDPF//BEGbTNZnHajptsBZn06NzvlYFhlHDbLXU2gw+rdV+ry0k03G6ppJazeCzSvro6t+ttDy7n46q0fsP4xvMl3wHX3EJtths3EMKCFvzujDulekzwuyZkHuQ1THKtVXKp3tsToxHgNBg9ZaFMbqUhznkpGDG0qNW13GeZn3h6WouOMMUO1iiKn/5wr9nDylPfLecJRjVOHRLwivCPpoM6sg1gCMewurjd3Rf/XLbFiYGrT2h7sPjLRIej9QL9MesxWqQfWm122OHcfgOBPoARJl7nR3CW9y//mYHBXl6JGIfcGz4DAbpGXpNV3OVBMM6tIjtK0JHPD4+maN2ll8ghGmH7lX85Z/OxDj6C83/9UUyzlGqZo7r/509qg3RJeWzv08cE3hed/iacTJBmRpvNNC8nO20gcXekyP2csc3l9OZyfYSy7ZiU6GBlBAmviJkp6bQ351+7RkhPwMe8nwZEBpd1Gw2T5vnY8SzOHuj2Wz9jwiXHHsIH9EtcLJqoL+zfLaBRvC8a9SsRiBk+/ETHFC/3I//jDCBkQfSN7qmApuHbFDVXNR5RkgBYXaBsPY650dVeWEOp2bPCKs/0QNTGVe5BULQO1VA+CWSh0w2xQ66lZoKiepikOi6GIDwrgoIO3Wn9ixLlwg7gLA4RlU6A+KPQG5etR6up3M0OfYQAvdaqA13VWdLHj7yHsKjKIRtm8YPOXZ0SUAyJqttsl7hdWm1Qbvcqy9Hx3eoa1aPaql6J5utyqzhX2Zokj5uowfAc2RIj0fH7tOVKFf/5aRqX77APKxlv3TG6FetzI2XCM9FNkqHVRqO0LH5BOWQ1jYYxGc1MLKi6tNUWV3Y62FbEFrZ4fWvVL95ekqLTu5aG/aR26pSB02N8r/nAuJrKTTP5q8aaFJsPgy7DkzQ0Q8B9euozhDyt6gB0P5GGT6Ch9cFmgDhWn2afjpRhamIGkPs/ElP4dVH2ZcV43nNWx5vA9/zR61FYbnUUD5mcxJEXKp2/3xl/SQ7H6faHUDo2RXfa0ymDYxQhG4S8wRaurIkmGQNgJEWVSfqclTN3v31aMLkGY1Gl5et1iVYNfj6ema0WiBTqrXzTKY5Kx7x4t0dHd7fPyow/5Y0+1LNmjVjhnrAw9Fli1YxfMqF83AWHxoEkpsry7qCkCCAzGi1bukzQibajzzZAC7fkryPXo1RVfV+p/BRNQuqJeAYmsdm5xZdv1jhi9tDEJ4Z8YoCqNhd322XwErgWCXmt9Rr89xjuslnHMx7E9RX179YrddWCqtAt0ZebvoqwrmRpFwI0ay31tyLRkj5I5jEzoALcaRqwZp7lhh+onSQqDlH6xsMnEIC85vbVd1E0+KPTbrkNV2YpBTDbyt1E9VE5/PhQmj0syclKFPDLPBA7cvORxe7/LL8f/lPoPZlu5hIzJAId93JJyqExpET31Ssf83slu6D9UsT8cCKWmeZJqilxBASbffV9MOory3qeMYO1Ox9RBnnepJSQ6xo6FFrD3WEmblEEw1SvhTJgfhUP25xzOheakEPZT4ZQjmqiAcSnE4CN5GVfCV6I+ohO6OGzkWek+gnsmHbsgBuYvwjFpXtlc+tyS6wmux07Ri7UISVDTXZWSGXBM4zK95LzDec5fYOyijQsmRm18a6+ixymvAkX5zPfGLdeQCY9BjlzQexCMIsSb0+Rhb3iQP1rJikArDX8XgWU029G19O4wXj54gbaG8jQY2gJUBS6sYNrWEy65RjhcLtu0+BONQ9JZFocGnD2HOs++GngYb3WLb1GWcFJVT0XovMevyphH8nWE18eaBY2fl5T1qVRpylHEIgZhKYW6Oo8vOr8DhWH/tk066o99P8REsML+mZXeDyJROn3osJZzZ3Z6MKpwrhKE3kUTAqJTt3bXF2XhKIi4CCbO3s7DxLIlzMCeWvRDh9QzKznwQ0SqoUl0hLZzth41mJyfXEYxQnP/8Q1ZMUsfV1HjF3coblMY7dMBJAuMUZlmgQX70n+HCxfO1sd5brJlqcQ6qBqY0TuRMLqs2TH18roNMknqIfIkeUDz1LtiKBhqdbCBnvaJ0tHHPhJkF50BWQtjh58ynH/lcLaCCyxZftSLzZ8tVhZzrHEJFLPzbsPUlMk5Eu4fj1wSDhiBOQNr0n0SELwbdQUfHO5c69kZNMTgxGpphYQbxScbK9wsrEl8QMAakZWm+jB7qR+j3LBPmJKWcli2w+k/Emf/zXltJmQZRX880u608huWz1pm+ue5qWqHdCX8jxPxtJ/vUWgCjXii2KGUGirZ25243UnDvV9OReTYAIq8r2BhJQX5TxtiJtQZTTyqQxSepa9ScNUlSTWy8BwkQU33xKWt2uvu2t7MW0elweZbrPKKP0SL+bGZ0cPx9t/oYXEWxvLUafSUDuydt46L2ZEF4s6CezYW+SChM+TmrQ+zXLK5Ioct4Gui3sFz/99i6LsVumb5yLL0RFSa9ddei302mv3Z7P5+12L9Mc0k5RsSWRJsiM2fx4b7X3zQAFNElQkT6WMDjpRCvIKpDO/pE0jdCFSngnQnoyea89DBDfy0Vu4QJhfywpaVg2hmg+cjfPFlxMktW3J2IA34sQVPekw4TAvsGsE/YAxsUOE3Gx+xsmb1RWOyX+JHrn55YQ3Yr4NkG+S7Jk+wMDC3UttorNZxNYMvVF/38M9f/9JjN8hyTNFolrH7benvtlHNJMxMavD45gQkdlyocDEZczHzc+X2mSf6N38+Ek5j8iWhJCdeswJqM0Gsc39m0knKbpR9hw7yCCae1U2OH6+ry4XcD/40lTdrnYBZK5fqmT7YJEH0kWp4+2CN2/kXql/XERK70P1IDhBP2XGiXYzLcDdBzWRykWjP2EnLq2vQcjDmvFj1wZiaH+sPzZQxXnf9V3oOSjqTszuXdGWLZAR7E++yBPaQtqV8y4MtIfhlC12QD99JxWJ1NU+Q+Kt2xAR6hUzji7lqBRGKel7M7ZKJWmb1/qeSdBr/bvi+oOpyOl1dp0P0nlr+T01GNrR0PVOpZ6+8bHGOnMaV5Mctz5liTn8XzD2SGfS92motIEe3MTExXVcpPphwMBCNS/aOUT1OJISJoyu/CG534kaChBS1IZK6+KiRNwI4gX1RKXWe7CPDxyM6S0RX7qOgE8slw+FoSI4/r2R4vmjNvfTnRJxBaXPGfLu5JWVSX/rf3CvcMD+EpO9+y8YppycmbKmqpXzs+6e1PtbyDHbT/c/JY3VJklbi12ofi5xv5jH4iyaiq/3Ty03ZdqOf9JxNaxr1tWsWiYqipLmugRFkVZklTVNEo637ruDZZr4Atshzw412jZUsGpu5N5+2x6/dBc0MP1tNeeT9y64w+5CLsRMP8LANgTBPx2uKUAAAAASUVORK5CYII=" alt="Bluesign">
+        <h3>Bluesign® Approved</h3>
+        <p>Our manufacturing processes meet strict environmental health standards.</p>
+      </div>
+      <div class="certification-item">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAYhike5meDPh-_-xnnMKoIvuNFVJ0l25f7A&s" alt="FSC">
+        <h3>FSC Certified</h3>
+        <p>Our tree fiber comes from responsibly managed forests that provide environmental benefits.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Future Goals Section -->
+<section class="goals-section">
+  <div class="container">
+    <div class="goals-content">
+      <div class="goals-image">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQFz-X8RxkLlUEJr2Nfyd5GnsG0MT5pdDqQyA&s" alt="Future Sustainability Goals">
+      </div>
+      <div class="goals-text">
+        <h2>Looking Forward: Our 2030 Goals</h2>
+        <ul class="goals-list">
+          <li>
+            <h3>Carbon Negative</h3>
+            <p>Remove more carbon from the atmosphere than we emit</p>
+          </li>
+          <li>
+            <h3>Zero Waste</h3>
+            <p>Eliminate waste in our entire supply chain</p>
+          </li>
+          <li>
+            <h3>100% Regenerative Materials</h3>
+            <p>Source all our natural materials from regenerative agriculture</p>
+          </li>
+          <li>
+            <h3>Water Positive</h3>
+            <p>Return more clean water to the environment than we use</p>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-content">
+      <h2>Join Us on Our Journey</h2>
+      <p>Sustainability is a continuous journey, not a destination. Stay updated on our progress and learn how you can
+        be part of the solution.</p>
+      <div class="cta-buttons">
+        <a href="{% url 'sustainability' %}" class="btn btn-secondary">Read Our Full Report</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="faq-section">
+  <div class="container">
+    <div class="section-header">
+      <h2>Frequently Asked Questions</h2>
+      <p>Curious about our sustainability efforts? Here are answers to some common questions.</p>
+    </div>
+    <div class="faq-container">
+      <div class="faq-item">
+        <div class="faq-question" data-toggle="collapse" data-target="#faq1">
+          How do you measure your carbon footprint?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer collapse" id="faq1">
+          <p>We work with third-party environmental experts to calculate the carbon footprint of each product across its
+            entire lifecycle—from materials and manufacturing to transportation, use, and end-of-life. This
+            comprehensive approach, known as a Life Cycle Assessment (LCA), helps us identify where we can make the
+            biggest improvements.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" data-toggle="collapse" data-target="#faq2">
+          What makes your materials sustainable?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer collapse" id="faq2">
+          <p>We evaluate materials based on multiple sustainability criteria: renewable resource use, water efficiency,
+            carbon impact, chemical use, and end-of-life options. We prioritize natural, renewable materials that can be
+            grown with minimal environmental impact and processed using responsible methods.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" data-toggle="collapse" data-target="#faq3">
+          How do you ensure ethical manufacturing?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer collapse" id="faq3">
+          <p>All our manufacturing partners must adhere to our strict Code of Conduct, which covers fair labor
+            practices, worker safety, and environmental standards. We regularly audit our factories, both announced and
+            unannounced, and work closely with factory management to implement continuous improvements.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" data-toggle="collapse" data-target="#faq4">
+          What is regenerative agriculture?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer collapse" id="faq4">
+          <p>Regenerative agriculture refers to farming practices that restore soil health, increase biodiversity,
+            improve watershed health, and sequester carbon from the atmosphere. These practices include rotational
+            grazing, cover cropping, composting, and minimizing soil disturbance. We're working with our wool suppliers
+            to transition to these methods.</p>
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question" data-toggle="collapse" data-target="#faq5">
+          How can I recycle my old OakTrek shoes?
+          <span class="faq-icon">+</span>
+        </div>
+        <div class="faq-answer collapse" id="faq5">
+          <p>Through our ReWalk program, you can bring your old OakTrek shoes to any of our retail locations or request
+            a prepaid shipping label to send them back to us. Shoes in good condition are donated to those in need,
+            while worn-out pairs are disassembled and the materials are recycled into new products.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Sustainable Practices JavaScript
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Initialize components
+  initFaqAccordion();
+  initScrollAnimations();
+  initCarbonProgress();
+});
+
+// FAQ Accordion Functionality
+function initFaqAccordion() {
+  const faqQuestions = document.querySelectorAll('.faq-question');
+  
+  faqQuestions.forEach(question => {
+      question.addEventListener('click', function() {
+          // Get target ID from data attribute
+          const targetId = this.getAttribute('data-target');
+          const targetAnswer = document.querySelector(targetId);
+          
+          // Toggle active class on question
+          this.classList.toggle('active');
+          
+          // Toggle collapse class on answer
+          if (targetAnswer.classList.contains('show')) {
+              targetAnswer.classList.remove('show');
+              targetAnswer.style.display = 'none';
+              this.querySelector('.faq-icon').textContent = '+';
+          } else {
+              targetAnswer.classList.add('show');
+              targetAnswer.style.display = 'block';
+              this.querySelector('.faq-icon').textContent = '×';
+          }
+      });
+  });
+}
+
+// Scroll Animations
+function initScrollAnimations() {
+  // Apply initial states to elements that will be animated
+  const materialCards = document.querySelectorAll('.material-card');
+  const practiceItems = document.querySelectorAll('.practice-item');
+  const statItems = document.querySelectorAll('.stat-item');
+  const sectionHeaders = document.querySelectorAll('.section-header');
+  
+  // Set initial styles
+  materialCards.forEach(card => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  });
+  
+  practiceItems.forEach(item => {
+      item.style.opacity = '0';
+      item.style.transform = 'translateY(20px)';
+      item.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  });
+  
+  statItems.forEach(stat => {
+      stat.style.opacity = '0';
+      stat.style.transition = 'opacity 0.8s ease';
+  });
+  
+  sectionHeaders.forEach(header => {
+      header.style.opacity = '0';
+      header.style.transform = 'translateY(20px)';
+      header.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+  });
+  
+  // Utility function to check if element is in viewport
+  function isElementInViewport(el) {
+      const rect = el.getBoundingClientRect();
+      return (
+          rect.top <= (window.innerHeight || document.documentElement.clientHeight) * 0.85 &&
+          rect.bottom >= 0
+      );
+  }
+  
+  // Function to handle scroll animations
+  function handleScrollAnimations() {
+      // Animate material cards
+      materialCards.forEach((card, index) => {
+          if (isElementInViewport(card)) {
+              setTimeout(() => {
+                  card.style.opacity = '1';
+                  card.style.transform = 'translateY(0)';
+              }, index * 100);
+          }
+      });
+      
+      // Animate practice items
+      practiceItems.forEach((item, index) => {
+          if (isElementInViewport(item)) {
+              setTimeout(() => {
+                  item.style.opacity = '1';
+                  item.style.transform = 'translateY(0)';
+              }, index * 100);
+          }
+      });
+      
+      // Animate stat items
+      statItems.forEach((stat, index) => {
+          if (isElementInViewport(stat)) {
+              setTimeout(() => {
+                  stat.style.opacity = '1';
+                  // Add number counting animation for stats
+                  const statValue = stat.querySelector('h2');
+                  if (statValue) {
+                      animateNumber(statValue);
+                  }
+              }, index * 200);
+          }
+      });
+      
+      // Animate section headers
+      sectionHeaders.forEach(header => {
+          if (isElementInViewport(header)) {
+              header.style.opacity = '1';
+              header.style.transform = 'translateY(0)';
+          }
+      });
+      
+      // Check if carbon progress is in viewport
+      const carbonProgress = document.getElementById('carbon-progress');
+      if (carbonProgress && isElementInViewport(carbonProgress) && !carbonProgress.classList.contains('animated')) {
+          carbonProgress.classList.add('animated');
+          carbonProgress.style.width = '72%'; // Set to the current progress value
+      }
+  }
+  
+  // Animate number counting for statistics
+  function animateNumber(element) {
+      const finalValue = parseInt(element.textContent.replace(/[^0-9]/g, ''));
+      if (!isNaN(finalValue) && !element.classList.contains('animated')) {
+          element.classList.add('animated');
+          let startValue = 0;
+          const duration = 2000; // 2 seconds
+          const interval = 16; // approximately 60fps
+          const steps = duration / interval;
+          const increment = finalValue / steps;
+          
+          const counter = setInterval(() => {
+              startValue += increment;
+              if (startValue >= finalValue) {
+                  element.textContent = finalValue + '%';
+                  clearInterval(counter);
+              } else {
+                  element.textContent = Math.floor(startValue) + '%';
+              }
+          }, interval);
+      }
+  }
+  
+  // Run animations on load
+  handleScrollAnimations();
+  
+  // Run animations on scroll
+  window.addEventListener('scroll', handleScrollAnimations);
+}
+
+// Carbon Progress Bar Animation
+function initCarbonProgress() {
+  // Set up the carbon progress bar animation
+  const progressBar = document.getElementById('carbon-progress');
+  if (progressBar) {
+      progressBar.style.width = '0';
+      progressBar.style.transition = 'width 1.5s ease-in-out';
+      
+      // The animation will be triggered when the element is in viewport
+      // (handled by the scroll animations function)
+  }
+}
+
+// Add smooth scrolling for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+      e.preventDefault();
+      const targetId = this.getAttribute('href');
+      if (targetId === '#') return;
+      
+      const targetElement = document.querySelector(targetId);
+      if (targetElement) {
+          window.scrollTo({
+              top: targetElement.offsetTop - 100, // Offset for fixed header
+              behavior: 'smooth'
+          });
+      }
+  });
+});
+
+// Responsive image loading optimization
+function loadResponsiveImages() {
+  const images = document.querySelectorAll('img[data-src]');
+  images.forEach(img => {
+      // Check if we should load the image based on viewport size
+      const viewportWidth = window.innerWidth;
+      const imgSize = img.getAttribute('data-size');
+      
+      if ((imgSize === 'desktop' && viewportWidth >= 768) || 
+          (imgSize === 'mobile' && viewportWidth < 768) ||
+          !imgSize) {
+              img.src = img.getAttribute('data-src');
+              img.removeAttribute('data-src');
+              img.removeAttribute('data-size');
+      }
+  });
+}
+
+// Initialize responsive images
+window.addEventListener('load', loadResponsiveImages);
+window.addEventListener('resize', loadResponsiveImages);
+
+
+</script>
+
+
+
+{% endblock %}

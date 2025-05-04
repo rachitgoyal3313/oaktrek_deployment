@@ -1,0 +1,320 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            padding: 0.8rem 2rem;
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.04);
+            transition: all 0.3s ease;
+            height: 15vh;
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 2rem;
+        }
+
+        .navbar-brand {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #2d3436;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-link {
+            color: #2d3436 !important;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 0.5rem 1.2rem !important;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: #2d3436;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 70%;
+        }
+
+        .nav-link:hover {
+            color: #000 !important;
+            transform: translateY(-1px);
+        }
+
+        .navbar-nav {
+            align-items: center;
+        }
+
+        .right-icons {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .right-icons svg {
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            stroke: #2d3436;
+        }
+
+        .right-icons svg:hover {
+            transform: scale(1.1);
+            stroke: #000;
+        }
+
+        .cart-icon-container {
+            position: relative;
+            padding: 8px;
+        }
+
+        .cart-count {
+            background: #2d3436;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            right: 0;
+            transition: all 0.3s ease;
+            animation: popIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        @keyframes popIn {
+            0% {
+                transform: scale(0);
+            }
+            80% {
+                transform: scale(1.2);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .navbar-toggler {
+            border: none;
+            padding: 0.5rem;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+        }
+
+        .navbar-toggler-icon {
+            width: 1.2em;
+            height: 1.2em;
+        }
+
+        @media (max-width: 991.98px) {
+            .navbar-collapse {
+                background-color: white;
+                padding: 1rem;
+                border-radius: 10px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                margin-top: 1rem;
+            }
+
+            .nav-link {
+                padding: 0.8rem 1rem !important;
+            }
+
+            .nav-link::after {
+                display: none;
+            }
+
+            .right-icons {
+                margin-top: 1rem;
+                justify-content: center;
+            }
+        }
+
+        /* Add these styles to your existing CSS */
+
+        .custom-dropdown {
+            display: none;
+            position: absolute;
+            background: white;
+            top: 100%;
+            left: 0;
+            width: 100%;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            padding: 2rem 0;
+        }
+        
+        .custom-dropdown.show {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .dropdown-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            padding: 0 2rem;
+        }
+        
+        .dropdown-section {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .dropdown-section h6 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #2d3436;
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .dropdown-section a {
+            text-decoration: none;
+            color: #2d3436;
+            font-size: 0.85rem;
+            padding: 0.4rem 0;
+            transition: all 0.2s ease;
+        }
+        
+        .dropdown-section a:hover {
+            color: #000;
+            transform: translateX(5px);
+        }
+        
+        @keyframes fadeIn {
+            from {
+            opacity: 0;
+            transform: translateY(-10px);
+            }
+            to {
+            opacity: 1;
+            transform: translateY(0);
+            }
+        }
+        
+        @media (max-width: 991.98px) {
+            .custom-dropdown {
+            position: static;
+            box-shadow: none;
+            padding: 1rem 0;
+            }
+        
+            .dropdown-content {
+            grid-template-columns: 1fr;
+            gap: 1rem;
+            padding: 0 1rem;
+            }
+        
+            .dropdown-section a:hover {
+            transform: none;
+            }
+        }
+  
+        .featured-section {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .featured-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .featured-item {
+            position: relative;
+            width: 100%;
+        }
+        
+        .featured-item img {
+            width: 100%;
+            border-radius: 5px;
+        }
+        
+        .featured-item span {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+        
+        .mega-menu {
+            width: 600px; /* Adjust as needed */
+            padding: 20px;
+        }
+        
+        .dropdown-header {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .featured-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+        
+        .featured-item img {
+            width: 100px; /* Adjust as needed */
+            height: auto;
+            border-radius: 5px;
+        }
+        
+
+        /* Add a subtle gradient overlay to the navbar */
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(0,0,0,0.05), transparent);
+        }
+
+        .Logo{
+            width: 120px;
+            transform: translate(0,-12px);
+        }

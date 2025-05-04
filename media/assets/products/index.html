@@ -1,0 +1,848 @@
+{% block styles_block %}
+<style>
+    :root {
+        --allbirds-navy: #1a394f;
+        --allbirds-gray: #f8f8f8;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    .hero-section {
+        height: 90vh;
+        display: flex;
+        overflow: hidden;
+    }
+
+    .hero-left,
+    .hero-right {
+        width: 50%;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-left img,
+    .hero-right img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .hero-content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        text-align: center;
+        color: white;
+        width: 100%;
+    }
+
+    .hero-title {
+        font-size: 4rem;
+        font-family: serif;
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        margin-bottom: 2rem;
+    }
+
+    /* Category Sections */
+    .category-section {
+        padding: 60px 0;
+    }
+
+    .category-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+        padding: 0 20px;
+    }
+
+    .category-card {
+        position: relative;
+        height: 500px;
+        overflow: hidden;
+    }
+
+    .category-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .category-content {
+        position: absolute;
+        bottom: 30px;
+        left: 30px;
+        color: white;
+    }
+
+    /* Buttons */
+    .btn-allbirds {
+        background-color: white;
+        color: black;
+        padding: 12px 24px;
+        margin: 5px;
+        text-decoration: none;
+        display: inline-block;
+        min-width: 150px;
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 500;
+        border: none;
+    }
+
+    .btn-allbirds:hover {
+        background-color: #f8f8f8;
+        color: black;
+    }
+
+    .btn-light-outline {
+        background-color: transparent;
+        border: 2px solid white;
+        color: white;
+    }
+
+    /* Main Carousel Section */
+    .carousel-container {
+        width: 100%;
+        height: 80vh;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .carousel {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .carousel-slide {
+        flex: 0 0 calc(50% - 10px);
+        height: 100%;
+        position: relative;
+        margin-right: 20px;
+    }
+
+    .carousel-slide img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .slide-content {
+        position: absolute;
+        bottom: 2rem;
+        left: 2rem;
+        color: white;
+        font-family: system-ui, -apple-system, sans-serif;
+        font-size: 1.25rem;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .carousel-dots {
+        position: absolute;
+        bottom: 2rem;
+        right: 2rem;
+        display: flex;
+        gap: 0.5rem;
+        z-index: 10;
+    }
+
+    .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        border: none;
+        padding: 0;
+    }
+
+    .dot.active {
+        background: white;
+    }
+
+    /* Product Showcase Section */
+    .product-showcase {
+        background-color: #fff;
+    }
+
+    .lifestyle-section {
+        min-height: 600px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .product-card {
+        position: relative;
+        transition: transform 0.3s ease;
+        overflow: hidden;
+        margin-bottom: 30px;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .bg-navy {
+        min-height: 600px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+    }
+
+    .price {
+        font-weight: 600;
+        color: #1a394f;
+    }
+
+    /* Product Carousel Styles */
+    .product-carousel {
+        width: 90%;
+        max-width: 1400px;
+        margin: 40px auto;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .carousel-track {
+        display: flex;
+        transition: transform 0.5s ease-in-out;
+    }
+
+    .slide {
+        min-width: 100%;
+        display: flex;
+        gap: 24px;
+        padding: 0 12px;
+    }
+
+    .product-carousel-card {
+        width: calc(25% - 18px);
+        text-decoration: none;
+        color: inherit;
+        flex-shrink: 0;
+        display: block;
+        transition: transform 0.3s ease;
+    }
+
+    .product-carousel-card:hover {
+        transform: translateY(-5px);
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .product-image {
+        width: 100%;
+        background-color: #f7f7f7;
+        margin-bottom: 16px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .product-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+        object-fit: cover;
+    }
+
+    .product-info {
+        padding: 0 8px;
+    }
+
+    .product-info h3 {
+        font-size: 16px;
+        font-weight: 500;
+        margin: 0 0 4px 0;
+        color: #000;
+    }
+
+    .product-info .color {
+        font-size: 14px;
+        color: #666;
+        margin: 0 0 4px 0;
+    }
+
+    .carousel-controls {
+        position: absolute;
+        top: 50%;
+        width: 100%;
+        transform: translateY(-50%);
+        display: flex;
+        justify-content: space-between;
+        padding: 0 20px;
+        pointer-events: none;
+    }
+
+    .carousel-controls label {
+        width: 40px;
+        height: 40px;
+        background: rgba(255, 255, 255, 0.9);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        pointer-events: auto;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Product hover overlay styles */
+    .product-hover-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: calc(100% - 80px);
+        background: rgba(0, 0, 0, 0.6);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        pointer-events: none;
+    }
+
+    .product-card:hover .product-hover-overlay {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .hover-btn {
+        background: white;
+        color: black;
+        border: none;
+        padding: 12px 24px;
+        min-width: 160px;
+        text-transform: uppercase;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .hover-btn:hover {
+        background: #f8f8f8;
+    }
+
+    /* Final Promo Section */
+    .promo-section {
+        margin-top: 2rem;
+    }
+
+    .promo-card {
+        position: relative;
+        height: 600px;
+        overflow: hidden;
+    }
+
+    .promo-card img {
+        transition: transform 0.5s ease;
+    }
+
+    .promo-card:hover img {
+        transform: scale(1.05);
+    }
+
+    .promo-overlay {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        padding: 2rem;
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0) 100%);
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        display: flex;
+        justify-content: center;
+    }
+
+    .promo-card:hover .promo-overlay {
+        opacity: 1;
+    }
+
+    .button-group {
+        display: flex;
+        gap: 1rem;
+    }
+
+    input[type="radio"] {
+        display: none;
+    }
+
+    #slide1:checked~.carousel-track {
+        transform: translateX(0);
+    }
+
+    #slide2:checked~.carousel-track {
+        transform: translateX(-100%);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .hero-section {
+            flex-direction: column;
+        }
+
+        .hero-left,
+        .hero-right {
+            width: 100%;
+            height: 50vh;
+        }
+
+        .category-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .carousel-container {
+            height: 100vh;
+        }
+
+        .carousel-slide {
+            flex: 0 0 100%;
+            margin-right: 0;
+        }
+
+        .lifestyle-section {
+            min-height: 400px;
+        }
+
+        .bg-navy {
+            min-height: 400px;
+        }
+
+        .product-carousel-card {
+            width: calc(50% - 8px);
+        }
+
+        .slide {
+            gap: 16px;
+        }
+
+        .promo-card {
+            height: 400px;
+        }
+
+        .button-group {
+            flex-direction: column;
+            width: 100%;
+            max-width: 200px;
+        }
+    }
+</style>
+
+{% endblock %}
+
+
+{% extends "base.html" %}
+{% block title %} Oaktrek {% endblock %}
+
+{% block main_block %}
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-container" style="width: 100%; height: 90vh; position: relative; overflow: hidden;">
+        <div class="hero-slide"
+            style="position: absolute; width: 100%; height: 100%; opacity: 0; transition: opacity 1s ease;">
+            <img src="{{url_for('static', filename = 'assets/products/landingpage.png')}}" alt="Person with flowers"
+                style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="hero-slide"
+            style="position: absolute; width: 100%; height: 100%; opacity: 1; transition: opacity 1s ease;">
+            <img src="{{url_for('static', filename = 'assets/products/landingpage2.png')}}"
+                alt="Blue sneakers with flowers" style="width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div class="hero-content"
+            style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; color: white; width: 100%; z-index: 2;">
+            <h1 class="hero-title">Blues In Bloom</h1>
+            <p class="hero-subtitle">NEW LIMITED-EDITION HUES ARE HERE FOR SPRING.</p>
+            <div>
+                <a href="#" class="btn-allbirds">Shop Men</a>
+                <a href="#" class="btn-allbirds">Shop Women</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Category Section -->
+<section class="category-section">
+    <div class="category-grid">
+        <div class="category-card">
+            <img src="{{url_for('static', filename= 'assets/products/landingpageflex1.png')}}" alt="Men's Shoes">
+            <div class="category-content">
+                <h3>Men's Shoes</h3>
+                <a href="#" class="btn-allbirds btn-light-outline">Shop Now</a>
+            </div>
+        </div>
+        <div class="category-card">
+            <img src="{{url_for('static', filename= 'assets/products/landingpageflex2.png')}}" alt="Women's Shoes">
+            <div class="category-content">
+                <h3>Women's Shoes</h3>
+                <a href="#" class="btn-allbirds btn-light-outline">Shop Now</a>
+            </div>
+        </div>
+        <div class="category-card">
+            <img src="{{url_for('static', filename= 'assets/products/landingpageflex3.png')}}" alt="New Arrivals">
+            <div class="category-content">
+                <h3>New Arrivals</h3>
+                <a href="#" class="btn-allbirds btn-light-outline">Shop Now</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Main Carousel Section -->
+<div class="carousel-container">
+    <div class="carousel">
+        <a href="/mens-active" class="carousel-slide">
+            <img src="{{url_for('static', filename='assets/products/landingpagecrousel1.png')}}"
+                alt="Men's Active Shoes">
+            <div class="slide-content">Men's Active Shoes</div>
+        </a>
+        <a href="/urban-collection" class="carousel-slide">
+            <img src="{{url_for('static', filename='assets/products/landingpagecrousel2.png')}}" alt="Urban Collection">
+            <div class="slide-content">Women's Active Shoes</div>
+        </a>
+        <a href="/womens-active" class="carousel-slide">
+            <img src="{{url_for('static', filename='assets/products/landingpagecrousel3.png')}}"
+                alt="Women's Active Shoes">
+            <div class="slide-content">Men's Season Ready Style</div>
+        </a>
+        <a href="/womens-active" class="carousel-slide">
+            <img src="{{url_for('static', filename='assets/products/landingpagecrousel4.png')}}"
+                alt="Women's Active Shoes">
+            <div class="slide-content">Women's Essential Everyday</div>
+        </a>
+        <a href="/womens-active" class="carousel-slide">
+            <img src="{{url_for('static', filename='assets/products/landingpagecrousel5.png')}}"
+                alt="Women's Active Shoes">
+            <div class="slide-content">Men's Weather Ready Collection</div>
+        </a>
+    </div>
+    <div class="carousel-dots">
+        <button class="dot active" onclick="setSlide(0)"></button>
+        <button class="dot" onclick="setSlide(1)"></button>
+        <button class="dot" onclick="setSlide(2)"></button>
+    </div>
+</div>
+
+<!-- Product Showcase Section -->
+<section class="product-showcase my-5">
+    <div class="container-fluid p-0">
+        <div class="row g-0">
+            <!-- Left Side - Lifestyle Image -->
+            <div class="col-md-6 d-flex">
+                <div class="bg-navy w-100 position-relative overflow-hidden">
+                    <img src="{{url_for('static', filename = 'assets/products/landingpageblues1.png')}}"
+                        alt="New And Beautiful Blues Collection" class="w-100 h-100 object-fit-cover opacity-90">
+                    <div class="position-absolute bottom-0 start-0 p-4 text-white">
+                        <h2 class="display-4 mb-2">New And Beautiful Blues</h2>
+                        <p class="mb-4">Cool classics to put spring in your step.</p>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-light text-dark px-4">Shop men</button>
+                            <button class="btn btn-outline-light px-4">Shop women</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Side - Product Grid -->
+            <div class="col-md-6 d-flex">
+                <div class="row g-4 p-4 w-100">
+                    <!-- Top Row Products -->
+                    <div class="col-6">
+                        <div class="product-card text-center">
+                            <div class="product-hover-overlay">
+                                <button class="hover-btn">Shop Men</button>
+                                <button class="hover-btn">Shop Women</button>
+                            </div>
+                            <img src="{{url_for('static', filename = 'assets/products/landingpageblues2.png')}}"
+                                alt="Tree Runner Go" class="img-fluid mb-3">
+                            <h5 class="mb-1">Tree Runner Go</h5>
+                            <p class="text-muted small">Natural Navy/Light</p>
+                            <p class="price">$115</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="product-card text-center">
+                            <div class="product-hover-overlay">
+                                <button class="hover-btn">Shop Men</button>
+                                <button class="hover-btn">Shop Women</button>
+                            </div>
+                            <img src="{{url_for('static', filename = 'assets/products/landingpageblues3.png')}}"
+                                alt="Tree Runner Go" class="img-fluid mb-3">
+                            <h5 class="mb-1">Tree Runner Go</h5>
+                            <p class="text-muted small">White/Natural Light</p>
+                            <p class="price">$115</p>
+                        </div>
+                    </div>
+                    <!-- Bottom Row Products -->
+                    <div class="col-6">
+                        <div class="product-card text-center">
+                            <div class="product-hover-overlay">
+                                <button class="hover-btn">Shop Men</button>
+                                <button class="hover-btn">Shop Women</button>
+                            </div>
+                            <img src="{{url_for('static', filename = 'assets/products/landingpageblues4.png')}}"
+                                alt="Tree Dasher 2" class="img-fluid mb-3">
+                            <h5 class="mb-1">Tree Dasher 2</h5>
+                            <p class="text-muted small">White/Navy</p>
+                            <p class="price">$135</p>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="product-card text-center">
+                            <div class="product-hover-overlay">
+                                <button class="hover-btn">Shop Men</button>
+                                <button class="hover-btn">Shop Women</button>
+                            </div>
+                            <img src="{{url_for('static', filename = 'assets/products/landingpageblues5.png')}}"
+                                alt="Tree Dasher 2" class="img-fluid mb-3">
+                            <h5 class="mb-1">Tree Dasher 2</h5>
+                            <p class="text-muted small">Natural Navy</p>
+                            <p class="price">$135</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Final Promo Section -->
+<section class="promo-section container-fluid p-0">
+    <div class="row g-0">
+        <div class="col-md-6">
+            <div class="promo-card">
+                <img src="{{url_for('static', filename='assets/products/landingpagemoonshot.png')}}"
+                    alt="Sock boot with sheep" class="w-100 h-100 object-fit-cover">
+                <div class="promo-overlay">
+                    <button class="btn-allbirds">Explore Now</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="promo-card">
+                <img src="{{url_for('static', filename='assets/products/landingpagechaelsea.png')}}"
+                    alt="Black boots lifestyle" class="w-100 h-100 object-fit-cover">
+                <div class="promo-overlay">
+                    <div class="button-group">
+                        <button class="btn-allbirds">Shop Men</button>
+                        <button class="btn-allbirds">Shop Women</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<div class="product-carousel">
+    <input type="radio" name="slider" id="slide1" checked>
+    <input type="radio" name="slider" id="slide2">
+
+    <div class="carousel-track">
+        <div class="slide">
+            <a href="/products/mens-tree-runner" class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{url_for('static', filename='assets/products/productcrousel1.png')}}"
+                        alt="Men's Tree Runner Go">
+                </div>
+                <div class="product-info">
+                    <h3>Men's Tree Runner Go</h3>
+                    <p class="color">Hanami Night</p>
+                    <p class="price">$120</p>
+                </div>
+            </a>
+            <a href="/products/womens-tree-dasher" class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{url_for('static', filename='assets/products/productcrousel2.png')}}"
+                        alt="Women's Tree Dasher 2">
+                </div>
+                <div class="product-info">
+                    <h3>Women's Tree Dasher 2</h3>
+                    <p class="color">Blizzard/Hanami Night</p>
+                    <p class="price">$135</p>
+                </div>
+            </a>
+            <a href="/products/mens-tree-loungers" class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{url_for('static', filename='assets/products/productcrousel3.png')}}"
+                        alt="Men's Tree Loungers">
+                </div>
+                <div class="product-info">
+                    <h3>Men's Tree Loungers</h3>
+                    <p class="color">Hanami Night</p>
+                    <p class="price">$100</p>
+                </div>
+            </a>
+            <a href="/products/womens-lounger-lift" class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{url_for('static', filename='assets/products/productcrousel4.png')}}"
+                        alt="Women's Lounger Lift">
+                </div>
+                <div class="product-info">
+                    <h3>Women's Lounger Lift</h3>
+                    <p class="color">Natural White/Hanami Night</p>
+                    <p class="price">$105</p>
+                </div>
+            </a>
+        </div>
+        <div class="slide">
+            <a href="/products/womens-lounger-lift-white" class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{url_for('static', filename='assets/products/productcrousel5.png')}}"
+                        alt="Women's Lounger Lift">
+                </div>
+                <div class="product-info">
+                    <h3>Women's Lounger Lift</h3>
+                    <p class="color">Natural White/Hanami Night</p>
+                    <p class="price">$105</p>
+                </div>
+            </a>
+            <a href="/products/womens-lounger-lift-navy" class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{url_for('static', filename='assets/products/productcrousel6..png')}}"
+                        alt="Women's Lounger Lift">
+                </div>
+                <div class="product-info">
+                    <h3>Women's Lounger Lift</h3>
+                    <p class="color">Natural White/Hanami Night</p>
+                    <p class="price">$105</p>
+                </div>
+            </a>
+            <a href="/products/womens-lounger-lift-black" class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{url_for('static', filename='assets/products/productcrousel7.png')}}"
+                        alt="Women's Lounger Lift">
+                </div>
+                <div class="product-info">
+                    <h3>Women's Lounger Lift</h3>
+                    <p class="color">Natural White/Hanami Night</p>
+                    <p class="price">$105</p>
+                </div>
+            </a>
+            <a href="/products/womens-lounger-lift-gray" class="product-carousel-card">
+                <div class="product-image">
+                    <img src="{{url_for('static', filename='assets/products/productcrousel8.png')}}"
+                        alt="Women's Lounger Lift">
+                </div>
+                <div class="product-info">
+                    <h3>Women's Lounger Lift</h3>
+                    <p class="color">Natural White/Hanami Night</p>
+                    <p class="price">$105</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="carousel-controls">
+        <label for="slide1" class="prev">&#10094;</label>
+        <label for="slide2" class="next">&#10095;</label>
+    </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+
+
+<script>
+    let currentSlide = 0;
+    const carousel = document.querySelector('.carousel');
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dots = document.querySelectorAll('.dot');
+
+    function setSlide(index) {
+        currentSlide = index;
+        updateCarousel();
+    }
+
+    function updateCarousel() {
+        carousel.style.transform = `translateX(-${currentSlide * 50}%)`;
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentSlide);
+        });
+    }
+
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        updateCarousel();
+    }
+
+    // Auto-advance slides every 5 seconds
+    setInterval(nextSlide, 5000);
+
+    // Add click event listeners to dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => setSlide(index));
+    });
+
+
+
+    // Find existing carousel and dots elements
+    const heroLeft = document.querySelector('.hero-left');
+    const heroRight = document.querySelector('.hero-right');
+    const heroImages = [
+        heroLeft.querySelector('img'),
+        heroRight.querySelector('img')
+    ];
+
+    // Store original image sources
+    const imageSources = heroImages.map(img => img.src);
+
+    function updateHeroSection() {
+        // Swap image sources
+        heroImages.forEach((img, index) => {
+            img.src = imageSources[(index + currentSlide) % 2];
+        });
+    }
+
+    // Modify the existing updateCarousel function
+    function updateCarousel() {
+        // Keep existing carousel functionality
+        carousel.style.transform = `translateX(-${currentSlide * 50}%)`;
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentSlide);
+        });
+
+        // Add hero section update
+        updateHeroSection();
+    }
+
+    // The rest of your existing code remains the same:
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        updateCarousel();
+    }
+
+    // Auto-advance slides every 5 seconds
+    setInterval(nextSlide, 5000);
+
+    // Add click event listeners to dots
+    dots.forEach((dot, index) => {
+        dot.addEventListener('click', () => setSlide(index));
+    });
+
+
+</script>
+
+
+{% endblock %}

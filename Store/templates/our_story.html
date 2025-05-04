@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style_block %}
+<style>
+    /* Story Page Specific Styles */
+    .hero-section {
+        background-color: #111; /* Dark background for hero */
+        color: white;
+        padding: 5rem 0; /* Adjusted padding */
+        text-align: center;
+        margin-top: 60px; /* Added margin to prevent overlap with fixed navbar if applicable */
+    }
+
+    .hero-section h1 {
+        font-size: 3rem; /* Larger heading */
+        font-weight: bold;
+        margin-bottom: 0.5rem;
+    }
+
+    .hero-section .lead {
+        font-size: 1.2rem;
+        color: rgba(255, 255, 255, 0.8); /* Slightly transparent lead text */
+    }
+
+    .section {
+        padding: 4rem 1rem; /* Added horizontal padding */
+    }
+
+    .story-image {
+        border-radius: 8px;
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Softer shadow */
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        display: block; /* Ensure image behaves like a block */
+        max-width: 100%; /* Ensure image is responsive */
+        height: auto; /* Maintain aspect ratio */
+        margin-bottom: 1.5rem; /* Add space below image on small screens */
+    }
+
+    .story-image:hover {
+        transform: translateY(-5px); /* Lift effect on hover */
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .story-content {
+        padding-left: 1rem; /* Add padding for text content */
+        padding-right: 1rem;
+    }
+
+    .story-content h2 {
+        color: #111;
+        margin-bottom: 1.5rem;
+        font-weight: 600; /* Slightly less bold */
+        font-size: 2rem; /* Adjusted size */
+        border-left: 4px solid #111; /* Add a subtle accent */
+        padding-left: 1rem;
+    }
+
+    .story-content p {
+        color: #555; /* Slightly lighter text */
+        font-size: 1.05rem; /* Adjusted size */
+        line-height: 1.7; /* Adjusted line height */
+        margin-bottom: 1rem; /* Consistent paragraph spacing */
+    }
+
+    /* Ensure proper alignment and spacing */
+    .align-items-center {
+        align-items: center; /* Vertically center content in row */
+    }
+
+    .mb-5, .mt-5 {
+        margin-bottom: 4rem !important; /* Increase vertical spacing between sections */
+        margin-top: 4rem !important;
+    }
+
+     /* Responsive adjustments */
+    @media (max-width: 767px) {
+        .hero-section {
+            padding: 3rem 0;
+        }
+        .hero-section h1 {
+            font-size: 2.5rem;
+        }
+        .section {
+            padding: 2.5rem 1rem;
+        }
+        .story-content h2 {
+            font-size: 1.8rem;
+        }
+        /* Stack images above text on mobile */
+        .row.align-items-center > div:first-child { order: 1; }
+        .row.align-items-center > div:last-child { order: 2; }
+        .row.align-items-center .col-md-6.order-md-2 { order: 1 !important; } /* Override mission image order */
+        .row.align-items-center .col-md-6.order-md-1 { order: 2 !important; } /* Override mission text order */
+
+        .story-image {
+             margin: 0 auto 2rem auto; /* Center image and add bottom margin */
+        }
+        .story-content {
+             text-align: center; /* Center text content */
+             padding-left: 0;
+             padding-right: 0;
+        }
+         .story-content h2 {
+             border-left: none; /* Remove border on mobile */
+             padding-left: 0;
+             text-align: center;
+         }
+
+    }
+
+    /* --- Styles for commented out sections (Timeline, Values) - Keep if planning to add them --- */
+    .mission-section { /* Example styling */
+        background-color: #f8f8f8;
+        padding: 4rem 1rem;
+        margin-top: 3rem;
+        border-top: 1px solid #eee;
+        border-bottom: 1px solid #eee;
+    }
+
+    .values-section { /* Example styling */
+        text-align: center;
+        padding: 4rem 1rem;
+    }
+
+    .value-item { /* Example styling */
+        padding: 2rem;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        margin-bottom: 2rem;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+     .value-item:hover {
+         transform: translateY(-5px);
+         box-shadow: 0 6px 15px rgba(0, 0, 0, 0.12);
+     }
+
+    .value-item h3 { /* Example styling */
+        color: #111;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .timeline { /* Example styling */
+        position: relative;
+        padding: 4rem 0;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .timeline::before { /* Example styling - vertical line */
+        content: '';
+        position: absolute;
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+        width: 3px;
+        height: 100%;
+        background-color: #e0e0e0; /* Lighter line color */
+        border-radius: 2px;
+    }
+    /* --- End of commented out section styles --- */
+
+</style>
+{% endblock %}
+
+{% block title_block %}Our Story - Oaktrek{% endblock %}
+
+{% block main_block %}
+<!-- Our Story Page Content -->
+<div class="hero-section">
+    <div class="container">
+        <h1>Our Story</h1>
+        <p class="lead">Born from a desire for better shoes and a better planet.</p>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <!-- Section 1: The Beginning -->
+        <div class="row align-items-center mb-5">
+            <div class="col-md-6">
+                {# --- Changed from url_for to static tag --- #}
+                <img src="{% static 'assets/logos/our_story.jpg' %}" alt="Founders sketching shoe designs"
+                    class="img-fluid story-image">
+            </div>
+            <div class="col-md-6 story-content">
+                <h2>The Spark of an Idea</h2>
+                <p>OakTrek wasn't born in a boardroom, but from a simple question: why couldn't shoes be comfortable, stylish, *and* kind to the Earth? Frustrated by the trade-offs in the footwear industry – synthetic materials, questionable comfort, and a heavy environmental cost – our founders envisioned something different.</p>
+                <p>It started with curiosity, countless sketches, and a deep dive into natural materials. We believed that nature held the key to better performance and a lighter footprint.</p>
+            </div>
+        </div>
+
+        <!-- Section 2: Our Mission -->
+        <div class="row align-items-center mt-5">
+            <div class="col-md-6 order-md-2">
+                {# --- Changed from url_for to static tag --- #}
+                <img src="{% static 'assets/logos/our_mission.jpg' %}"
+                    alt="Hands holding sustainable materials like wool and eucalyptus fiber" class="img-fluid story-image">
+            </div>
+            <div class="col-md-6 order-md-1 story-content">
+                <h2>Treading Lighter</h2>
+                <p>Our mission is simple: to make it easy for people to choose footwear that feels good and does good. We're committed to using renewable materials, reducing our carbon footprint, and ensuring ethical practices throughout our supply chain.</p>
+                <p>This means constantly challenging ourselves to innovate, finding smarter ways to create, and being transparent about our progress. Every pair of OakTreks represents our commitment to a more sustainable path forward, one comfortable step at a time.</p>
+            </div>
+        </div>
+
+        <!-- Optional Sections (Add content later if needed) -->
+        <!--
+        <div class="mission-section">
+            <div class="container text-center">
+                <h2>Our Core Values</h2>
+                <p class="lead">Guiding principles that shape everything we do.</p>
+            </div>
+        </div>
+
+        <div class="values-section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="value-item">
+                            <h3>Sustainability First</h3>
+                            <p>Prioritizing the planet in our materials and processes.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                         <div class="value-item">
+                            <h3>Comfort Obsessed</h3>
+                            <p>Relentlessly pursuing unparalleled comfort in every design.</p>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="value-item">
+                            <h3>Radical Transparency</h3>
+                            <p>Being open and honest about our journey and impact.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="timeline-section section">
+            <div class="container">
+                 <h2 class="text-center mb-5">Our Journey So Far</h2>
+                 <div class="timeline">
+                      Timeline items would go here
+                 </div>
+            </div>
+        </div>
+        -->
+
+    </div> <!-- /.container -->
+</div> <!-- /.section -->
+
+
+{# --- JavaScript for leaves commented out as the target container #leaves-container is missing --- #}
+{#
+<script>
+    // // Create animated leaves (Requires <div id="leaves-container"></div> in the HTML)
+    // const leavesContainer = document.getElementById('leaves-container');
+    // if (leavesContainer) {
+    //     for (let i = 0; i < 10; i++) {
+    //         const leaf = document.createElement('div');
+    //         leaf.className = 'floating-leaf'; // Ensure .floating-leaf styles are defined
+    //         leaf.style.left = Math.random() * 100 + 'vw';
+    //         leaf.style.animationDelay = Math.random() * 20 + 's';
+    //         leaf.style.animationDuration = (Math.random() * 10 + 15) + 's'; // Adjust duration
+    //         leaf.innerHTML = `<svg viewBox="0 0 100 100"><path d="M50 10 C60 30 80 40 90 60 C80 80 60 90 50 95 C40 90 20 80 10 60 C20 40 40 30 50 10 Z" fill="currentColor"/></svg>`;
+    //         leavesContainer.appendChild(leaf);
+    //     }
+    // }
+</script>
+#}
+
+{% endblock %}

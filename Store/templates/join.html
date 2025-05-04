@@ -1,0 +1,657 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title_block %}Join the Movement | OakTrek{% endblock %}
+
+{% block style_block %}
+<style>
+    :root {
+        --primary-color: #111;
+        --secondary-color: #f9f9f9;
+        --accent-color: #111;
+        --light-accent: #d5d7d4;
+        --text-color: #333333;
+        --light-gray: #f7f7f7;
+        --border-color: #e0e0e0;
+    }
+
+    .hero-join {
+        background-color: var(--light-accent);
+        padding: 6rem 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-join h1 {
+        font-size: 3.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        animation: fadeInUp 1s ease-out;
+    }
+
+    .hero-join p {
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto 2rem;
+        color: var(--text-color);
+        animation: fadeInUp 1s ease-out 0.3s;
+        animation-fill-mode: both;
+    }
+
+    .btn-oak {
+        display: inline-block;
+        background-color: var(--accent-color);
+        color: white;
+        padding: 0.8rem 2.5rem;
+        border-radius: 2px;
+        text-decoration: none;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9rem;
+        animation: fadeInUp 1s ease-out 0.6s;
+        animation-fill-mode: both;
+    }
+
+    .btn-oak:hover {
+        background-color: #151615;
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    .btn-outline {
+        background-color: transparent;
+        border: 1px solid var(--accent-color);
+        color: var(--accent-color);
+    }
+
+    .btn-outline:hover {
+        background-color: var(--accent-color);
+        color: white;
+    }
+
+    .section-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 2rem;
+    }
+
+    .purpose-section {
+        padding: 5rem 0;
+        background-color: white;
+    }
+
+    .purpose-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 4rem;
+        align-items: center;
+    }
+
+    .purpose-content {
+        animation: slideInLeft 1s ease-out forwards;
+    }
+
+    .purpose-image {
+        overflow: hidden;
+        border-radius: 4px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        animation: slideInRight 1s ease-out forwards;
+    }
+
+    .purpose-image img {
+        width: 100%;
+        height: auto;
+        display: block;
+        transition: transform 0.8s ease;
+    }
+
+    .purpose-image:hover img {
+        transform: scale(1.05);
+    }
+
+    .section-title {
+        font-size: 2.2rem;
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+        position: relative;
+        padding-bottom: 0.8rem;
+        font-weight: 500;
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 60px;
+        height: 2px;
+        background-color: var(--accent-color);
+    }
+
+    .centered-title::after {
+        left: 50%;
+        transform: translateX(-50%);
+    }
+
+    .purpose-content p {
+        margin-bottom: 1.2rem;
+        font-size: 1.05rem;
+        line-height: 1.7;
+    }
+
+    .impact-section {
+        padding: 5rem 0;
+        background-color: var(--light-gray);
+    }
+
+    .impact-intro {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto 3rem;
+        font-size: 1.1rem;
+    }
+
+    .impact-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 2rem;
+    }
+
+    .stat-card {
+        background-color: white;
+        padding: 2.5rem 1.5rem;
+        text-align: center;
+        border-radius: 4px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: transform 0.5s, box-shadow 0.5s;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+
+    .stat-number {
+        font-size: 3.5rem;
+        font-weight: 600;
+        color: var(--accent-color);
+        margin-bottom: 1rem;
+    }
+
+    .materials-section {
+        padding: 5rem 0;
+        background-color: white;
+    }
+
+    .materials-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.5rem;
+    }
+
+    .material-card {
+        display: flex;
+        gap: 1.5rem;
+        padding: 1.5rem;
+        border-radius: 4px;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .material-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .material-icon {
+        flex: 0 0 50px;
+        height: 50px;
+        background-color: var(--light-accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: transform 0.4s;
+    }
+
+    .material-card:hover .material-icon {
+        transform: rotate(360deg);
+        background-color: var(--accent-color);
+    }
+
+    .material-card:hover .material-icon svg {
+        stroke: white;
+    }
+
+    .material-content h3 {
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--primary-color);
+    }
+
+    .testimonials-section {
+        padding: 5rem 0;
+        background-color: var(--secondary-color);
+    }
+
+    .testimonial-slider {
+        display: flex;
+        gap: 2rem;
+        overflow-x: auto;
+        padding-bottom: 2rem;
+        scroll-behavior: smooth;
+        scrollbar-width: none; /* Firefox */
+    }
+
+    .testimonial-slider::-webkit-scrollbar {
+        display: none; /* Chrome, Safari, Opera */
+    }
+
+    .testimonial-card {
+        flex: 0 0 350px;
+        background-color: white;
+        padding: 2rem;
+        border-radius: 4px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: transform 0.4s, box-shadow 0.4s;
+    }
+
+    .testimonial-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .testimonial-text {
+        font-style: italic;
+        margin-bottom: 1.5rem;
+        font-size: 1.05rem;
+        line-height: 1.7;
+    }
+
+    .testimonial-author {
+        display: flex;
+        align-items: center;
+    }
+
+    .author-name {
+        font-weight: 600;
+        color: var(--primary-color);
+    }
+
+    .join-form-section {
+        padding: 5rem 0;
+        background-color: white;
+    }
+
+    .form-container {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 3rem;
+        background-color: var(--light-gray);
+        border-radius: 4px;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 500;
+        color: var(--primary-color);
+    }
+
+    .form-input {
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid var(--border-color);
+        border-radius: 2px;
+        font-size: 1rem;
+        transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-input:focus {
+        outline: none;
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 3px rgba(92, 125, 64, 0.1);
+    }
+
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        margin-top: 0.6rem;
+        transition: transform 0.2s;
+    }
+
+    .checkbox-group:hover {
+        transform: translateX(5px);
+    }
+
+    .checkbox-group input {
+        margin-right: 0.8rem;
+    }
+
+    .commitment-section {
+        padding: 5rem 0;
+        background-color: var(--light-accent);
+        text-align: center;
+    }
+
+    .commitment-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .commitment-content p {
+        margin-bottom: 1.5rem;
+        font-size: 1.1rem;
+        line-height: 1.7;
+    }
+
+    .oak-leaf {
+        width: 60px;
+        margin: 0 auto 2rem;
+    }
+
+    .oak-leaf svg {
+        fill: none;
+        stroke: var(--accent-color);
+        stroke-width: 2;
+    }
+
+    .oak-leaf {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .oak-leaf svg path {
+        stroke-dasharray: 400;
+        stroke-dashoffset: 400;
+        animation: drawLeaf 3s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideInLeft {
+        from {
+            opacity: 0;
+            transform: translateX(-30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slideInRight {
+        from {
+            opacity: 0;
+            transform: translateX(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes float {
+        0% {
+            transform: translateY(0px);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+        100% {
+            transform: translateY(0px);
+        }
+    }
+
+    @keyframes drawLeaf {
+        to {
+            stroke-dashoffset: 0;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .purpose-grid, .impact-stats, .materials-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .purpose-grid {
+            gap: 2rem;
+        }
+
+        .hero-join h1 {
+            font-size: 2.5rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block main_block %}
+    <!-- Hero Section -->
+    <section class="hero-join">
+        <div class="section-container">
+            <h1>Join The Movement</h1>
+            <p>Be part of something bigger. Together, we can transform the industry and protect our planet for future generations.</p>
+            <a href="{% url 'profile' %}" class="btn-oak">Join Now</a>
+        </div>
+    </section>
+
+    <!-- Purpose Section -->
+    <section class="purpose-section">
+        <div class="section-container purpose-grid">
+            <div class="purpose-content">
+                <h2 class="section-title">Our Purpose</h2>
+                <p>At OakTrek, we're on a mission to create eco-friendly footwear that doesn't compromise on style or comfort. We believe that sustainable fashion isn't just a trend—it's the future.</p>
+                <p>Each step you take in OakTrek shoes contributes to a healthier planet. Our innovative materials and ethical manufacturing processes are designed to minimize environmental impact while maximizing durability and performance.</p>
+                <p>By joining our movement, you're not just buying shoes—you're voting for a more sustainable world with your wallet and becoming part of a community that values both people and planet.</p>
+                <div style="margin-top: 2rem;">
+                    <a href="{% url 'home' %}" class="btn-oak btn-outline">Learn More</a>
+                </div>
+            </div>
+            <div class="purpose-image">
+                <img src="https://cdn.allbirds.com/image/fetch/q_auto,f_auto/w_880,f_auto,q_auto/https://cdn.allbirds.com/image/upload/f_auto,q_auto/v1/production/sustainabilityPageShowcaseItem/en-US/images/3FOrqyyNPx0IH32jzjS1jV/1" alt="Sustainable shoes">
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="impact-section">
+        <div class="section-container">
+            <div class="oak-leaf">
+                <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50,10 C60,20 75,15 85,25 C95,35 90,50 80,60 C70,70 75,85 65,95 C55,105 40,100 30,90 C20,80 5,85 15,65 C25,45 15,30 25,20 C35,10 40,0 50,10 Z" />
+                    <path d="M50,10 C50,40 50,70 50,110" />
+                    <path d="M50,60 C60,55 70,50 80,45" />
+                    <path d="M50,80 C40,75 30,70 20,75" />
+                </svg>
+            </div>
+            <h2 class="section-title centered-title" style="text-align: center;">Our Impact</h2>
+            <p class="impact-intro">Together with our community, we've already made significant strides toward a more sustainable fashion industry. Here's what we've accomplished:</p>
+            
+            <div class="impact-stats">
+                <div class="stat-card">
+                    <div class="stat-number">75%</div>
+                    <p>Reduction in carbon footprint compared to traditional footwear manufacturing</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">500K</div>
+                    <p>Plastic bottles recycled and transformed into durable, comfortable shoes</p>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">15</div>
+                    <p>Reforestation projects funded across the globe</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Materials Section -->
+    <section class="materials-section">
+        <div class="section-container">
+            <h2 class="section-title">Sustainable Materials</h2>
+            <p style="margin-bottom: 3rem;">Our commitment to sustainability begins with our carefully selected materials:</p>
+            
+            <div class="materials-grid">
+                <div class="material-card">
+                    <div class="material-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M8,12 C8,8 12,8 12,12 C12,16 16,16 16,12" />
+                        </svg>
+                    </div>
+                    <div class="material-content">
+                        <h3>Recycled Polyester</h3>
+                        <p>Made from post-consumer plastic bottles, our recycled polyester reduces landfill waste and requires less energy to produce than virgin polyester.</p>
+                    </div>
+                </div>
+                <div class="material-card">
+                    <div class="material-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                            <rect x="4" y="4" width="16" height="16" />
+                            <path d="M8,8 L16,16 M8,16 L16,8" />
+                        </svg>
+                    </div>
+                    <div class="material-content">
+                        <h3>Organic Cotton</h3>
+                        <p>Grown without harmful pesticides or synthetic fertilizers, our organic cotton supports healthier soil and uses significantly less water.</p>
+                    </div>
+                </div>
+                <div class="material-card">
+                    <div class="material-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                            <path d="M12,4 L20,12 L12,20 L4,12 Z" />
+                        </svg>
+                    </div>
+                    <div class="material-content">
+                        <h3>Natural Rubber</h3>
+                        <p>Harvested from rubber trees using responsible methods, our natural rubber outsoles provide durability without petroleum-based alternatives.</p>
+                    </div>
+                </div>
+                <div class="material-card">
+                    <div class="material-icon">
+                        <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none">
+                            <path d="M4,12 C4,6 12,6 12,12 C12,18 20,18 20,12" />
+                        </svg>
+                    </div>
+                    <div class="material-content">
+                        <h3>Tree Fiber</h3>
+                        <p>Created from responsibly harvested eucalyptus pulp, our tree fiber is breathable, moisture-wicking, and uses 95% less water than cotton.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section class="testimonials-section">
+        <div class="section-container">
+            <h2 class="section-title" style="text-align: center;">Community Voices</h2>
+            <div class="testimonial-slider">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"I never thought eco-friendly shoes could be this comfortable! My OakTreks are now my go-to for everything from hiking to casual wear. Knowing my purchase supports sustainability makes me feel even better."</p>
+                    <div class="testimonial-author">
+                        <div>
+                            <p class="author-name">Emma Johnson</p>
+                            <p>Member since 2023</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"As someone who's passionate about environmental conservation, finding OakTrek was a game-changer. Their transparency about materials and manufacturing processes is refreshing in an industry full of greenwashing."</p>
+                    <div class="testimonial-author">
+                        <div>
+                            <p class="author-name">Michael Chen</p>
+                            <p>Member since 2022</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"I joined the OakTrek movement after learning about their reforestation initiatives. A year later, I've not only reduced my fashion footprint but also connected with like-minded individuals who care about our planet."</p>
+                    <div class="testimonial-author">
+                        <div>
+                            <p class="author-name">Sarah Williams</p>
+                            <p>Member since 2023</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <!-- Commitment Section -->
+    <section class="commitment-section">
+        <div class="section-container commitment-content">
+            <div class="oak-leaf">
+                <svg viewBox="0 0 100 120" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50,10 C60,20 75,15 85,25 C95,35 90,50 80,60 C70,70 75,85 65,95 C55,105 40,100 30,90 C20,80 5,85 15,65 C25,45 15,30 25,20 C35,10 40,0 50,10 Z" />
+                    <path d="M50,10 C50,40 50,70 50,110" />
+                    <path d="M50,60 C60,55 70,50 80,45" />
+                    <path d="M50,80 C40,75 30,70 20,75" />
+                </svg>
+            </div>
+            <h2 class="section-title centered-title" style="text-align: center;">Our Commitment</h2>
+            <p>When you join the OakTrek movement, you're not just another customer. You become part of our family of changemakers who believe in the power of conscious consumption.</p>
+            <p>We promise to continue innovating, to remain transparent about our practices, and to always prioritize the well-being of our planet and its inhabitants.</p>
+            <div style="margin-top: 2rem;">
+                <a href="{% url 'home' %}" class="btn-oak">Take The First Step</a>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Intersection Observer for animation on scroll
+    document.addEventListener('DOMContentLoaded', function() {
+        const observerOptions = {
+            threshold: 0.25
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        // Observe stat cards
+        document.querySelectorAll('.stat-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Observe material cards
+        document.querySelectorAll('.material-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Observe testimonial cards
+        document.querySelectorAll('.testimonial-card').forEach(card => {
+            observer.observe(card);
+        });
+    });
+</script>
+{% endblock %}

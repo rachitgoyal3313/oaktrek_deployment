@@ -1,0 +1,244 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title_block %}OakTrek{% endblock %}</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/logos/leaf.png' %}">
+    <link rel="stylesheet" href="{% static 'css/header.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    {% block style_block %}{% endblock %}
+    {% block head_block %}{% endblock %}
+</head>
+
+<body>
+    <header>
+        <nav class="navbar navbar-expand-lg">
+            <div class="container-fluid">
+                <!-- Mobile Toggle Button -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- Left Navigation -->
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="toggleDropdown('menDropdown')">Men</a>
+                            <div id="menDropdown" class="custom-dropdown">
+                                <div class="dropdown-content">
+                                    <div class="dropdown-section">
+                                        <h6>SHOES</h6>
+                                        <a href="{% url 'products-cat' gender='men' collection_name='everyday-sneakers'%}">Everyday Sneakers</a>
+                                        <a href="{% url 'products-cat' gender='men' collection_name='active-shoes'%}">Active Shoes</a>
+                                        <a href="{% url 'products-cat' gender='men' collection_name='water-repellent-shoes'%}">Water-Repellent Sneakers</a>
+                                        <a href="{% url 'products-cat' gender='men' collection_name='slip-ons'%}">Slip-Ons</a>
+                                        <a href="{% url 'products-cat' gender='men' collection_name='hiking-shoes'%}">Hiking</a>
+                                    </div>
+                                    <div class="dropdown-section">
+                                        <h6>BESTSELLERS</h6>
+                                        <a href="{% url 'product_page' collection_name='men' product_slug='tree-runner-go' %}">Tree Runner Go</a>
+                                        <a href="{% url 'product_page' collection_name='men' product_slug='tree-dasher-2' %}">Tree Dasher 2</a>
+                                        <a href="{% url 'product_page' collection_name='men' product_slug='tree-runner-classic' %}">Tree Runner</a>
+                                        <a href="{% url 'product_page' collection_name='men' product_slug='power-sprint' %}">Power Sprint</a>
+                                        <a href="{% url 'product_page' collection_name='men' product_slug='mizzle-runner' %}">Mizzle Runner</a>
+                                        <a href="{% url 'product_page' collection_name='men' product_slug='wool-runner' %}">Wool Runner Go</a>
+                                        <a href="{% url 'product_page' collection_name='men' product_slug='tree-runner-pro' %}">Tree Runner Pro</a>
+                                        <a href="{% url 'product_page' collection_name='men' product_slug='storm-shield' %}">Storm Shield</a>
+                                        <a href="{% url 'products' collection_name='men' %}">Shop all</a>
+                                    </div>
+                                    <div class="dropdown-section">
+                                        <h6>APPAREL & MORE</h6>
+                                        <a href="{% url 'coming_soon' %}">Socks</a>
+                                        <a href="{% url 'coming_soon' %}">Tees</a>
+                                        <a href="{% url 'coming_soon' %}">Sweats</a>
+                                        <a href="{% url 'coming_soon' %}">Underwear</a>
+                                        <a href="{% url 'coming_soon' %}">Bags</a>
+                                        <a href="{% url 'coming_soon' %}">Hats</a>
+                                        <a href="{% url 'coming_soon' %}">Insoles</a>
+                                        <a href="{% url 'coming_soon' %}">Lace Kits</a>
+                                        <a href="{% url 'coming_soon' %}">Gift Cards</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" onclick="toggleDropdown('womenDropdown')">Women</a>
+                            <div id="womenDropdown" class="custom-dropdown">
+                                <div class="dropdown-content">
+                                    <div class="dropdown-section">
+                                        <h6>SHOES</h6>
+                                        <a href="{% url 'products-cat' gender='women' collection_name='everyday-sneakers'%}">Everyday Sneakers</a>
+                                        <a href="{% url 'products-cat' gender='women' collection_name='active-shoes'%}">Active Shoes</a>
+                                        <a href="{% url 'products-cat' gender='women' collection_name='ballet-flats'%}">Ballet Flats</a>
+                                        <a href="{% url 'products-cat' gender='women' collection_name='slip-ons'%}">Slip-Ons</a>
+                                        <a href="{% url 'products-cat' gender='women' collection_name='hiking-shoes'%}">Hiking</a>
+                                    </div>
+                                    <div class="dropdown-section">
+                                        <h6>BESTSELLERS</h6>
+                                        <a href="{% url 'product_page' collection_name='women' product_slug='tree-runner-go' %}">Tree Runner Go</a>
+                                        <a href="{% url 'product_page' collection_name='women' product_slug='tree-dasher-2-womens' %}">Tree Dasher 2</a>
+                                        <a href="{% url 'product_page' collection_name='women' product_slug='tree-runner-go-womens' %}">Tree Runner</a>
+                                        <a href="{% url 'product_page' collection_name='women' product_slug='tree-breezer' %}">Tree Breezer</a>
+                                        <a href="{% url 'product_page' collection_name='women' product_slug='tree-sprinter' %}">Tree Sprinter</a>
+                                        <a href="{% url 'product_page' collection_name='women' product_slug='wool-breeze' %}">Wool Breezer</a>
+                                        <a href="{% url 'product_page' collection_name='women' product_slug='mountain-trekker' %}">Mountain Trekker</a>
+                                        <a href="{% url 'product_page' collection_name='women' product_slug='cloud-ballet' %}">Cloud Ballet</a>
+                                    </div>
+                                    <div class="dropdown-section">
+                                        <h6>APPAREL & MORE</h6>
+                                        <a href="{% url 'coming_soon' %}">Socks</a>
+                                        <a href="{% url 'coming_soon' %}">Tees</a>
+                                        <a href="{% url 'coming_soon' %}">Sweats</a>
+                                        <a href="{% url 'coming_soon' %}">Underwear</a>
+                                        <a href="{% url 'coming_soon' %}">Bags</a>
+                                        <a href="{% url 'coming_soon' %}">Hats</a>
+                                        <a href="{% url 'coming_soon' %}">Insoles</a>
+                                        <a href="{% url 'coming_soon' %}">Lace Kits</a>
+                                        <a href="{% url 'coming_soon' %}">Gift Cards</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'coming_soon' %}">Socks</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/auctions">Auctions</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <a class="navbar-brand mx-auto" href="{% url 'home' %}"><img class="Logo"
+                        src="{% static 'assets/logos/oaktrek_logo-no_bg.png' %}" alt="OakTrek Logo"></a>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto">
+                        <li class="nav-item">
+                            <a class="nav-link" href="#"
+                                onclick="toggleDropdown('sustainabilityDropdown')">Sustainability</a>
+                            <div id="sustainabilityDropdown" class="custom-dropdown">
+                                <div class="dropdown-content">
+                                    <div class="dropdown-section">
+                                        <h6>OUR IMPACT</h6>
+                                        <a href="{% url 'adidasxoaktrek' %}">Adidas X OakTrek</a>
+                                        <a href="{% url 'carbonoffsets' %}">Carbon Footprint</a>
+                                        <a href="{% url 'regenerative' %}">Regenerative Agriculture</a>
+                                    </div>
+                                    <div class="dropdown-section">
+                                        <h6>OUR INITIATIVES</h6>
+                                        <a href="{% url 'responsibleEnergy' %}">Recycled Materials</a>
+                                        <a href="{% url 'sustainability' %}">Sustainable Factories</a>
+                                        <a href="{% url 'bcorp' %}">B Corp Certification</a>
+                                       
+                                    </div>
+                                    <div class="dropdown-section">
+                                        <h6>LEARN MORE</h6>
+                                        <a href="{% url 'sustainability' %}">Our Sustainability Report</a>
+                                        <a href="{% url 'our_story' %}">Our Journey</a>
+                                        <a href="{% url 'join' %}">Join the Movement</a>
+                                        <a href="{% url 'faq' %}">FAQs</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'stores' %}">Stores</a>
+
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="right-icons ms-3">
+                    <!-- Search Form -->
+                    <div class="search-container">
+                        <form action="{% url 'search' %}" method="get" class="search-form d-flex">
+                            <input type="text" name="q" class="form-control search-input"
+                                   placeholder="Search products..." value="{{ query|default_if_none:'' }}">
+                            <a href="#" class="search-toggle">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <circle cx="11" cy="11" r="8" />
+                                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                                </svg>
+                            </a>
+                        </form>
+                    </div>
+                    <a href="{% url 'auth' %}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                            <circle cx="12" cy="7" r="4" />
+                        </svg>
+                    </a>
+                    <a href="{% url 'faq' %}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <circle cx="12" cy="12" r="10" />
+                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                    </a>
+                    <a href="{% url 'chat_interface' %}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                        </svg>
+                    </a>
+                    <div class="cart-icon-container">
+                        <a href="{% url 'cart' %}" class="cart-icon-container">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" />
+                                <line x1="3" y1="6" x2="21" y2="6" />
+                                <path d="M16 10a4 4 0 0 1-8 0" />
+                            </svg>
+                            <span class="cart-count">{{ cart_count }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        {% block main_block %}
+        {% endblock %}
+    </main>
+
+    <footer>
+        {% include 'footer.html' %}
+    </footer>
+
+    <script src="{% static 'js/header.js' %}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const searchToggle = document.querySelector('.search-toggle');
+        const searchInput = document.querySelector('.search-input');
+        const searchResults = document.querySelector('.search-results-dropdown');
+
+        searchToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            searchInput.style.display = searchInput.style.display === 'none' ? 'block' : 'none';
+            if (searchInput.style.display === 'block') {
+                searchInput.focus();
+            }
+        });
+
+        searchInput.addEventListener('input', function () {
+            if (this.value.trim() === '' && searchResults) {
+                searchResults.classList.remove('show');
+            }
+        });
+
+        searchInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                if (this.value.trim() === '') {
+                    e.preventDefault();
+                }
+            }
+        });
+    });
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,883 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ page_title }}{% endblock %}
+
+{% block style_block %}
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Moment.js for date formatting -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<style>
+    /* Enhanced styling while keeping your theme */
+    .card {
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        transition: transform 0.2s, box-shadow 0.2s;
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        font-weight: 600;
+        padding: 1rem 1.5rem;
+    }
+
+    .chart-container {
+        background-color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        margin-bottom: 1.5rem;
+    }
+
+    .alert {
+        border-radius: 8px;
+        border-left: 4px solid;
+    }
+
+    .alert-success {
+        border-left-color: {{ chart_colors.success }};
+        background-color: rgba(16, 185, 129, 0.1);
+    }
+
+    .alert-warning {
+        border-left-color: {{ chart_colors.warning }};
+        background-color: rgba(245, 158, 11, 0.1);
+    }
+
+    .alert-danger {
+        border-left-color: {{ chart_colors.danger }};
+        background-color: rgba(239, 68, 68, 0.1);
+    }
+
+    .badge {
+        padding: 0.5em 0.8em;
+        font-weight: 500;
+        border-radius: 6px;
+    }
+
+    .breadcrumb {
+        padding: 0.75rem 1rem;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .breadcrumb-item a {
+        color: {{ chart_colors.primary }};
+        text-decoration: none;
+    }
+
+    .breadcrumb-item a:hover {
+        text-decoration: underline;
+    }
+
+    .table {
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .table th {
+        background-color: #f8f9fa;
+        font-weight: 600;
+    }
+
+    .btn-primary {
+        background-color: {{ chart_colors.primary }};
+        border-color: {{ chart_colors.primary }};
+        transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+        background-color: #2563eb;
+        border-color: #2563eb;
+        transform: translateY(-2px);
+    }
+
+    .btn-outline-secondary, .btn-outline-warning {
+        transition: all 0.2s;
+    }
+
+    .btn-outline-secondary:hover, .btn-outline-warning:hover {
+        transform: translateY(-2px);
+    }
+
+    .chart-title {
+        font-weight: 600;
+        margin-bottom: 1rem;
+        color: #1f2937;
+        border-bottom: 2px solid #f8f9fa;
+        padding-bottom: 0.5rem;
+    }
+
+    .stock-badge {
+        font-size: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 50px;
+    }
+
+    .product-image {
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .product-image:hover {
+        transform: scale(1.02);
+    }
+</style>
+{% endblock %}
+
+{% block main_block %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="fas fa-home me-1"></i> Home</a></li>
+            <li class="breadcrumb-item"><a href="#"><i class="fas fa-box me-1"></i> Products</a></li>
+            <li class="breadcrumb-item active" aria-current="page">{{ product.product_name }}</li>
+        </ol>
+    </nav>
+
+    {% if messages %}
+    <div class="messages mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'warning' %}exclamation-triangle{% elif message.tags == 'danger' %}exclamation-circle{% else %}info-circle{% endif %} me-2"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="row">
+        <!-- Product Basic Info -->
+        <div class="col-md-4 mb-4">
+            {% if product.image_1 %}
+                <img src="{{ product.image_1.url }}" class="img-fluid rounded mb-3 product-image" alt="{{ product.product_name }}">
+            {% else %}
+                <div class="bg-light p-5 rounded text-center product-image">
+                    <span class="text-muted"><i class="fas fa-image fa-3x mb-3"></i><br>No image available</span>
+                </div>
+            {% endif %}
+            
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">{{ product.product_name }}</h5>
+                    <p class="card-text">
+                        <span class="badge bg-primary me-2">{{ product.category }}</span>
+                        <span class="badge bg-secondary">{{ product.gender }}</span>
+                    </p>
+                    <h4 class="fw-bold text-primary">${{ product.price }}</h4>
+                    <div class="mt-2">
+                        <div class="d-flex align-items-center">
+                            <div class="me-2">
+                                {% for i in "12345" %}
+                                    {% if forloop.counter <= product.rating %}
+                                        <i class="fas fa-star text-warning"></i>
+                                    {% else %}
+                                        <i class="far fa-star text-warning"></i>
+                                    {% endif %}
+                                {% endfor %}
+                            </div>
+                            <span>({{ product.rating }})</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Stock Management Section -->
+        <div class="col-md-8">
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-box-open me-2"></i> Stock Management</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Current Stock: 
+                                <span class="badge stock-badge {% if product.stock_quantity <= stock_thresholds.critical %}bg-danger{% elif product.stock_quantity <= stock_thresholds.warning %}bg-warning{% else %}bg-success{% endif %}">
+                                    {{ product.stock_quantity }}
+                                </span>
+                            </h6>
+                            
+                            {% if product.stock_quantity <= stock_thresholds.critical %}
+                                <div class="alert alert-danger mt-3">
+                                    <i class="fas fa-exclamation-triangle me-2"></i> <strong>Critical Stock Alert!</strong>
+                                    This product is almost out of stock.
+                                </div>
+                            {% elif product.stock_quantity <= stock_thresholds.warning %}
+                                <div class="alert alert-warning mt-3">
+                                    <i class="fas fa-exclamation-triangle me-2"></i> <strong>Low Stock Alert!</strong> 
+                                    Consider restocking this product soon.
+                                </div>
+                            {% else %}
+                                <div class="alert alert-success mt-3">
+                                    <i class="fas fa-check-circle me-2"></i> <strong>Stock Level Good</strong>
+                                    This product is well-stocked.
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <form action="{% url 'update_stock' product.id %}{% if request.GET.redirect %}?redirect={{ request.GET.redirect }}{% endif %}" method="post" class="p-3 bg-light rounded">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="quantity" class="form-label fw-bold">Update Stock Quantity</label>
+                                    <input type="number" class="form-control" id="quantity" name="quantity" 
+                                        value="{{ product.stock_quantity }}" min="{{ request.POST.min_quantity|default:0 }}" required>
+                                </div>
+                                {% if request.GET.show_reason %}
+                                <div class="mb-3">
+                                    <label for="reason" class="form-label fw-bold">Reason for Update</label>
+                                    <input type="text" class="form-control" id="reason" name="reason" placeholder="Optional reason">
+                                </div>
+                                {% endif %}
+                                <input type="hidden" name="success_message" value="{{ request.GET.success_message|default:'Stock updated successfully for {product}' }}">
+                                <button type="submit" class="btn btn-primary w-100">
+                                    <i class="fas fa-sync-alt me-2"></i> Update Stock
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    
+                    <!-- Analytics Cards -->
+                    {% if analytics %}
+                    <div class="row mt-4">
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-line mb-3" style="font-size: 2rem; color: {{ chart_colors.primary }};"></i>
+                                    <div class="fs-4 fw-bold">{{ analytics.sales_velocity }}</div>
+                                    <div class="text-muted">Sales Velocity (units/day)</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-calendar-day mb-3" style="font-size: 2rem; color: {{ chart_colors.warning }};"></i>
+                                    <div class="fs-4 fw-bold">{{ analytics.days_remaining }}</div>
+                                    <div class="text-muted">Days of Inventory Left</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-exclamation-triangle mb-3" style="font-size: 2rem; color: {% if analytics.stock_status == 'Critical' %}{{ chart_colors.danger }}{% elif analytics.stock_status == 'Low' %}{{ chart_colors.warning }}{% elif analytics.stock_status == 'Moderate' %}{{ chart_colors.primary }}{% else %}{{ chart_colors.success }}{% endif %};"></i>
+                                    <div class="fs-4 fw-bold">{{ analytics.stock_status }}</div>
+                                    <div class="text-muted">Stock Status</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="btn-group mb-3">
+                        <button type="button" class="btn btn-sm btn-outline-secondary chart-period-btn {% if chart_period == 'days' %}active{% endif %}" data-period="days">
+                            <i class="fas fa-calendar-day me-1"></i> Daily
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary chart-period-btn {% if chart_period == 'weeks' %}active{% endif %}" data-period="weeks">
+                            <i class="fas fa-calendar-week me-1"></i> Weekly
+                        </button>
+                        <button type="button" class="btn btn-sm btn-outline-secondary chart-period-btn {% if chart_period == 'months' or not chart_period %}active{% endif %}" data-period="months">
+                            <i class="fas fa-calendar-alt me-1"></i> Monthly
+                        </button>
+                    </div>
+                    
+                    <!-- Interactive Stock History Chart -->
+                    <div class="mt-4">
+                        <h6 class="chart-title"><i class="fas fa-history me-2"></i> Stock History</h6>
+                        <div class="chart-container" style="position: relative; height:250px; width:100%">
+                            <canvas id="stockHistoryChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Sales Analytics (if available) -->
+                    {% if analytics %}
+                    <div class="mt-4">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="chart-title"><i class="fas fa-chart-pie me-2"></i> Sales Analytics</h6>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Sales Velocity</th>
+                                                <th>Days of Inventory Left</th>
+                                                <th>Stock Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>{{ analytics.sales_velocity }} units/day</td>
+                                                <td>{{ analytics.days_remaining }}</td>
+                                                <td>
+                                                    <span class="badge {% if analytics.stock_status == 'Critical' %}bg-danger{% elif analytics.stock_status == 'Low' %}bg-warning{% elif analytics.stock_status == 'Moderate' %}bg-info{% else %}bg-success{% endif %}">
+                                                        {{ analytics.stock_status }}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <!-- Sales Velocity Gauge Chart -->
+                                <h6 class="chart-title"><i class="fas fa-tachometer-alt me-2"></i> Sales Velocity</h6>
+                                <div class="chart-container" style="position: relative; height:150px; width:100%">
+                                    <canvas id="salesGaugeChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <!-- Category Comparison Chart -->
+                    <div class="mt-4">
+                        <h6 class="chart-title"><i class="fas fa-chart-bar me-2"></i> Category Stock Comparison</h6>
+                        <div class="chart-container" style="position: relative; height:250px; width:100%">
+                            <canvas id="categoryComparisonChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Stock vs. Sales Chart -->
+                    <div class="mt-4">
+                        <h6 class="chart-title"><i class="fas fa-chart-line me-2"></i> Stock vs. Sales (Last {{ chart_period|title }})</h6>
+                        <div class="chart-container" style="position: relative; height:250px; width:100%">
+                            <canvas id="stockSalesChart"></canvas>
+                        </div>
+                    </div>
+                    
+                    <!-- Inventory Management Links -->
+                    <div class="mt-4">
+                        <div class="d-flex flex-wrap gap-2">
+                            <a href="{% url 'inventory_dashboard' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-chart-line me-2"></i> Inventory Dashboard
+                            </a>
+                            <a href="{% url 'low_stock_alerts' %}?threshold={{ stock_thresholds.warning }}" class="btn btn-outline-warning">
+                                <i class="fas fa-exclamation-triangle me-2"></i> Low Stock Alerts
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<!-- JavaScript for Charts -->
+<script>
+    // Replace the existing JavaScript in product_detail.html with this improved version
+document.addEventListener('DOMContentLoaded', function() {
+    // Chart.js color scheme
+    const colors = {
+        primary: '{{ chart_colors.primary }}',
+        secondary: '{{ chart_colors.secondary }}',
+        success: '{{ chart_colors.success }}',
+        warning: '{{ chart_colors.warning }}',
+        danger: '{{ chart_colors.danger }}',
+        light: 'rgba(248, 249, 250, 0.7)'
+    };
+    
+    // Set global Chart.js defaults for consistent styling
+    Chart.defaults.font.family = "'Inter', 'Helvetica', 'Arial', sans-serif";
+    Chart.defaults.font.size = 12;
+    Chart.defaults.plugins.tooltip.padding = 12;
+    Chart.defaults.plugins.tooltip.backgroundColor = 'rgba(33, 37, 41, 0.9)';
+    Chart.defaults.plugins.tooltip.titleFont = { weight: 'bold', size: 13 };
+    Chart.defaults.plugins.tooltip.bodyFont = { size: 12 };
+    Chart.defaults.plugins.tooltip.cornerRadius = 6;
+    
+    // Stock History Chart
+    const stockHistoryData = {
+        labels: {{ stock_history.labels|safe }},
+        datasets: [{
+            label: 'Stock Level',
+            data: {{ stock_history.values|safe }},
+            borderColor: colors.primary,
+            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+            tension: {{ chart_settings.tension }},
+            fill: {{ chart_settings.fill_area|yesno:"true,false" }},
+            pointBackgroundColor: colors.primary,
+            pointBorderColor: '#fff',
+            pointBorderWidth: 2,
+            pointRadius: {{ chart_settings.show_points|yesno:"5,0" }},
+            pointHoverRadius: 7
+        }]
+    };
+    
+    const stockHistoryCtx = document.getElementById('stockHistoryChart').getContext('2d');
+    const stockHistoryChart = new Chart(stockHistoryCtx, {
+        type: 'line',
+        data: stockHistoryData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Stock Quantity',
+                        font: {
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        precision: 0 // Show whole numbers only
+                    }
+                },
+                x: {
+                    title: {
+                        display: true,
+                        text: '{{ chart_period|title }}',
+                        font: {
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    titleFont: {
+                        size: 14,
+                        weight: 'bold'
+                    },
+                    bodyFont: {
+                        size: 13
+                    },
+                    callbacks: {
+                        label: function(context) {
+                            return `Stock: ${context.parsed.y} units`;
+                        }
+                    }
+                },
+                legend: {
+                    labels: {
+                        font: {
+                            weight: 'bold'
+                        }
+                    }
+                },
+                annotation: {
+                    annotations: {
+                        warningLine: {
+                            type: 'line',
+                            yMin: {{ stock_thresholds.warning }},
+                            yMax: {{ stock_thresholds.warning }},
+                            borderColor: colors.warning,
+                            borderWidth: 2,
+                            borderDash: [6, 4],
+                            label: {
+                                content: 'Warning Threshold',
+                                display: true,
+                                position: 'start',
+                                backgroundColor: colors.warning
+                            }
+                        },
+                        criticalLine: {
+                            type: 'line',
+                            yMin: {{ stock_thresholds.critical }},
+                            yMax: {{ stock_thresholds.critical }},
+                            borderColor: colors.danger,
+                            borderWidth: 2,
+                            borderDash: [6, 4],
+                            label: {
+                                content: 'Critical Threshold',
+                                display: true,
+                                position: 'start',
+                                backgroundColor: colors.danger
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    });
+    
+    // Category Comparison Chart
+    const categoryData = {
+        labels: Object.keys({{ category_data|safe }}),
+        datasets: [{
+            label: 'Average Stock Level',
+            data: Object.values({{ category_data|safe }}),
+            backgroundColor: [
+                'rgba(59, 130, 246, 0.7)',
+                'rgba(16, 185, 129, 0.7)',
+                'rgba(245, 158, 11, 0.7)'
+            ],
+            borderColor: [
+                colors.primary,
+                colors.success,
+                colors.warning
+            ],
+            borderWidth: 2,
+            borderRadius: 8
+        }]
+    };
+    
+    const categoryCtx = document.getElementById('categoryComparisonChart').getContext('2d');
+    const categoryChart = new Chart(categoryCtx, {
+        type: 'bar',
+        data: categoryData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Average Stock',
+                        font: {
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        precision: 0
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    callbacks: {
+                        label: function(context) {
+                            const productCount = getProductCountByCategory(context.label);
+                            return [
+                                `Avg Stock: ${context.parsed.y} units`,
+                                `Products: ${productCount}`
+                            ];
+                        }
+                    }
+                },
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+    
+    // Helper function to get product count by category
+    function getProductCountByCategory(category) {
+        const categoryCounts = {
+            'Skincare': {{ skincare_count }},
+            'Haircare': {{ haircare_count }},
+            'Bodycare': {{ bodycare_count }}
+        };
+
+
+        return categoryCounts[category] || 0;
+    }
+    
+    // Stock vs. Sales Chart
+    const stockSalesData = {
+        labels: {{ stock_history.labels|safe }},
+        datasets: [
+            {
+                label: 'Stock Level',
+                data: {{ stock_history.values|safe }},
+                borderColor: colors.primary,
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                yAxisID: 'y',
+                tension: {{ chart_settings.tension }},
+                pointBackgroundColor: colors.primary,
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: {{ chart_settings.show_points|yesno:"4,0" }},
+                fill: {{ chart_settings.fill_area|yesno:"true,false" }}
+            },
+            {
+                label: 'Sales',
+                data: {{ sales_data|safe }},
+                borderColor: colors.danger,
+                backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                yAxisID: 'y1',
+                tension: {{ chart_settings.tension }},
+                pointBackgroundColor: colors.danger,
+                pointBorderColor: '#fff',
+                pointBorderWidth: 2,
+                pointRadius: {{ chart_settings.show_points|yesno:"4,0" }},
+                fill: {{ chart_settings.fill_area|yesno:"true,false" }}
+            }
+        ]
+    };
+    
+    const stockSalesCtx = document.getElementById('stockSalesChart').getContext('2d');
+    const stockSalesChart = new Chart(stockSalesCtx, {
+        type: 'line',
+        data: stockSalesData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            scales: {
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'Stock Quantity',
+                        font: {
+                            weight: 'bold'
+                        }
+                    },
+                    grid: {
+                        color: 'rgba(0, 0, 0, 0.05)'
+                    },
+                    ticks: {
+                        precision: 0
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    grid: {
+                        drawOnChartArea: false
+                    },
+                    title: {
+                        display: true,
+                        text: 'Sales',
+                        font: {
+                            weight: 'bold'
+                        }
+                    },
+                    ticks: {
+                        precision: 0
+                    }
+                },
+                x: {
+                    grid: {
+                        display: false
+                    }
+                }
+            },
+            plugins: {
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    padding: 12,
+                    callbacks: {
+                        afterTitle: function(context) {
+                            return '{{ chart_period|title }} Data';
+                        }
+                    }
+                },
+                legend: {
+                    position: 'top',
+                    align: 'center',
+                    labels: {
+                        boxWidth: 15,
+                        usePointStyle: true,
+                        pointStyle: 'circle'
+                    }
+                }
+            }
+        }
+    });
+    
+    {% if analytics %}
+    // Sales Velocity Gauge Chart
+    const gaugeData = {
+        labels: ['Sales Velocity', 'Remaining'],
+        datasets: [{
+            data: [{{ analytics.sales_velocity }}, {{ remaining_velocity }}],
+            backgroundColor: [
+                colors.primary,
+                'rgba(220, 220, 220, 0.2)'
+            ],
+            borderWidth: 0,
+            circumference: 180,
+            rotation: 270
+        }]
+    };
+    
+    const gaugeCtx = document.getElementById('salesGaugeChart').getContext('2d');
+    const gaugeChart = new Chart(gaugeCtx, {
+        type: 'doughnut',
+        data: gaugeData,
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '70%',
+            plugins: {
+                tooltip: {
+                    enabled: false
+                },
+                legend: {
+                    display: false
+                }
+            }
+        },
+        plugins: [{
+            id: 'gaugeText',
+            afterDraw: (chart) => {
+                const {ctx, width, height} = chart;
+                ctx.save();
+                
+                // Draw velocity value
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                ctx.font = 'bold 16px Inter, Helvetica, Arial, sans-serif';
+                ctx.fillStyle = '#333';
+                ctx.fillText('{{ analytics.sales_velocity }} units/day', width / 2, height - 30);
+                
+                // Draw velocity label
+                ctx.font = '12px Inter, Helvetica, Arial, sans-serif';
+                ctx.fillStyle = '#666';
+                ctx.fillText('Sales Velocity', width / 2, height - 10);
+                
+                // Draw needle
+                const needleValue = Math.min({{ analytics.sales_velocity }}, {{ max_velocity }});
+                const needleLength = height * 0.35;
+                const needleRadius = width / 2;
+                const angle = Math.PI * (1 - (needleValue / {{ max_velocity }}));
+                
+                const topX = needleRadius + Math.cos(angle) * needleLength;
+                const topY = needleRadius + Math.sin(angle) * needleLength;
+                
+                ctx.beginPath();
+                ctx.moveTo(needleRadius, needleRadius);
+                ctx.lineTo(topX, topY);
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#333';
+                ctx.stroke();
+                
+                // Draw needle circle
+                ctx.beginPath();
+                ctx.arc(needleRadius, needleRadius, 5, 0, Math.PI * 2);
+                ctx.fillStyle = '#333';
+                ctx.fill();
+                
+                ctx.restore();
+            }
+        }]
+    });
+    {% endif %}
+    
+    // Function to refresh chart data
+    function refreshChartData() {
+        const now = new Date();
+        const timestamp = now.toLocaleTimeString();
+        console.log(`Refreshing chart data at ${timestamp}...`);
+        
+        fetch(`/api/inventory/stock-history/{{ product.id }}?period={{ chart_period }}`)
+            .then(response => response.json())
+            .then(data => {
+                stockHistoryChart.data.labels = data.labels;
+                stockHistoryChart.data.datasets[0].data = data.values;
+                stockHistoryChart.update();
+                
+                // Also update stock vs sales chart stock data
+                stockSalesChart.data.labels = data.labels;
+                stockSalesChart.data.datasets[0].data = data.values;
+                stockSalesChart.update();
+                
+                console.log(`Stock history updated: ${data.labels.length} data points`);
+            })
+            .catch(error => console.error('Error fetching stock history:', error));
+            
+        fetch('/api/inventory/category-comparison')
+            .then(response => response.json())
+            .then(data => {
+                categoryChart.data.labels = Object.keys(data);
+                categoryChart.data.datasets[0].data = Object.values(data);
+                categoryChart.update();
+                
+                console.log(`Category comparison updated: ${Object.keys(data).length} categories`);
+            })
+            .catch(error => console.error('Error fetching category data:', error));
+            
+        fetch(`/api/inventory/stock-sales/{{ product.id }}?period={{ chart_period }}`)
+            .then(response => response.json())
+            .then(data => {
+                stockSalesChart.data.datasets[1].data = data.sales;
+                stockSalesChart.update();
+                
+                console.log(`Stock vs sales updated: ${data.sales.length} data points`);
+            })
+            .catch(error => console.error('Error fetching stock-sales data:', error));
+    }
+    
+    // Refresh data every interval from settings
+    const refreshInterval = {{ chart_settings.refresh_interval }};
+    console.log(`Setting refresh interval to ${refreshInterval}ms`);
+    setInterval(refreshChartData, refreshInterval);
+    
+    // Add event listeners for chart period buttons
+    document.querySelectorAll('.chart-period-btn').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const period = this.dataset.period;
+            
+            // Update URL parameter without reloading the page
+            const url = new URL(window.location);
+            url.searchParams.set('period', period);
+            window.history.pushState({}, '', url);
+            
+            // Update charts
+            fetch(`/api/inventory/stock-history/{{ product.id }}?period=${period}`)
+                .then(response => response.json())
+                .then(data => {
+                    stockHistoryChart.data.labels = data.labels;
+                    stockHistoryChart.data.datasets[0].data = data.values;
+                    stockHistoryChart.options.scales.x.title.text = period.charAt(0).toUpperCase() + period.slice(1);
+                    stockHistoryChart.update();
+                    
+                    // Also update stock vs sales chart
+                    stockSalesChart.data.labels = data.labels;
+                    stockSalesChart.data.datasets[0].data = data.values;
+                    stockSalesChart.options.scales.x.title.text = period.charAt(0).toUpperCase() + period.slice(1);
+                    stockSalesChart.update();
+                })
+                .catch(error => console.error('Error fetching stock history:', error));
+                
+            fetch(`/api/inventory/stock-sales/{{ product.id }}?period=${period}`)
+                .then(response => response.json())
+                .then(data => {
+                    stockSalesChart.data.datasets[1].data = data.sales;
+                    stockSalesChart.update();
+                })
+                .catch(error => console.error('Error fetching stock-sales data:', error));
+                
+            // Update active button state
+            document.querySelectorAll('.chart-period-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            this.classList.add('active');
+        });
+    });
+});
+
+</script>
+{% endblock %}

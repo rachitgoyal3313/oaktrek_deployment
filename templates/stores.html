@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title_block %} OakTrek - Stores {% endblock %}
+
+{% block main_block %}
+    <div id="map" style="height: 90vh;"></div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map', {
+        center: [20.5937, 78.9629], // Centered on India initially
+        zoom: 5, 
+        minZoom: 3, // Prevents excessive zooming out
+        // maxZoom: 10 // Adjust as needed
+        // maxBounds: [[-85, -180], [85, 180]], // Limits panning to the world map
+        // maxBoundsViscosity: 1.0 // Strongly restricts movement outside bounds
+        worldCopyJump: true
+        });
+
+    
+        // Use a grayscale tile layer
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>',
+        }).addTo(map);
+    
+        // Store locations
+        var stores = [
+            { name: "Delhi", lat: 28.7041, lon: 77.1025 },
+            { name: "Mumbai", lat: 19.0760, lon: 72.8777 },
+            { name: "Bangalore", lat: 12.9716, lon: 77.5946 },
+            { name: "Kolkata", lat: 22.5726, lon: 88.3639 },
+            { name: "Sri Ganganagar", lat: 29.9038, lon: 73.8772 },
+            // { name: "Una", lat: 31.500525, lon: 76.229906},
+            { name: "Gharaunda", lat: 29.542225, lon: 76.972968},
+            { name: "Dhuri", lat: 30.3731, lon: 75.8671},
+            { name: "Chitkara University", lat: 30.5167, lon: 76.6572},
+            { name: "Jaipur", lat: 26.9124, lon: 75.7873 },
+            // { name: "Jodhpur", lat: 26.2389, lon: 73.0243 },
+            { name: "Ahmedabad", lat: 23.0225, lon: 72.5714 },
+            // { name: "Hyderabad", lat: 17.3850, lon: 78.4867 },
+            { name: "Goa", lat: 15.2993, lon: 74.1240 },
+            // { name: "Shimla", lat: 31.1048, lon: 77.1734 },
+            // { name: "Indore", lat: 22.7196, lon: 75.8577 },
+            // { name: "Lucknow", lat: 26.8467, lon: 80.9462 },
+            { name: "Agra", lat: 27.1767, lon: 78.0081 },
+            // { name: "Pune", lat: 18.5204, lon: 73.8567 },
+            { name: "Dubai", lat: 25.276987, lon: 55.296249 },
+            { name: "New York", lat: 40.712776, lon: -74.005974 },
+            { name: "London", lat: 51.507351, lon: -0.127758 },
+            // { name: "Paris", lat: 48.856613, lon: 2.352222 },
+            // { name: "Tokyo", lat: 35.689487, lon: 139.691711 },
+            { name: "Sydney", lat: -33.868820, lon: 151.209290 },
+            // { name: "Singapore", lat: 1.352083, lon: 103.819839 },
+            { name: "Los Angeles", lat: 34.052235, lon: -118.243683 },
+            { name: "Rome", lat: 41.902782, lon: 12.496366 },
+            { name: "Toronto", lat: 43.651070, lon: -79.347015 },
+            // {name: "Bhadaur", lat: 30.47466803485442, lon: 75.32879044321929}
+            ];
+
+    
+        var markers = [];
+    
+        // Add custom markers
+        stores.forEach(store => {
+            var customIcon = L.icon({
+            iconUrl: "{{ url_for('static', filename='assets/logos/patta.png') }}",  // Replace with your PNG URL or local path
+            iconSize: [70, 70],          // Adjust size if needed
+            iconAnchor: [40, 40],        // Adjust anchor point
+            popupAnchor: [0, -40]        // Adjust popup position
+        });
+
+        var marker = L.marker([store.lat, store.lon], { icon: customIcon }).addTo(map)
+            .bindPopup(store.name);
+
+        markers.push(marker);
+        });
+
+    
+        // Search function
+        document.getElementById('search').addEventListener('keyup', function () {
+            var query = this.value.toLowerCase();
+            markers.forEach((marker, i) => {
+                if (stores[i].name.toLowerCase().includes(query)) {
+                    marker.openPopup();
+                } else {
+                    marker.closePopup();
+                }
+            });
+        });
+    
+        // View All button
+        document.getElementById('viewAll').addEventListener('click', function () {
+            map.setView([39.8283, -98.5795], 4);
+        });
+    
+        // Add scroll effect
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+    </script>
+
+{% endblock %}

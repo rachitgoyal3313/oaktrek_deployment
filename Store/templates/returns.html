@@ -1,0 +1,270 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block style_block %}
+{{ block.super }}
+<style>
+    .hero-section {
+        background-color: #111;
+        color: white;
+        padding: 6rem 0;
+        text-align: center;
+    }
+
+    .section {
+        padding: 4rem 0;
+    }
+
+    .process-card {
+        background-color: #f8f8f8;
+        border-radius: 8px;
+        padding: 2rem;
+        margin-bottom: 2rem;
+        transition: transform 0.3s;
+    }
+
+    .process-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .process-number {
+        width: 40px;
+        height: 40px;
+        background-color: #111;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1rem;
+        font-weight: bold;
+    }
+
+    .policy-section {
+        background-color: white;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .policy-section h3 {
+        color: #111;
+        margin-bottom: 1.5rem;
+    }
+
+    .policy-list li {
+        margin-bottom: 1rem;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .policy-list li::before {
+        content: '•';
+        position: absolute;
+        left: 0;
+        color: #111;
+    }
+
+    .alert-custom {
+        background-color: #f8f8f8;
+        border-left: 4px solid #111;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .tracking-form {
+        background-color: #f8f8f8;
+        padding: 2rem;
+        border-radius: 8px;
+        margin-top: 2rem;
+    }
+
+    .form-control {
+        border: 1px solid #ddd;
+        padding: 12px;
+        margin-bottom: 15px;
+        /* Note: Bootstrap 5 uses mb-3 typically */
+        border-radius: 4px;
+    }
+
+    .form-control:focus {
+        border-color: #111;
+        box-shadow: none;
+    }
+
+    .btn-dark {
+        background-color: #111;
+        border: none;
+        padding: 12px 30px;
+        transition: background-color 0.3s;
+    }
+
+    .btn-dark:hover {
+        background-color: #333;
+    }
+
+    .faq-section {
+        margin-top: 3rem;
+    }
+
+    .accordion-button {
+        background-color: #f8f8f8;
+        color: #111;
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #111;
+        color: white;
+    }
+</style>
+{% endblock style_block %}
+
+{% block main_block %}
+<!-- Returns & Exchanges Page Content -->
+<div class="hero-section">
+    <div class="container">
+        <h1>Returns & Exchanges</h1>
+        <p class="lead">Simple, hassle-free returns within 30 days</p>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <!-- Return Process -->
+        <div class="row mb-5">
+            <div class="col-12 text-center mb-4">
+                <h2>How to Return or Exchange</h2>
+                <p class="lead">Complete your return in 3 easy steps</p>
+            </div>
+
+            <div class="col-md-4">
+                <div class="process-card">
+                    <div class="process-number">1</div>
+                    <h3>Initiate Your Return</h3>
+                    <p>Log into your account and select the items you wish to return or exchange. Print your free return
+                        label.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="process-card">
+                    <div class="process-number">2</div>
+                    <h3>Pack Your Items</h3>
+                    <p>Pack your unused items in their original packaging along with all tags attached.</p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="process-card">
+                    <div class="process-number">3</div>
+                    <h3>Ship It Back</h3>
+                    <p>Drop off your package at any authorized shipping location. Track your return status online.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Return Policy Details -->
+        <div class="row">
+            <div class="col-md-8">
+                <div class="policy-section">
+                    <h3>Return Policy</h3>
+                    <ul class="policy-list">
+                        <li>Returns accepted within 30 days of purchase</li>
+                        <li>Items must be unworn and unwashed with original tags attached</li>
+                        <li>Free returns for orders within the United States</li>
+                        <li>Exchanges are processed as a return and new purchase</li>
+                        <li>Gift returns will be issued as store credit</li>
+                    </ul>
+
+                    <div class="alert-custom mt-4">
+                        <strong>Note:</strong> Sale items are final sale and cannot be returned or exchanged.
+                    </div>
+                </div>
+                <br><br><br>
+                <!-- Return Tracking -->
+                <div class="tracking-form">
+                    <h3>Track Your Return</h3>
+                    <!-- Add CSRF token for Django forms -->
+                    <form method="post"> <!-- Usually POST for forms that do something -->
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="order_number" class="form-label">Order Number</label>
+                            <!-- Add name attributes for form submission -->
+                            <input type="text" class="form-control" id="order_number" name="order_number"
+                                placeholder="Enter your order number" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email_address" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email_address" name="email_address"
+                                placeholder="Enter your email" required>
+                        </div>
+                        <button type="submit" class="btn btn-dark">Track Return</button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <!-- FAQ Section -->
+                <div class="faq-section">
+                    <h3>Frequently Asked Questions</h3>
+                    <div class="accordion" id="returnsAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faqHeading1"> <!-- Added id for aria-labelledby -->
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq1" aria-expanded="true" aria-controls="faq1">
+                                    <!-- Added aria attributes -->
+                                    How long do returns take to process?
+                                </button>
+                            </h2>
+                            <div id="faq1" class="accordion-collapse collapse show" aria-labelledby="faqHeading1"
+                                data-bs-parent="#returnsAccordion">
+                                <div class="accordion-body">
+                                    Returns typically take 5-7 business days to process once received at our warehouse.
+                                    Refunds will be issued to your original payment method.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faqHeading2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq2" aria-expanded="false" aria-controls="faq2">
+                                    Can I exchange for a different size?
+                                </button>
+                            </h2>
+                            <div id="faq2" class="accordion-collapse collapse" aria-labelledby="faqHeading2"
+                                data-bs-parent="#returnsAccordion">
+                                <div class="accordion-body">
+                                    Yes, you can exchange items for a different size if available. We recommend
+                                    initiating a return and placing a new order to ensure your size is secured.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faqHeading3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#faq3" aria-expanded="false" aria-controls="faq3">
+                                    What if my item is defective?
+                                </button>
+                            </h2>
+                            <div id="faq3" class="accordion-collapse collapse" aria-labelledby="faqHeading3"
+                                data-bs-parent="#returnsAccordion">
+                                <div class="accordion-body">
+                                    If you receive a defective item, please contact our customer service team
+                                    immediately. We'll provide a prepaid return label and process your return promptly.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+{% endblock main_block %}

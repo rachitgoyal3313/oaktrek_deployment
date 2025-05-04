@@ -1,0 +1,338 @@
+{% extends "base.html" %}
+{% load static %} 
+{% block title_block %} Help & Contact - OakTrek {% endblock %}
+
+{% block style_block %}
+<style>
+    .hero-section {
+        background-color: #111;
+        color: white;
+        padding: 5rem 1rem;
+        text-align: center;
+        margin-top: 60px; 
+    }
+     .hero-section h1 {
+        font-size: 2.8rem;
+        margin-bottom: 0.5rem;
+     }
+     .hero-section .lead {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.85);
+     }
+
+    .section {
+        padding: 4rem 1rem;
+        background-color: #fff;
+    }
+
+    .contact-form-section h3, .faq-section h3 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #111;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .contact-form {
+        max-width: 100%;
+        background-color: #f8f9fa; 
+        padding: 2rem;
+        border-radius: 8px;
+        border: 1px solid #eee;
+    }
+
+    .form-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: #333;
+    }
+
+    .form-control {
+        border: 1px solid #ccc; 
+        padding: 10px 12px; 
+        margin-bottom: 1rem;
+        border-radius: 5px; 
+        font-size: 1rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-control:focus {
+        border-color: #111;
+        box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.15); 
+    }
+
+    .btn-dark {
+        background-color: #111;
+        border-color: #111;
+        color: white;
+        padding: 10px 25px;
+        font-size: 1rem;
+        font-weight: 500;
+        border-radius: 5px;
+        transition: background-color 0.2s, border-color 0.2s;
+        cursor: pointer;
+    }
+
+    .btn-dark:hover {
+        background-color: #333;
+        border-color: #333;
+    }
+
+     .faq-section h3 {
+        margin-bottom: 1rem;
+     }
+     .quick-support-info {
+         margin-bottom: 1.5rem;
+         padding: 1.5rem;
+         background-color: #f8f9fa;
+         border-radius: 8px;
+         border: 1px solid #eee;
+     }
+     .quick-support-info h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 0.8rem;
+        color: #111;
+     }
+      .quick-support-info p {
+        font-size: 1rem;
+        color: #555;
+        margin-bottom: 0.5rem;
+        line-height: 1.6;
+      }
+      .quick-support-info p a {
+          color: #111;
+          text-decoration: none;
+          font-weight: 500;
+      }
+       .quick-support-info p a:hover {
+           text-decoration: underline;
+       }
+
+    .accordion-item {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 0.5rem; 
+        overflow: hidden; 
+    }
+     .accordion-header {
+         margin-bottom: 0;
+     }
+
+    .accordion-button {
+        background-color: #f8f9fa;
+        color: #111;
+        font-weight: 500;
+        padding: 1rem 1.25rem;
+        border: none; 
+    }
+
+    .accordion-button:not(.collapsed) {
+        background-color: #e9ecef;
+        color: #111;
+        box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+    }
+
+
+    .accordion-button:focus {
+        box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.15);
+        border-color: transparent; 
+        z-index: 3; 
+    }
+
+    .accordion-body {
+        padding: 1rem 1.25rem;
+        font-size: 0.95rem;
+        color: #444;
+        background-color: #fff;
+    }
+
+    /* New Success Message Styles */
+    .success-message {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+        border-radius: 8px;
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .success-message .success-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #28a745;
+    }
+
+    .success-message h4 {
+        font-size: 1.5rem;
+        margin-bottom: 0.8rem;
+        font-weight: 600;
+    }
+
+    .success-message p {
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+     @media (max-width: 767px) {
+        .hero-section {
+            padding: 4rem 1rem;
+        }
+         .hero-section h1 {
+            font-size: 2.2rem;
+         }
+        .section {
+            padding: 2.5rem 1rem;
+        }
+         .contact-form-section, .faq-section {
+             margin-bottom: 2rem;
+         }
+          .contact-form-section h3, .faq-section h3 {
+             font-size: 1.5rem;
+         }
+         .success-message {
+             padding: 1rem;
+         }
+         .success-message .success-icon {
+             font-size: 2rem;
+         }
+         .success-message h4 {
+             font-size: 1.2rem;
+         }
+     }
+
+</style>
+{% endblock %}
+
+{% block title %}Help - OakTrek{% endblock %}
+
+
+{% block main_block %}
+<div class="hero-section">
+    <div class="container">
+        <h1>How Can We Help?</h1>
+        <p class="lead">Find answers to common questions or get in touch with our support team.</p>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <div class="row g-4"> 
+            <div class="col-lg-6 contact-form-section">
+                <h3>Send Us a Message</h3>
+                
+                {% if form_submitted %}
+                <div class="success-message">
+                    <div class="success-icon">
+                        <i class="bi bi-check-circle-fill"></i>
+                    </div>
+                    <h4>Message Sent Successfully!</h4>
+                    <p>Thank you for reaching out. A member of our team will get back to you within 24-48 hours.</p>
+                </div>
+                {% endif %}
+                
+                <div class="contact-form">
+                    <form method="POST" action="{% url 'oaktrek_help' %}"> 
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label for="contactName" class="form-label">Name</label>
+                            <input type="text" class="form-control" id="contactName" name="name" required>
+                        </div>
+                        <!-- <div class="mb-3">
+                            <label for="contactEmail" class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="contactEmail" name="email" required>
+                        </div> -->
+                         <div class="mb-3">
+                            <label for="contactSubject" class="form-label">Subject (Optional)</label>
+                            <input type="text" class="form-control" id="contactSubject" name="subject">
+                        </div>
+                        <div class="mb-3">
+                            <label for="contactMessage" class="form-label">Message</label>
+                            <textarea class="form-control" id="contactMessage" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-dark">Send Message</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-lg-6 faq-section">
+                <h3>Quick Support & FAQ</h3>
+
+                 <div class="quick-support-info">
+                     <h4>Contact Information</h4>
+                     <p><strong>Phone:</strong> <a href="tel:1-888-963-8944">1-888-963-8944</a> (Mon-Fri, 9am-5pm IST)</p>
+                     <p><strong>Email:</strong> <a href="oaktrek.help@gmail.com">oaktrek.help@gmail.com</a> (Expect a reply within 24-48 hours)</p>
+                 </div>
+
+                 <h4>Frequently Asked Questions</h4>
+                <div class="accordion" id="faqAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFaq1">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFaq1" aria-expanded="true" aria-controls="collapseFaq1">
+                                How do I track my order?
+                            </button>
+                        </h2>
+                        <div id="collapseFaq1" class="accordion-collapse collapse show" aria-labelledby="headingFaq1" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Once your order ships, you'll receive a confirmation email containing a tracking number. You can use this number on the carrier's website (e.g., UPS, FedEx) to follow your package's progress. You can also check the order status by logging into your OakTrek account under "Order History".
+                            </div>
+                        </div>
+                    </div>
+                     <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFaq2">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFaq2" aria-expanded="false" aria-controls="collapseFaq2">
+                                What is your return policy?
+                            </button>
+                        </h2>
+                        <div id="collapseFaq2" class="accordion-collapse collapse" aria-labelledby="headingFaq2" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                We offer a 30-day return policy for items that are in new, unworn condition with the original packaging intact. Please visit our <a href="{% url 'returns' %}">Returns & Exchanges</a> page for detailed instructions and to initiate a return. 
+                            </div>
+                        </div>
+                    </div>
+                     <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFaq3">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapseFaq3" aria-expanded="false" aria-controls="collapseFaq3">
+                                How do I care for my OakTrek shoes?
+                            </button>
+                        </h2>
+                        <div id="collapseFaq3" class="accordion-collapse collapse" aria-labelledby="headingFaq3" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
+                                Care instructions vary slightly depending on the materials. Generally, we recommend spot cleaning with a mild detergent and cold water. Avoid machine washing or drying unless specifically stated on the product page. For detailed care tips, check out our <a href="#">Product Care Guide</a>. 
+                            </div>
+                        </div>
+                    </div>
+                </div> 
+            </div> 
+        </div> 
+    </div> 
+</div> 
+
+<script>
+    // // Create animated leaves (Requires <div id="leaves-container"></div> and associated CSS)
+    // const leavesContainer = document.getElementById('leaves-container');
+    // if (leavesContainer) {
+    //     for (let i = 0; i < 10; i++) {
+    //         const leaf = document.createElement('div');
+    //         leaf.className = 'floating-leaf';
+    //         leaf.style.left = Math.random() * 100 + 'vw';
+    //         leaf.style.animationDelay = Math.random() * 20 + 's';
+    //         leaf.innerHTML = <svg viewBox="0 0 100 100"><path d="M50 10 C60 30 80 40 90 60 C80 80 60 90 50 95 C40 90 20 80 10 60 C20 40 40 30 50 10 Z" fill="currentColor"/></svg>;
+    //         leavesContainer.appendChild(leaf);
+    //     }
+    // }
+</script>
+{% endblock %}

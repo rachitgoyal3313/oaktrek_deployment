@@ -1,0 +1,318 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title_block %}404 - Lost in the Forest | OakTrek{% endblock %}
+
+{% block style_block %}
+<style>
+    /* Main 404 styling */
+    .main_404 {
+        text-decoration: none;
+        font-size: 8rem;
+        font-weight: bold;
+        color: #2c3e50;
+        text-shadow: 3px 3px 0 rgba(0,0,0,0.1);
+        margin-bottom: 0.5rem;
+    }
+
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .gotohome {
+        background-color: #2c3e50;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 30px;
+        font-weight: bold;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        display: inline-block;
+        margin-top: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    .gotohome:hover {
+        background-color: #34495e;
+        transform: translateY(-3px);
+        box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+    }
+
+    /* Container styles */
+    .page-404-container {
+        margin: 0;
+        overflow: hidden;
+        height: calc(100vh - 100px);
+        min-height: 600px;
+        background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+        position: relative;
+        width: 100%;
+    }
+
+    /* Content styles */
+    .page-404-container .content {
+        position: relative;
+        z-index: 10;
+        text-align: center;
+        padding-top: 10vh;
+    }
+
+    .page-404-container .content h1 {
+        color: #2c3e50;
+        margin-bottom: 1rem;
+    }
+
+    .page-404-container .content p {
+        color: #34495e;
+        font-size: 1.5rem;
+        max-width: 600px;
+        margin: 0 auto 1rem auto;
+    }
+
+    .message-container {
+        background-color: rgba(255, 255, 255, 0.8);
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        max-width: 650px;
+        margin: 20px auto;
+    }
+
+    .fun-fact {
+        font-style: italic;
+        font-size: 1.1rem;
+        color: #2c3e50;
+        background-color: rgba(240, 240, 240, 0.7);
+        padding: 15px;
+        border-radius: 10px;
+        margin-top: 20px;
+        border-left: 4px solid #2c3e50;
+    }
+
+    /* Leaf styles - keeping original from your code */
+    .leaf {
+        position: absolute;
+        top: -100px;
+        z-index: 5;
+        opacity: 0.8;
+        filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.2));
+        pointer-events: none;
+    }
+
+    /* Animal styles */
+    .woodland-animal {
+        position: absolute;
+        bottom: 20px;
+        opacity: 0.9;
+        transition: transform 0.3s ease;
+    }
+    
+    .woodland-animal:hover {
+        transform: translateY(-10px);
+    }
+    
+    .fox {
+        left: 10%;
+        width: 80px;
+        height: 80px;
+    }
+    
+    .squirrel {
+        right: 15%;
+        width: 70px;
+        height: 70px;
+    }
+
+    /* Search box */
+    .search-box {
+        margin-top: 30px;
+        display: flex;
+        justify-content: center;
+    }
+    
+    .search-box input {
+        padding: 10px 15px;
+        border: 2px solid #2c3e50;
+        border-radius: 20px 0 0 20px;
+        width: 250px;
+        outline: none;
+    }
+    
+    .search-box button {
+        background-color: #2c3e50;
+        color: white;
+        border: 2px solid #2c3e50;
+        border-radius: 0 20px 20px 0;
+        padding: 10px 15px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .search-box button:hover {
+        background-color: #34495e;
+    }
+
+    /* Animations - keeping original from your code */
+    @keyframes falling {
+        0% {
+            transform: translateY(-100px) rotate(0deg) scale(0.6);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100vh) rotate(360deg) scale(0.6);
+            opacity: 0.7;
+        }
+    }
+
+    @keyframes sway {
+        0% { margin-left: 0px; }
+        25% { margin-left: 50px; }
+        50% { margin-left: -20px; }
+        75% { margin-left: 30px; }
+        100% { margin-left: 0px; }
+    }
+    
+    /* Ground elements */
+    .ground {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 80px;
+        background-color: #2c3e50;
+        z-index: 4;
+    }
+    
+    .path {
+        position: absolute;
+        bottom: 80px;
+        width: 100%;
+        height: 20px;
+        background-color: #a0a0a0;
+        z-index: 4;
+    }
+</style>
+{% endblock %}
+
+{% block main_block %}
+<div class="page-404-container">
+    <div class="content">
+        <h1 class="main_404">404</h1>
+        <div class="message-container">
+            <p>Whoops .... Page Not Found!!! </p>
+            
+            <p><a href="{% url 'home' %}" class="btn gotohome">Return to Home</a></p>
+        </div>
+    </div>
+    
+    <!-- Leaves will be appended here by the script -->
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // SVG code for oak leaf - keeping the original
+    const oakLeafSVG = `<svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" width="50" height="60">
+        <path d="M150 50
+            C180 70, 220 90, 200 130
+            C230 150, 190 180, 210 200
+            C240 220, 200 240, 220 270
+            C210 300, 180 320, 150 350
+            M150 50
+            C120 70, 80 90, 100 130
+            C70 150, 110 180, 90 200
+            C60 220, 100 240, 80 270
+            C90 300, 120 320, 150 350
+            M150 50
+            L150 320
+            M150 200
+            C160 220, 170 240, 180 260
+            M150 250
+            C140 260, 130 270, 120 280"
+            fill="none" stroke="#2c3e50" stroke-width="5"/>
+        </svg>`;
+
+    // Function to create falling leaves - keeping the original exactly as it was
+    function createLeaves() {
+        const container = document.querySelector('.page-404-container');
+        // Fallback to body if container not found, though it should be
+        const appendTarget = container || document.body;
+        const numLeaves = 20; // Number of leaves to create
+        const colors = ['#2c3e50', '#27ae60', '#d35400', '#8e44ad', '#c0392b']; // Different colors for leaves
+
+        for (let i = 0; i < numLeaves; i++) {
+            // Create leaf element
+            const leaf = document.createElement('div');
+            leaf.classList.add('leaf');
+            leaf.innerHTML = oakLeafSVG;
+
+            // Randomize leaf properties
+            const size = Math.random() * 0.3 + 0.8; // Random size between 0.8 and 1.1
+            const leftPos = Math.random() * 100; // Random horizontal position
+            const fallDuration = Math.random() * 8 + 5; // Fall duration between 5-13 seconds
+            const swayDuration = Math.random() * 3 + 4; // Sway duration between 4-7 seconds
+            const delay = Math.random() * 7; // Staggered start times over 7 seconds
+
+            // Random color for each leaf
+            const color = colors[Math.floor(Math.random() * colors.length)];
+
+            // Apply styles
+            leaf.style.left = `${leftPos}%`;
+            leaf.style.animation = `falling ${fallDuration}s linear ${delay}s infinite, sway ${swayDuration}s ease-in-out ${delay}s infinite`;
+            leaf.style.transform = `scale(${size})`;
+
+            // Set random color
+            const path = leaf.querySelector('path');
+            if (path) {
+                path.setAttribute('stroke', color);
+            }
+
+            // Add to the container
+            appendTarget.appendChild(leaf);
+        }
+    }
+
+    // Add interactive elements
+    function addInteractivity() {
+        // Make the search box functional (just for show)
+        const searchButton = document.querySelector('.search-box button');
+        if (searchButton) {
+            searchButton.addEventListener('click', function() {
+                const input = document.querySelector('.search-box input');
+                if (input && input.value.trim() !== '') {
+                    alert('Sorry, we still can\'t find "' + input.value + '". Let\'s take you back to the main trail!');
+                    window.location.href = '{% url "home" %}';
+                }
+            });
+        }
+        
+        // Add random fun facts when clicking on the fun fact box
+        const funFactBox = document.querySelector('.fun-fact');
+        const funFacts = [
+            "Even the most experienced hikers sometimes take a wrong turn!",
+            "Oak trees can live for over 1,000 years - much longer than most web pages!",
+            "The term '404' originated in the early days of the World Wide Web.",
+            "Just like forest trails, websites need regular maintenance to stay accessible.",
+            "If you're seeing this page, you've discovered our digital path less traveled."
+        ];
+        
+        if (funFactBox) {
+            funFactBox.addEventListener('click', function() {
+                const randomFact = funFacts[Math.floor(Math.random() * funFacts.length)];
+                this.textContent = randomFact;
+            });
+            
+            // Add a hint
+            funFactBox.setAttribute('title', 'Click for another fun fact!');
+            funFactBox.style.cursor = 'pointer';
+        }
+    }
+
+    // Use DOMContentLoaded to run the script after the HTML is parsed
+    document.addEventListener('DOMContentLoaded', function() {
+        createLeaves();
+        addInteractivity();
+    });
+</script>
+{% endblock %}

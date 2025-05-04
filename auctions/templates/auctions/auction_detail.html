@@ -1,0 +1,1040 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title_block %}{{ luxury_shoe.product.product_name }} Auction | OakTrek{% endblock %}
+
+{% block style_block %}
+<style>
+    .auction-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    .auction-breadcrumb {
+        margin-bottom: 2rem;
+        color: #666;
+    }
+
+    .auction-breadcrumb a {
+        color: #666;
+        text-decoration: none;
+    }
+
+    .auction-breadcrumb a:hover {
+        color: #1a1a1a;
+    }
+
+    .auction-breadcrumb span {
+        margin: 0 0.5rem;
+    }
+
+    .auction-detail {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 3rem;
+        margin-bottom: 3rem;
+    }
+
+    .product-images {
+        position: relative;
+    }
+
+    .main-image {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+    }
+
+    .thumbnail-container {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .thumbnail {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 4px;
+        cursor: pointer;
+        opacity: 0.6;
+        transition: all 0.3s ease;
+    }
+
+    .thumbnail:hover, .thumbnail.active {
+        opacity: 1;
+    }
+
+    .auction-badge {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        background-color: #1a1a1a;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+        font-weight: 500;
+    }
+
+    .auction-info {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .auction-title {
+        font-size: 2rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .auction-price {
+        font-size: 1.5rem;
+        font-weight: 500;
+        margin-bottom: 1.5rem;
+    }
+
+    .auction-status {
+        display: flex;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .status-indicator {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        margin-right: 0.5rem;
+    }
+
+    .status-active {
+        background-color: #28a745;
+    }
+
+    .status-upcoming {
+        background-color: #ffc107;
+    }
+
+    .status-ended {
+        background-color: #dc3545;
+    }
+
+    .countdown-container {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .countdown-title {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: #666;
+    }
+
+    .countdown {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+
+    .bid-form {
+        margin-bottom: 1.5rem;
+    }
+
+    .bid-input-group {
+        display: flex;
+        margin-bottom: 1rem;
+    }
+
+    .bid-currency {
+        display: flex;
+        align-items: center;
+        padding: 0 1rem;
+        background-color: #f8f9fa;
+        border: 1px solid #ddd;
+        border-right: none;
+        border-radius: 4px 0 0 4px;
+        font-weight: 500;
+    }
+
+    .bid-input {
+        flex: 1;
+        padding: 0.75rem;
+        border: 1px solid #ddd;
+        border-radius: 0 4px 4px 0;
+        font-size: 1rem;
+    }
+
+    .bid-button {
+        display: block;
+        width: 100%;
+        padding: 1rem;
+        background-color: #1a1a1a;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        border-radius: 4px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+
+    .bid-button:hover {
+        background-color: #333;
+    }
+
+    .bid-button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    .bid-notice {
+        margin-top: 1rem;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .highest-bid {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .highest-bid-title {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: #666;
+    }
+
+    .highest-bid-info {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.1rem;
+    }
+
+    .highest-bidder {
+        font-weight: 500;
+    }
+
+    .highest-amount {
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+
+    .product-description {
+        margin-top: 2rem;
+    }
+
+    .product-description h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .product-description p {
+        color: #666;
+        line-height: 1.7;
+    }
+
+    .bid-history {
+        margin-top: 3rem;
+    }
+
+    .bid-history h3 {
+        font-size: 1.5rem;
+        font-weight: 600;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .bid-history-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .bid-history-table th, .bid-history-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid #eee;
+    }
+
+    .bid-history-table th {
+        font-weight: 500;
+        color: #666;
+    }
+
+    .winner-notice {
+        background-color: #d4edda;
+        color: #155724;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+    }
+
+    .loser-notice {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+    }
+
+    .auction-ended {
+        background-color: #f8d7da;
+        color: #721c24;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+    }
+
+    .auction-upcoming {
+        background-color: #fff3cd;
+        color: #856404;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        font-weight: 500;
+    }
+
+    @media (max-width: 992px) {
+        .auction-detail {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .auction-container {
+            padding: 1rem;
+        }
+        
+        .auction-title {
+            font-size: 1.75rem;
+        }
+        
+        .auction-price {
+            font-size: 1.25rem;
+        }
+        
+        .countdown {
+            font-size: 1.25rem;
+        }
+    }
+
+    @keyframes bidPulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+
+    .bid-update {
+        animation: bidPulse 0.5s ease;
+    }
+
+    .live-bid-notification {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background-color: #1a1a1a;
+        color: white;
+        padding: 1rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        transform: translateY(150%);
+        opacity: 0;
+        transition: all 0.3s ease;
+        z-index: 1000;
+    }
+
+    .live-bid-notification.show {
+        transform: translateY(0);
+        opacity: 1;
+    }
+
+    .notification-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .notification-title {
+        font-weight: 600;
+    }
+
+    .notification-close {
+        background: none;
+        border: none;
+        color: white;
+        cursor: pointer;
+    }
+
+    .notification-content {
+        font-size: 0.9rem;
+    }
+
+    .no-bids-yet {
+        text-align: center;
+        padding: 2rem;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        color: #666;
+    }
+    
+    .timer-container {
+        margin-bottom: 1.5rem;
+    }
+    
+    .timer-bar {
+        height: 8px;
+        background-color: #ddd;
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    
+    .timer-progress {
+        height: 100%;
+        background-color: #28a745;
+        width: 100%;
+        transition: width 1s linear;
+    }
+    
+    .timer-text {
+        margin-top: 0.5rem;
+        text-align: center;
+        font-weight: 500;
+        color: #666;
+    }
+
+    .auction-countdown {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+    }
+
+    .auction-countdown-title {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        color: #666;
+    }
+
+    .auction-countdown-timer {
+        display: flex;
+        justify-content: space-between;
+        text-align: center;
+    }
+
+    .auction-countdown-section {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .auction-countdown-amount {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+
+    .auction-countdown-period {
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .countdown-error {
+        color: #dc3545;
+        font-weight: 500;
+    }
+</style>
+{% endblock %}
+
+{% block head_block %}
+{{ block.super }}
+<script>
+    let bidSocket;
+    let auctionEndCountdown;
+    let auctionStartCountdown;
+    let hasReloaded = false; // Flag to prevent multiple reloads
+    
+    function setupWebSocket() {
+        if (bidSocket) {
+            bidSocket.close();
+        }
+        
+        // Determine WebSocket URL based on current protocol
+        const wsScheme = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
+        const wsPath = wsScheme + window.location.host + '/ws/auction/{{ luxury_shoe.id }}/';
+        
+        console.log('Connecting to WebSocket at:', wsPath);
+        bidSocket = new WebSocket(wsPath);
+        
+        bidSocket.onopen = function(e) {
+            console.log('WebSocket connection established');
+        };
+        
+        bidSocket.onmessage = function(e) {
+            const data = JSON.parse(e.data);
+            console.log('WebSocket message received:', data);
+            
+            // Handle bid updates
+            if (data.bid) {
+                handleBidUpdate(data.bid);
+                // Refresh page if bid is from another user
+                if (data.bid.user !== "{{ user.username }}" && !hasReloaded) {
+                    console.log('Bid from another user, reloading page');
+                    hasReloaded = true;
+                    location.reload();
+                }
+            }
+            
+            // Handle auction end
+            if (data.winner !== undefined) {
+                handleAuctionEnd(data.winner, data.amount);
+            }
+            
+            // Handle auction details updates
+            if (data.auction_details) {
+                console.log('Received auction details:', data.auction_details);
+            }
+        };
+    
+        bidSocket.onclose = function(e) {
+            console.log('WebSocket connection closed');
+            // Try to reconnect after a delay
+            setTimeout(setupWebSocket, 5000);
+        };
+        
+        bidSocket.onerror = function(e) {
+            console.error('WebSocket error:', e);
+            bidSocket.close();
+        };
+    }
+
+    function handleBidUpdate(bid) {
+        console.log('Handling bid update:', bid);
+        
+        // Update highest bid display
+        const highestBidInfo = document.querySelector('.highest-bid-info');
+        if (highestBidInfo) {
+            highestBidInfo.innerHTML = `
+                <span class="highest-bidder">${bid.user}</span>
+                <span class="highest-amount">₹${parseFloat(bid.amount).toFixed(2)}</span>
+            `;
+            highestBidInfo.classList.add('bid-update');
+            setTimeout(() => {
+                highestBidInfo.classList.remove('bid-update');
+            }, 500);
+        } else {
+            console.error('Highest bid info element not found');
+        }
+        
+        // Update bid history table
+        const bidHistoryBody = document.querySelector('#bid-history-body');
+        if (bidHistoryBody) {
+            // Create new row for bid history
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td>${bid.user}</td>
+                <td>₹${parseFloat(bid.amount).toFixed(2)}</td>
+                <td>${new Date(bid.timestamp).toLocaleString()}</td>
+            `;
+            newRow.classList.add('bid-update');
+            
+            // Insert at the top of the table
+            bidHistoryBody.prepend(newRow);
+            
+            // Remove animation after a delay
+            setTimeout(() => {
+                newRow.classList.remove('bid-update');
+            }, 500);
+            
+            // Remove "no bids yet" message if it exists
+            const noBidsMessage = document.querySelector('.no-bids-yet');
+            if (noBidsMessage) {
+                noBidsMessage.remove();
+            }
+        } else {
+            console.error('Bid history body element not found');
+        }
+        
+        // Show notification for new bid
+        showBidNotification(bid);
+        
+        // Update the minimum bid value in the form
+        const bidInput = document.querySelector('#id_amount');
+        if (bidInput) {
+            const nextMinBid = parseFloat(bid.amount) + 0.01;
+            bidInput.setAttribute('min', nextMinBid);
+            bidInput.setAttribute('placeholder', `Min bid: ₹${nextMinBid.toFixed(2)}`);
+            
+            // If the current value is less than the new minimum, update it
+            if (parseFloat(bidInput.value) < nextMinBid) {
+                bidInput.value = nextMinBid.toFixed(2);
+            }
+        }
+    }
+
+    function handleAuctionEnd(winner, amount) {
+        if (auctionEndCountdown) {
+            clearInterval(auctionEndCountdown);
+        }
+        if (auctionStartCountdown) {
+            clearInterval(auctionStartCountdown);
+        }
+        
+        const statusContainer = document.querySelector('.auction-status');
+        const countdownContainer = document.querySelector('.auction-countdown');
+        const bidForm = document.querySelector('.bid-form');
+        
+        if (statusContainer) {
+            statusContainer.innerHTML = `
+                <div class="status-indicator status-ended"></div>
+                <span>Auction Ended</span>
+            `;
+        }
+        
+        if (countdownContainer) {
+            countdownContainer.innerHTML = `
+                <div class="auction-ended">This auction has ended.</div>
+            `;
+        }
+        
+        if (bidForm) {
+            bidForm.remove();
+        }
+        
+        const noticeContainer = document.createElement('div');
+        if (winner) {
+            noticeContainer.className = winner === "{{ user.username }}" ? 'winner-notice' : 'loser-notice';
+            noticeContainer.innerHTML = winner === "{{ user.username }}" ?
+                `Congratulations! You won this auction with a bid of ₹${amount.toFixed(2)}!
+                 <p>Proceed to purchase the item now.</p>
+                 <a href="{% url 'auctions:buy_now' luxury_shoe_id=luxury_shoe.id %}" class="bid-button">Buy Now</a>` :
+                `This auction was won by ${winner} with a bid of ₹${amount.toFixed(2)}.`;
+        } else {
+            noticeContainer.className = 'loser-notice';
+            noticeContainer.innerHTML = 'This auction ended without any bids.';
+        }
+        
+        const auctionInfo = document.querySelector('.auction-info');
+        if (auctionInfo) {
+            auctionInfo.insertBefore(noticeContainer, auctionInfo.querySelector('.highest-bid'));
+        }
+        
+        if (bidSocket) {
+            bidSocket.close();
+        }
+    }
+    
+    function showBidNotification(bid) {
+        const notification = document.createElement('div');
+        notification.className = 'live-bid-notification';
+        notification.innerHTML = `
+            <div class="notification-header">
+                <span class="notification-title">New Bid!</span>
+                <button class="notification-close">×</button>
+            </div>
+            <div class="notification-content">
+                ${bid.user} placed a bid of ₹${parseFloat(bid.amount).toFixed(2)}
+            </div>
+        `;
+        document.body.appendChild(notification);
+        
+        // Slight delay before showing for animation effect
+        setTimeout(() => {
+            notification.className = 'live-bid-notification show';
+        }, 100);
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => {
+            notification.className = 'live-bid-notification';
+            setTimeout(() => {
+                notification.remove();
+            }, 300); // Wait for fade-out animation
+        }, 5000);
+        
+        // Handle manual close
+        notification.querySelector('.notification-close').addEventListener('click', () => {
+            notification.className = 'live-bid-notification';
+            setTimeout(() => {
+                notification.remove();
+            }, 300); // Wait for fade-out animation
+        });
+    }
+
+    function setupImageGallery() {
+        const thumbnails = document.querySelectorAll('.thumbnail');
+        const mainImage = document.querySelector('#main-image');
+        
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', function() {
+                mainImage.src = this.getAttribute('data-src');
+                thumbnails.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    }
+    
+    function updateCountdown(targetDate, daysId, hoursId, minutesId, secondsId, isStartCountdown, callback) {
+        const target = new Date(targetDate);
+        if (isNaN(target.getTime())) {
+            console.error('Invalid target date:', targetDate);
+            document.querySelector('.auction-countdown-timer').innerHTML = `
+                <div class="countdown-error">Error: Invalid auction time</div>
+            `;
+            return;
+        }
+
+        const now = new Date();
+        const diff = target - now;
+
+        console.log(`Countdown: target=${target}, now=${now}, diff=${diff}ms`);
+
+        if (diff <= 0) {
+            console.log('Countdown reached zero, triggering callback');
+            if (!hasReloaded) {
+                hasReloaded = true;
+                if (callback) callback();
+            }
+            return;
+        }
+
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        console.log(`Updating countdown: ${days}d ${hours}h ${minutes}m ${seconds}s`);
+
+        const daysElement = document.getElementById(daysId);
+        const hoursElement = document.getElementById(hoursId);
+        const minutesElement = document.getElementById(minutesId);
+        const secondsElement = document.getElementById(secondsId);
+
+        if (daysElement && hoursElement && minutesElement && secondsElement) {
+            daysElement.textContent = days;
+            hoursElement.textContent = hours.toString().padStart(2, '0');
+            minutesElement.textContent = minutes.toString().padStart(2, '0');
+            secondsElement.textContent = seconds.toString().padStart(2, '0');
+        } else {
+            console.error('Countdown elements not found:', { daysId, hoursId, minutesId, secondsId });
+        }
+
+        // Update progress bar
+        const auctionStart = new Date("{{ luxury_shoe.auction_start|date:'c' }}");
+        const totalDuration = (target - auctionStart) / 1000; // Total auction duration in seconds
+        const timeRemaining = diff / 1000; // Remaining time in seconds
+        const progressPercentage = (timeRemaining / totalDuration) * 100;
+
+        const timerProgress = document.querySelector('.timer-progress');
+        const timerText = document.querySelector('.timer-text');
+        if (timerProgress && timerText) {
+            timerProgress.style.width = `${progressPercentage}%`;
+            timerText.textContent = `Time remaining: ${days}d ${hours}h ${minutes}m ${seconds}s`;
+        }
+    }
+
+    function updateAuctionEndCountdown() {
+        const endDateElement = document.getElementById('auction-end-date');
+        if (!endDateElement) {
+            console.error('Auction end date element not found');
+            return;
+        }
+        
+        const endDate = endDateElement.getAttribute('data-end-time');
+        updateCountdown(endDate, 'countdown-days', 'countdown-hours', 'countdown-minutes', 'countdown-seconds', false, () => {
+            console.log('Auction end countdown finished, reloading page');
+            location.reload();
+        });
+    }
+
+    function updateAuctionStartCountdown() {
+        const startDateElement = document.getElementById('auction-start-date');
+        if (!startDateElement) {
+            console.error('Auction start date element not found');
+            return;
+        }
+        
+        const startDate = startDateElement.getAttribute('data-start-time');
+        updateCountdown(startDate, 'countdown-days', 'countdown-hours', 'countdown-minutes', 'countdown-seconds', true, () => {
+            console.log('Auction start countdown finished, reloading page');
+            location.reload();
+        });
+    }
+    
+    document.addEventListener('DOMContentLoaded', function() {
+        const now = new Date();
+        const auctionStart = new Date("{{ luxury_shoe.auction_start|date:'c' }}");
+        const auctionEnd = new Date("{{ luxury_shoe.auction_end|date:'c' }}");
+        
+        console.log('Auction times:', {
+            now: now.toISOString(),
+            auctionStart: auctionStart.toISOString(),
+            auctionEnd: auctionEnd.toISOString()
+        });
+
+        if (isNaN(auctionStart.getTime()) || isNaN(auctionEnd.getTime())) {
+            console.error('Invalid auction start or end time');
+            document.querySelector('.auction-countdown-timer').innerHTML = `
+                <div class="countdown-error">Error: Invalid auction time</div>
+            `;
+            return;
+        }
+
+        if (now < auctionStart) {
+            const auctionStartElement = document.getElementById('auction-start-date');
+            if (auctionStartElement) {
+                console.log('Starting auction start countdown');
+                updateAuctionStartCountdown();
+                auctionStartCountdown = setInterval(updateAuctionStartCountdown, 1000);
+            } else {
+                console.error('Auction start date element not found');
+            }
+        } else if (now >= auctionStart && now < auctionEnd) {
+            console.log('Starting auction end countdown and WebSocket');
+            setupWebSocket();
+            const auctionEndElement = document.getElementById('auction-end-date');
+            if (auctionEndElement) {
+                updateAuctionEndCountdown();
+                auctionEndCountdown = setInterval(updateAuctionEndCountdown, 1000);
+            } else {
+                console.error('Auction end date element not found');
+            }
+        } else {
+            console.log('Auction has ended, no countdown needed');
+        }
+        
+        setupImageGallery();
+    });
+</script>
+{% endblock %}
+
+{% block main_block %}
+<div class="auction-container">
+    <div class="auction-breadcrumb">
+        <a href="{% url 'home' %}">Home</a>
+        <span>/</span>
+        <a href="{% url 'auctions:auction_list' %}">Auctions</a>
+        <span>/</span>
+        <span>{{ luxury_shoe.product.product_name }}</span>
+    </div>
+
+    <div class="auction-detail">
+        <div class="product-images">
+            <div class="auction-badge">Luxury Auction</div>
+            <img src="{{ luxury_shoe.product.image_1.url }}" alt="{{ luxury_shoe.product.product_name }}" class="main-image" id="main-image">
+            <div class="thumbnail-container">
+                {% if luxury_shoe.product.image_1 %}
+                <img src="{{ luxury_shoe.product.image_1.url }}" alt="{{ luxury_shoe.product.product_name }}" class="thumbnail active" data-src="{{ luxury_shoe.product.image_1.url }}">
+                {% endif %}
+                {% if luxury_shoe.product.image_2 %}
+                <img src="{{ luxury_shoe.product.image_2.url }}" alt="{{ luxury_shoe.product.product_name }}" class="thumbnail" data-src="{{ luxury_shoe.product.image_2.url }}">
+                {% endif %}
+                {% if luxury_shoe.product.image_3 %}
+                <img src="{{ luxury_shoe.product.image_3.url }}" alt="{{ luxury_shoe.product.product_name }}" class="thumbnail" data-src="{{ luxury_shoe.product.image_3.url }}">
+                {% endif %}
+                {% if luxury_shoe.product.image_4 %}
+                <img src="{{ luxury_shoe.product.image_4.url }}" alt="{{ luxury_shoe.product.product_name }}" class="thumbnail" data-src="{{ luxury_shoe.product.image_4.url }}">
+                {% endif %}
+                {% if luxury_shoe.product.image_5 %}
+                <img src="{{ luxury_shoe.product.image_5.url }}" alt="{{ luxury_shoe.product.product_name }}" class="thumbnail" data-src="{{ luxury_shoe.product.image_5.url }}">
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="auction-info">
+            <h1 class="auction-title">{{ luxury_shoe.product.product_name }}</h1>
+            <div class="auction-price">Starting at ₹{{ luxury_shoe.starting_bid|floatformat:2 }}</div>
+            
+            {% with now=current_time %}
+                {% if now < luxury_shoe.auction_start %}
+                    <div class="auction-status">
+                        <div class="status-indicator status-upcoming"></div>
+                        <span>Auction Upcoming</span>
+                    </div>
+                    
+                    <div class="auction-countdown">
+                        <div class="auction-countdown-title">AUCTION STARTS IN</div>
+                        <div id="auction-start-date" data-start-time="{{ luxury_shoe.auction_start|date:'c' }}" class="d-none"></div>
+                        <div class="auction-countdown-timer">
+                            <div class="auction-countdown-section">
+                                <span id="countdown-days" class="auction-countdown-amount">0</span>
+                                <span class="auction-countdown-period">Days</span>
+                            </div>
+                            <div class="auction-countdown-section">
+                                <span id="countdown-hours" class="auction-countdown-amount">00</span>
+                                <span class="auction-countdown-period">Hours</span>
+                            </div>
+                            <div class="auction-countdown-section">
+                                <span id="countdown-minutes" class="auction-countdown-amount">00</span>
+                                <span class="auction-countdown-period">Mins</span>
+                            </div>
+                            <div class="auction-countdown-section">
+                                <span id="countdown-seconds" class="auction-countdown-amount">00</span>
+                                <span class="auction-countdown-period">Secs</span>
+                            </div>
+                        </div>
+                        <div class="timer-container">
+                            <div class="timer-bar">
+                                <div class="timer-progress"></div>
+                            </div>
+                            <div class="timer-text">Time remaining: Calculating...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="highest-bid">
+                        <div class="highest-bid-title">STARTING BID</div>
+                        <div class="highest-bid-info">
+                            <span class="highest-bidder">No bids yet</span>
+                            <span class="highest-amount">₹{{ luxury_shoe.starting_bid|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                {% elif now >= luxury_shoe.auction_start and now < luxury_shoe.auction_end %}
+                    <div class="auction-status">
+                        <div class="status-indicator status-active"></div>
+                        <span>Auction Active</span>
+                    </div>
+                    
+                    <div class="auction-countdown">
+                        <div class="auction-countdown-title">AUCTION ENDS IN</div>
+                        <div id="auction-end-date" data-end-time="{{ luxury_shoe.auction_end|date:'c' }}" class="d-none"></div>
+                        <div class="auction-countdown-timer">
+                            <div class="auction-countdown-section">
+                                <span id="countdown-days" class="auction-countdown-amount">0</span>
+                                <span class="auction-countdown-period">Days</span>
+                            </div>
+                            <div class="auction-countdown-section">
+                                <span id="countdown-hours" class="auction-countdown-amount">00</span>
+                                <span class="auction-countdown-period">Hours</span>
+                            </div>
+                            <div class="auction-countdown-section">
+                                <span id="countdown-minutes" class="auction-countdown-amount">00</span>
+                                <span class="auction-countdown-period">Mins</span>
+                            </div>
+                            <div class="auction-countdown-section">
+                                <span id="countdown-seconds" class="auction-countdown-amount">00</span>
+                                <span class="auction-countdown-period">Secs</span>
+                            </div>
+                        </div>
+                        <div class="timer-container">
+                            <div class="timer-bar">
+                                <div class="timer-progress"></div>
+                            </div>
+                            <div class="timer-text">Time remaining: Calculating...</div>
+                        </div>
+                    </div>
+                    
+                    <div class="highest-bid">
+                        <div class="highest-bid-title">CURRENT HIGHEST BID</div>
+                        <div class="highest-bid-info">
+                            {% if highest_bid %}
+                                <span class="highest-bidder">{{ highest_bid.user.username }}</span>
+                                <span class="highest-amount">₹{{ highest_bid.amount|floatformat:2 }}</span>
+                            {% else %}
+                                <span class="highest-bidder">No bids yet</span>
+                                <span class="highest-amount">₹{{ luxury_shoe.starting_bid|floatformat:2 }}</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    
+                    {% if user.is_authenticated %}
+                        <form method="post" class="bid-form" id="bid-form">
+                            {% csrf_token %}
+                            <div class="bid-input-group">
+                                <div class="bid-currency">₹</div>
+                                <input type="number" name="amount" id="id_amount" class="bid-input" step="0.01" min="{% if highest_bid %}{{ highest_bid.amount|add:'0.01' }}{% else %}{{ luxury_shoe.starting_bid }}{% endif %}" placeholder="Enter your bid amount" required>
+                            </div>
+                            <button type="submit" class="bid-button">Place Bid</button>
+                            <p class="bid-notice">Your bid must be at least ₹0.01 higher than the current highest bid.</p>
+                        </form>
+                    {% else %}
+                        <div class="bid-form">
+                            <a href="{% url 'account_login' %}?next={{ request.path }}" class="bid-button">Login to Place a Bid</a>
+                            <p class="bid-notice">You need to be logged in to place bids.</p>
+                        </div>
+                    {% endif %}
+                {% else %}
+                    <div class="auction-status">
+                        <div class="status-indicator status-ended"></div>
+                        <span>Auction Ended</span>
+                    </div>
+                    
+                    <div class="auction-ended">
+                        This auction has ended.
+                    </div>
+                    
+                    {% if highest_bid %}
+                        {% if highest_bid.user == user %}
+                            <div class="winner-notice">
+                                Congratulations! You won this auction with a bid of ₹{{ highest_bid.amount|floatformat:2 }}!
+                                <p>Proceed to purchase the item now.</p>
+                                <a href="{% url 'auctions:buy_now' luxury_shoe_id=luxury_shoe.id %}" class="bid-button">Buy Now</a>
+                            </div>
+                        {% elif highest_bid.user != user  %}
+                            <div class="loser-notice">
+                                This auction was won by {{ highest_bid.user.username }} with a bid of ₹{{ highest_bid.amount|floatformat:2 }}.
+                            </div>
+                        {% else %}
+                            <div class="loser-notice">
+                                This auction ended without any bids.
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+            {% endwith %}
+            
+            <div class="product-description">
+                <h3>Product Description</h3>
+                <p>
+                    {{ luxury_shoe.product.product_name }} is a premium {{ luxury_shoe.product.category }} product designed for {{ luxury_shoe.product.gender }}. 
+                    {% if luxury_shoe.product.rating > 0 %}
+                        It has an average rating of {{ luxury_shoe.product.rating|floatformat:1 }} stars.
+                    {% else %}
+                        No ratings are available yet.
+                    {% endif %}
+                    {% if luxury_shoe.product.stock_quantity > 0 %}
+                        Currently, {{ luxury_shoe.product.stock_quantity }} units are available.
+                    {% else %}
+                        This is a limited edition item with restricted availability.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <div class="bid-history">
+        <h3>Bid History</h3>
+        {% if bids %}
+            <table class="bid-history-table">
+                <thead>
+                    <tr>
+                        <th>Bidder</th>
+                        <th>Amount</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="bid-history-body">
+                    {% for bid in bids %}
+                        <tr>
+                            <td>{{ bid.user.username }}</td>
+                            <td>₹{{ bid.amount|floatformat:2 }}</td>
+                            <td>{{ bid.timestamp }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="no-bids-yet">
+                <p>No bids have been placed yet.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

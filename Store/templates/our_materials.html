@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title_block %}OakTrek - Our Materials{% endblock %}
+
+{% block style_block %}
+<style>
+    .hero-section {
+        background-color: #111;
+        color: white;
+        padding: 6rem 0;
+        text-align: center;
+    }
+
+    .section {
+        padding: 4rem 0;
+    }
+
+    .material-card {
+        border: none;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        margin-bottom: 2rem;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .material-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .material-card .card-img-top {
+        height: 250px;
+        object-fit: cover;
+    }
+
+    .material-card .card-body {
+        padding: 2rem;
+    }
+
+    .material-card .card-title {
+        color: #111;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
+
+    .material-card .card-text {
+        color: #444;
+        margin-bottom: 1.5rem;
+    }
+
+    .material-card ul li {
+        color: #666;
+        margin-bottom: 0.5rem;
+        padding-left: 1.5rem;
+        position: relative;
+    }
+
+    .material-card ul li::before {
+        content: '✓';
+        position: absolute;
+        left: 0;
+        color: #111;
+    }
+
+    .sustainability-section {
+        background-color: #f8f8f8;
+        padding: 4rem 0;
+        margin-top: 3rem;
+        text-align: center;
+    }
+
+    .sustainability-section h2 {
+        color: #111;
+        margin-bottom: 1.5rem;
+    }
+
+    .sustainability-section .lead {
+        color: #444;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* Material Process Steps */
+    .process-step {
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .process-step .step-number {
+        width: 40px;
+        height: 40px;
+        background-color: #111;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1rem;
+    }
+</style>
+{% endblock %}
+
+{% block title %}Our Materials - Oaktrek{% endblock %}
+
+{% block main_block %}
+<div class="hero-section">
+    <div class="container">
+        <h1>Our Materials</h1>
+        <p class="lead">Sustainable comfort from the ground up</p>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <div class="row mb-5">
+            <div class="col-md-4 mb-4">
+                <div class="card material-card">
+                    <img width="1000px" src="{% static 'assets/logos/merino_wool.jpg' %}" 
+                         alt="Merino Wool" class="img-fluid rounded">
+                    <div class="card-body">
+                        <h5 class="card-title">Merino Wool</h5>
+                        <p class="card-text">Naturally temperature-regulating and moisture-wicking material that keeps
+                            your feet comfortable in any weather.</p>
+                        <ul class="list-unstyled mt-3">
+                            <li>✓ Temperature regulating</li>
+                            <li>✓ Moisture wicking</li>
+                            <li>✓ Naturally antimicrobial</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card material-card">
+                    <img width="1000px" src="{% static 'assets/logos/recycled_polyester.jpg' %}" 
+                         alt="Recycled Polyester" class="img-fluid rounded">
+                    <div class="card-body">
+                        <h5 class="card-title">Recycled Polyester</h5>
+                        <p class="card-text">Made from post-consumer plastic bottles, our recycled polyester reduces
+                            waste while maintaining durability.</p>
+                        <ul class="list-unstyled mt-3">
+                            <li>✓ Eco-friendly</li>
+                            <li>✓ Durable</li>
+                            <li>✓ Quick-drying</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="card material-card">
+                    <img width="1000px" src="{% static 'assets/logos/natural_rubber.jpg' %}" 
+                         alt="Natural Rubber" class="img-fluid rounded">
+                    <div class="card-body">
+                        <h5 class="card-title">Natural Rubber</h5>
+                        <p class="card-text">Sustainably sourced natural rubber provides the perfect balance of grip and
+                            cushioning.</p>
+                        <ul class="list-unstyled mt-3">
+                            <li>✓ Sustainable sourcing</li>
+                            <li>✓ Superior grip</li>
+                            <li>✓ Long-lasting comfort</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5">
+            <div class="col-12 text-center">
+                <h2>Our Commitment to Sustainability</h2>
+                <p class="lead">Every material we use is carefully selected to minimize environmental impact while
+                    maximizing comfort and durability.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const leavesContainer = document.getElementById('leaves-container');
+        if (leavesContainer) {
+            for (let i = 0; i < 10; i++) {
+                const leaf = document.createElement('div');
+                leaf.className = 'floating-leaf';
+                leaf.style.left = Math.random() * 100 + 'vw';
+                leaf.style.animationDelay = Math.random() * 20 + 's';
+                leaf.innerHTML = `<svg viewBox="0 0 100 100"><path d="M50 10 C60 30 80 40 90 60 C80 80 60 90 50 95 C40 90 20 80 10 60 C20 40 40 30 50 10" fill="currentColor"/></svg>`;
+                leavesContainer.appendChild(leaf);
+            }
+        }
+    });
+</script>
+{% endblock %}

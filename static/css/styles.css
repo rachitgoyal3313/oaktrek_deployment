@@ -1,0 +1,12 @@
+body{
+    display: flex;
+    flex-direction: column;
+}
+
+/* header{
+    height: 10vh; 
+    width: 100vw;
+}  */
+main{
+    min-height: 80vh;
+}

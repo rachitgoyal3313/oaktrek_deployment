@@ -1,0 +1,194 @@
+{% extends 'base.html' %}
+
+{% block title_block %}Search Results - OakTrek{% endblock %}
+
+{% block style_block %}
+<style>
+.search-results-container {
+  padding: 4rem 0;
+  background-color: #fafafa;
+}
+
+.search-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2.5rem;
+  color: #1a1a1a;
+}
+
+.product-card {
+  height: 100%;
+  border: none;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+  height: 230px;
+  object-fit: cover;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.bg-light-placeholder {
+  height: 230px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 1rem;
+}
+
+.card-body {
+  padding: 1.5rem;
+  background-color: white;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.card-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #222;
+  margin-bottom: 0.75rem;
+}
+
+.badge {
+  font-size: 0.8rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.badge.bg-secondary {
+  background-color: #e0e0e0 !important;
+  color: #333;
+}
+
+.badge.bg-primary {
+  background-color: #d0e8ff !important;
+  color: #0056b3;
+}
+
+.badge.bg-danger {
+  background-color: #ffdbdb !important;
+  color: #c62828;
+}
+
+.badge.bg-light {
+  background-color: #ededed !important;
+  color: #555;
+}
+
+.price {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #111;
+  margin: 1rem 0;
+}
+
+.view-details-btn {
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  border: 2px solid #333;
+  background-color: transparent;
+  color: #333;
+  padding: 0.6rem 1rem;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+}
+
+.view-details-btn:hover {
+  background-color: #333;
+  color: white;
+}
+
+.no-results {
+  background-color: #fff;
+  padding: 3rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.no-results h4 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+.no-results p {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+@media (max-width: 767.98px) {
+  .search-results-container {
+    padding: 2rem 0;
+  }
+
+  .search-title {
+    font-size: 1.6rem;
+  }
+}
+</style>
+{% endblock %}
+
+
+{% load static %}
+
+{% block main_block %}
+<div class="container search-results-container">
+    <h4 class="search-title" style="display: inline; margin-right: 0;">Search Results for "{{ query }}"</h4>
+    <br><br>
+    
+    {% if results %}
+        <div class="row g-4">
+            {% for product_item in products_with_images %}
+                {% with product=product_item.product images=product_item.images %}
+                <div class="col-md-6 col-lg-4 col-xl-3 mb-4">
+                    <div class="card product-card">
+                        {% if images %}
+                            <img src="{{ images.0.url }}" class="card-img-top" alt="{{ product.product_name }}">
+                        {% else %}
+                            <div class="bg-light-placeholder">
+                                <span class="text-muted">No Image Available</span>
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.product_name }}</h5>
+                            <div class="mb-2">
+                                <span class="badge bg-secondary">{{ product.category }}</span>
+                                <span class="badge {% if product.gender == 'Male' %}bg-primary{% elif product.gender == 'Female' %}bg-danger{% else %}bg-light{% endif %}">
+                                    {{ product.gender }}
+                                </span>
+                            </div>
+                            <div class="price">₹{{ product.price|floatformat:2 }}</div>
+                            <a href="{% url 'product_page' product.category_slug product.slug %}" class="btn view-details-btn w-100">View Details</a>
+                        </div>
+                    </div>
+                </div>
+                {% endwith %}
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="no-results">
+            <h4>No Results Found</h4>
+            <p>Try different keywords or explore our categories.</p>
+            <a href="{% url 'home' %}" class="btn view-details-btn mt-3">Browse All Products</a>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,355 @@
+{% extends 'base.html' %}
+{% load static %} 
+
+{% block title_block %}Coming Soon - Oaktrek{% endblock %}
+
+{% block style_block %}
+<link href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary-color: #212A2F;
+        --secondary-color: #F7F7F7;
+        --accent-color: #4D5559;
+    }
+
+    
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Vollkorn', serif;
+        background-color: white;
+        color: var(--primary-color);
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        overflow-x: hidden;
+        position: relative;
+    }
+
+    header {
+        position: relative;
+        z-index: 10;
+        background-color: white;
+    }
+
+    .content-wrapper {
+        flex: 1 0 auto;
+        position: relative;
+        min-height: calc(100vh - 60px);
+        display: flex; 
+        flex-direction: column;
+        padding-top: 40px;
+    }
+
+    main {
+        flex: 1; /* Allow main to grow and fill available space */
+        display: flex;
+        align-items: center; /* Vertically center */
+        justify-content: center; /* Horizontally center */
+        position: relative;
+        padding: 2rem;
+        background-color: transparent; /* Let body/wrapper bg show through */
+        z-index: 2; /* Above leaves */
+    }
+
+    .leaves-container {
+        position: absolute;
+        top: 0; /* Start from the top of the content-wrapper */
+        left: 0;
+        width: 100%;
+        height: 100%; /* Cover the entire content-wrapper */
+        pointer-events: none;
+        z-index: 1; /* Behind main content */
+        overflow: hidden; /* Prevent leaves from showing outside */
+    }
+
+    .leaf {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+        /* SVG data URI remains the same */
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='500' height='500' viewBox='0 0 500 500' preserveAspectRatio='xMidYMid meet'%3E%3Cg transform='translate(0,500) scale(0.1,-0.1)' fill='%23000000' stroke='none'%3E%3Cpath d='M2534 4037c-256-123-349-243-430-559-44-171-28-238 101-421 55-79 68-120 43-145-15-15-76-15-148 0-110 22-203-29-234-129-20-65-20-77 0-120 35-72 108-122 204-138 25-4 68-18 96-31 53-25 134-102 134-128 0-8-31-47-69-87-37-41-75-88-85-106-22-44-20-118 4-169 27-55 196-218 290-278 40-27 95-66 120-87 101-85 67-23-40 74-103 94-230 226-273 286-71 96-67 110 59 242 94 97 97 111 46 186-70 103-121 139-236 167-38 9-85 25-106 36-41 21-90 73-90 96 0 31 31 72 66 89 35 17 41 17 120 0 108-22 163-15 211 28 40 37 52 93 34 150-7 20-44 75-82 122-93 116-111 154-111 229 2 119 29 213 105 359 60 115 117 174 223 229 91 48 159 70 216 71 96 1 223-93 249-185 19-68 14-277-10-395-32-155-26-192 39-247 50-41 73-42 159-7 93 38 112 39 152 3 26-23 32-36 32-70 0-63-48-123-232-297-79-74-121-156-129-250-5-63-4-65 31-100 47-47 101-48 187-5 33 17 70 30 84 30 28 0 66-42 66-74 0-36-43-103-117-185-148-161-190-246-180-360 7-78 28-145 48-149 8-1 23 4 33 11 17 13 18 19 8 60-36 142-2 229 155 401 89 97 123 158 123 221 0 56-18 92-66 135-45 39-75 37-165-10-118-61-169-30-138 85 9 32 40 68 153 180 157 153 191 205 201 305 15 139-101 200-267 140-58-21-70-23-91-11-48 26-57 78-32 191 22 96 30 292 16 374-15 85-39 134-92 187-60 60-117 82-224 86-85 3-94 2-161-30z'/%3E%3C/g%3E%3C/svg%3E") no-repeat;
+        background-size: contain;
+        pointer-events: none;
+        opacity: 0.6;
+        animation: falling linear infinite;
+    }
+
+    @keyframes falling {
+        0% {
+            transform: translateY(-100px) rotate(0deg);
+            opacity: 0.6;
+        }
+        /* Ensure leaves fall below the viewport */
+        100% {
+            /* Adjust based on content-wrapper height if necessary */
+            transform: translateY(calc(100vh + 100px)) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    .coming-soon-container {
+        text-align: center;
+        max-width: 600px;
+        width: 100%;
+        padding: 3rem 2rem; /* More padding */
+        z-index: 3;
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.8s ease forwards 0.2s; /* Added delay */
+        background-color: rgba(255, 255, 255, 0.85); /* Slightly more opaque bg */
+        border-radius: 12px; /* Softer radius */
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08); /* Subtle shadow */
+    }
+    .notification-message {
+        background-color: var(--primary-color);
+        color: white;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 1.5rem;
+        display: none; /* Start hidden */
+        opacity: 0;
+        transform: translateY(10px) scale(0.95); /* Start slightly below and scaled down */
+        transition: opacity 0.6s ease-out, transform 0.6s ease-out; /* Slower, smoother transition */
+    }
+    
+    .notification-message.success {
+        background-color: #28a745;
+    }
+    
+    .notification-message.error {
+        background-color: #dc3545;
+    }
+    
+    .notification-message.show {
+        display: inline-block;
+        opacity: 1;
+        transform: translateY(0) scale(1); /* Fully visible and in place */
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .logo {
+        width: 120px;
+        margin-bottom: 2rem;
+        animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    h1 {
+        font-size: 2.8rem; /* Slightly larger */
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .description {
+        font-size: 1.1rem;
+        color: var(--accent-color);
+        margin-bottom: 2.5rem;
+        line-height: 1.6;
+        max-width: 450px; /* Constrain line length */
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .email-form {
+        max-width: 400px;
+        margin: 0 auto;
+        position: relative; /* For positioning the button */
+        margin-bottom: 1rem; /* Space before notification */
+    }
+
+    
+
+    .submit-btn {
+        position: absolute;
+        right: 5px; /* Add space from edge */
+        top: 5px; /* Add space from edge */
+        height: 45px; /* Adjust height */
+        padding: 0 25px;
+        background-color: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 4px; /* Button radius */
+        cursor: pointer; /* Pointer cursor */
+        font-family: 'Vollkorn', serif; /* Ensure font */
+        font-weight: 500;
+        font-size: 0.95rem;
+        transition: background-color 0.3s ease;
+    }
+
+    .submit-btn:hover {
+        background-color: var(--accent-color);
+    }
+
+    footer {
+        flex-shrink: 0; /* Prevent footer from shrinking */
+        position: relative; /* Ensure it's in flow */
+        z-index: 4; /* Above content if needed */
+        width: 100%;
+        background: white; /* Ensure footer bg */
+    }
+</style>
+{% endblock %}
+
+{% block main_block %}
+<div class="content-wrapper">
+    <div class="leaves-container"></div>
+
+    <main class="main-content">
+        <div class="coming-soon-container">
+            <img src="{% static 'assets/logos/patta.png' %}" alt="Oaktrek Logo" class="logo">
+            <h1 style="color:var(--primary-color)">Coming Soon</h1>
+            <p class="description">We're crafting something special. Join our waitlist to be the first to know when we launch.</p>
+            <form class="email-form" id="notifyForm" method="POST">
+                {% csrf_token %}
+                <input type="email" class="form-control" name="email" placeholder="Enter your email address" required>
+                <button type="submit" class="submit-btn">Notify Me</button>
+            </form>
+            <div class="notification-message" id="notificationMessage">
+                Thank you! We'll keep you posted about our launch! 🎉
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+    function createLeaf() {
+        const container = document.querySelector('.leaves-container');
+        // Ensure container exists before proceeding
+        if (!container) return;
+
+        const leaf = document.createElement('div');
+        leaf.className = 'leaf';
+
+        // Randomize starting position horizontally
+        leaf.style.left = Math.random() * container.offsetWidth + 'px';
+
+        // Start slightly above the container to ensure smooth entry
+        leaf.style.top = '-60px'; // Start above the viewport
+
+        // Randomize animation duration between 4 and 8 seconds
+        leaf.style.animationDuration = (Math.random() * 4 + 4) + 's';
+
+        // Randomize animation delay to stagger leaves
+        leaf.style.animationDelay = (Math.random() * 2) + 's';
+
+        // Randomize initial rotation
+        leaf.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+        // Randomize size slightly
+        const size = Math.random() * 20 + 40; // Size between 40px and 60px
+        leaf.style.width = size + 'px';
+        leaf.style.height = size + 'px';
+
+        container.appendChild(leaf);
+
+        // Remove leaf after animation completes to prevent DOM buildup
+        leaf.addEventListener('animationend', () => {
+            leaf.remove();
+        });
+    }
+
+    // Interval to create new leaves
+    let leafInterval = setInterval(createLeaf, 600); // Slightly less frequent
+
+    // Initial burst of leaves
+    for (let i = 0; i < 8; i++) {
+        // Create initial leaves without waiting for the interval
+        setTimeout(createLeaf, i * 150);
+    }
+
+    // --- Form Submission Handling ---
+    const form = document.getElementById('notifyForm');
+    const notification = document.getElementById('notificationMessage');
+
+    if (form && notification) {
+        form.addEventListener('submit', function (e) {
+            e.preventDefault(); // Prevent default browser submission
+
+            // Basic client-side validation (optional, as HTML5 'required' handles some)
+            const emailInput = form.querySelector('input[type="email"]');
+            if (!emailInput.value || !emailInput.checkValidity()) {
+                // Optionally show an error or just rely on browser validation UI
+                console.log("Invalid email");
+                emailInput.focus(); // Focus the invalid field
+                return; // Stop submission
+            }
+
+            // --- Option 1: Simple Client-Side Notification (as in original) ---
+            notification.classList.add('show');
+            form.reset(); // Clear the form
+            // Hide the notification after a few seconds
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3500); // Slightly longer display
+
+            // --- Option 2: AJAX Submission (Recommended for Django) ---
+            /*
+            const formData = new FormData(form);
+            fetch(form.action, { // Assumes form.action is set correctly (or specify URL)
+                method: 'POST',
+                body: formData,
+                headers: {
+                    // Django requires the CSRF token header for AJAX POST
+                    'X-CSRFToken': form.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+            .then(response => response.json()) // Assuming your Django view returns JSON
+            .then(data => {
+                console.log('Success:', data);
+                // Display success message (potentially from server response)
+                notification.textContent = data.message || "Thank you! We'll keep you posted!";
+                notification.classList.add('show');
+                form.reset();
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3500);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+                // Display error message
+                notification.textContent = "Something went wrong. Please try again.";
+                notification.style.backgroundColor = '#dc3545'; // Error color
+                notification.classList.add('show');
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                    notification.style.backgroundColor = ''; // Reset color
+                }, 4000);
+            });
+            */
+            // --- End AJAX Submission ---
+
+        });
+    }
+
+    const serverMessages = document.querySelectorAll('.server-message');
+    serverMessages.forEach(msg => {
+        setTimeout(() => {
+            msg.style.transition = 'opacity 0.5s ease';
+            msg.style.opacity = '0';
+            setTimeout(() => msg.remove(), 500); 
+        }, 5000);
+    });
+
+});
+</script>
+{% endblock %}

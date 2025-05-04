@@ -1,0 +1,435 @@
+{% extends "base.html" %}
+{% load static %} 
+
+{% block title %}Renewable Materials - Oaktrek{% endblock %} {# Updated title to match H1 #}
+
+{% block style_block %}
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+  * {
+    font-family: "Poppins", sans-serif;
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    font-size: 16px;
+    line-height: 1.6; 
+    color: #333; 
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px; 
+    padding: 40px 20px;
+    box-sizing: border-box;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .container img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 50px;
+    margin-bottom: 50px; /* Consistent margin */
+    display: block; /* Ensure images are block level */
+    border-radius: 8px; /* Optional: Add subtle rounding */
+  }
+
+  /* --- Headings --- */
+  h1 {
+    font-size: 2.8em; /* Adjusted size */
+    text-align: center;
+    width: 100%;
+    margin-top: 80px; /* Add top margin if needed */
+    margin-bottom: 40px; /* Adjusted spacing */
+    font-weight: 600;
+    color: #111;
+  }
+
+  h2 { /* Style for initiative/approach headings */
+      font-size: 2em;
+      text-align: center;
+      margin-top: 60px;
+      margin-bottom: 30px;
+      font-weight: 600;
+      color: #111;
+  }
+   #initiativeheading, #approachhead { /* Keep IDs if needed for specific targeting */
+       /* Inherits h2 styles */
+   }
+
+  h5 {
+    font-size: 1.4em; /* Adjusted size */
+    margin-bottom: 15px; /* Adjusted spacing */
+    font-weight: 600;
+    color: #111;
+  }
+
+  /* --- Text Content Sections --- */
+  .middlecontent,
+  .whatwedoing {
+    width: 100%;
+    max-width: 850px; /* Max width for text blocks */
+    margin-top: 0; /* Removed redundant margin-top */
+    margin-bottom: 40px; /* Add bottom margin */
+  }
+
+  .ourgoals,
+  .whywecare {
+    margin-bottom: 30px; /* Adjusted spacing */
+  }
+
+  ul {
+    padding-left: 25px; /* Slightly more indent */
+    margin-bottom: 20px; /* Space after list */
+    list-style: disc; /* Ensure bullets are visible */
+  }
+  ul li {
+      margin-bottom: 8px; /* Space between list items */
+  }
+
+  p {
+    width: 100%;
+    word-wrap: break-word;
+    margin-bottom: 1.5em; /* Consistent paragraph spacing */
+    color: #555; /* Slightly lighter text color */
+  }
+   p b { /* Style bold text within paragraphs */
+       color: #333;
+   }
+
+  /* --- Email Signup Section --- */
+  .emailnotify {
+    background-color: #f0f0f0; /* Slightly lighter background */
+    width: 90%;
+    max-width: 700px; /* Adjusted max-width */
+    margin: 60px auto 40px; /* Adjusted margins */
+    padding: 30px; /* Increased padding */
+    border-radius: 8px; /* Softer radius */
+    text-align: center;
+    border: 1px solid #ddd; /* Subtle border */
+  }
+  .emailnotify h2 {
+      font-size: 1.8em;
+      margin-top: 0;
+      margin-bottom: 15px;
+  }
+  .emailnotify p {
+      color: #555;
+      margin-bottom: 25px; /* Space before form */
+      line-height: 1.5;
+  }
+  #email {
+    width: 60%;
+    max-width: 350px; /* Allow slightly wider email input */
+    border: 1px solid #ccc; /* Lighter border */
+    border-radius: 4px;
+    padding: 10px; /* Better padding */
+    margin-right: 10px;
+    font-size: 1rem;
+  }
+  .emailnotify .btn-dark { /* Style the button */
+      padding: 10px 20px;
+      font-size: 1rem;
+      border-radius: 4px;
+      background-color: #333;
+      border-color: #333;
+      cursor: pointer;
+      transition: background-color 0.2s;
+  }
+  .emailnotify .btn-dark:hover {
+      background-color: #555;
+      border-color: #555;
+  }
+
+  /* --- Initiatives Section (Cards) --- */
+  .initiatives {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 25px; /* Slightly increased gap */
+    padding: 20px 0; /* Padding top/bottom */
+    max-width: 1200px;
+    margin: 0 auto; /* Center the container */
+  }
+
+  .card {
+    width: 18rem; /* Keep original width */
+    /* height: auto; */ /* Let height be determined by content */
+    text-align: center;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+    display: flex;
+    flex-direction: column; /* Stack card content */
+  }
+  .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  }
+
+  .card-img-top {
+    transition: transform 0.3s ease-in-out;
+    width: 100%;
+    height: 200px; /* Fixed height for image consistency */
+    object-fit: cover; /* Ensure image covers area */
+  }
+
+  .card:hover .card-img-top {
+    transform: scale(1.05); /* Slightly smaller scale */
+  }
+
+  .card .card-body {
+      padding: 20px;
+      flex-grow: 1; /* Allow body to grow */
+      display: flex;
+      flex-direction: column;
+  }
+  .card .card-body h3 {
+      font-size: 1.25em;
+      margin-bottom: 10px;
+      font-weight: 600;
+      color: #111;
+  }
+   .card .card-body p {
+       font-size: 0.95rem;
+       color: #666;
+       flex-grow: 1; /* Allow text to take space */
+       margin-bottom: 0;
+   }
+
+  .disnon { /* Link styling */
+    text-decoration: none;
+    color: inherit;
+  }
+
+  /* --- Approach Section --- */
+  .parentpara {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 25px;
+    margin: 40px auto 60px; /* Adjusted margins */
+    max-width: 1200px;
+    padding: 0 20px;
+  }
+
+  .childpara {
+    flex: 1;
+    min-width: 280px; /* Slightly adjusted min-width */
+    max-width: 350px; /* Add max-width for better control */
+    padding: 25px; /* Increased padding */
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    text-align: center;
+    border: 1px solid #eee;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+  }
+
+  .childpara h4 {
+    margin-bottom: 15px; /* Increased margin */
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #111;
+  }
+  .childpara p {
+      font-size: 0.95rem;
+      color: #666;
+      margin-bottom: 0; /* Remove default paragraph margin */
+  }
+
+  /* --- Media Queries for Responsiveness --- */
+  @media (max-width: 1200px) {
+    h1 { font-size: 2.5em; }
+  }
+
+  @media (max-width: 992px) {
+    h1 { font-size: 2.2em; }
+    h2 { font-size: 1.8em; }
+    h5 { font-size: 1.3em; }
+    .parentpara { gap: 20px; }
+    .childpara { min-width: 250px; }
+  }
+
+  @media (max-width: 768px) {
+    body { font-size: 15px; }
+    h1 { font-size: 2em; margin-top: 60px; margin-bottom: 30px; }
+    h2 { font-size: 1.6em; margin-top: 40px; margin-bottom: 20px; }
+    .container { padding: 20px 15px; }
+    .container img { margin-top: 30px; margin-bottom: 30px; }
+
+    .emailnotify { width: 95%; padding: 20px; }
+    #email { width: 100%; max-width: none; margin-right: 0; margin-bottom: 10px; }
+    .emailnotify form { display: flex; flex-direction: column; align-items: center; }
+    .emailnotify .btn-dark { width: 100%; max-width: 350px; }
+
+
+    .initiatives { padding: 10px 0; }
+    .card { width: 90%; max-width: 350px; /* Adjust card width for mobile */ }
+
+    .parentpara { flex-direction: column; align-items: center; }
+    .childpara { width: 90%; max-width: 400px; /* Adjust para width */ }
+  }
+
+  @media (max-width: 576px) {
+    h1 { font-size: 1.8em; margin-top: 40px; margin-bottom: 20px; }
+    h2 { font-size: 1.5em; }
+    h5 { font-size: 1.2em; }
+    .container { padding: 15px 10px; }
+    .container img { margin-top: 20px; margin-bottom: 20px; }
+
+    .emailnotify h2 { font-size: 1.5em; }
+    .card { width: 95%; }
+    .childpara { width: 95%; }
+  }
+</style>
+{% endblock %}
+
+
+{% block main_block %}
+
+<div class="container">
+  <div class="uppermainheading">
+    <h1 id="mainheading"><b>Renewable Materials</b></h1>
+  </div>
+
+  {# --- Changed from url_for to static tag --- #}
+  <img src="{% static 'assets/products/regenerative1.png' %}" alt="Sheep grazing in a field, illustrating regenerative wool source">
+
+  <div class="middlecontent">
+    <div class="ourgoals">
+      <h5 id="ourgoals"><b>Our Goals for Dec. 2025</b></h5>
+      <ul>
+        <li>100% of OakTrek’s wool coming from regenerative sources</li> {# Assuming Allbirds -> OakTrek #}
+        <li>Reducing or sequestering 100% of on-farm emissions from OakTrek’s wool</li> {# Assuming Allbirds -> OakTrek #}
+      </ul>
+    </div>
+
+    <div class="whywecare">
+      <h5><b>Why We Care</b></h5>
+      <p>We love the amazing potential of natural materials. Which means the farm is the first step when sourcing for any product. In our eyes, the future of fashion is inextricably linked to the future of agriculture.</p>
+      <p>Unfortunately, modern agricultural practices—fertilizers, pesticides, tilling, just to name a few—have been destroying our food and fiber systems, stripping carbon from the soil. And somewhat ironically, soil needs carbon to flourish. The industrialization of the agriculture industry has led to it becoming responsible for ¼ of global greenhouse gas emissions. All that’s to say, the immense power of soil has been vastly underutilized. The reality is it’s been rendered a part of the problem instead of leveraged as part of the solution.</p>
+      <p>Because if soil’s healthy, it can help remove carbon from the atmosphere (where there’s too much) and store it in the ground (where there’s too little). And even though the science for measuring all of this is still new, leveraging regenerative agriculture techniques gives the world a real shot at solving climate change if it’s done on a large enough scale.</p>
+      <p>Not only does regenerative agriculture represent a huge opportunity to reverse climate change, it also provides added benefits to local communities, biodiversity, ecology, long-term viability of the land...the list goes on. Which is why we’re all in. And we think the rest of the fashion industry should be, too.</p>
+    </div>
+  </div>
+
+  {# --- Changed from url_for to static tag --- #}
+  <img src="{% static 'assets/products/regenerative2.png' %}" alt="Close up of healthy soil with plant roots">
+
+  <div class="whatwedoing">
+    <h5><b>What We're Doing</b></h5>
+    <p>Merino wool is one of the natural materials in our repertoire. Merino wool comes from sheep. No surprises there, but what’s exciting about this connection is that sheep can help reverse climate change by speeding up the carbon storage process through regenerative practices. Simply by doing sheep things like eating grass and stimulating plant growth (reminder: plants take in carbon dioxide as they grow), they represent a great ally on our mission to reduce our footprint.</p>
+    <p>Sheep have been important members of our flock since day one, and thus, we’ve prioritized getting to know their farmers. And we’ve been in consistent conversation about how we can be supportive on our mutual journey to transform all of their farms to a regenerative model. We’re working with them to increase the supply of regenerative wool, while also creating innovative financing models to incentivize them to use their land to store carbon.</p>
+    <p>And finally, we’re investing in science to help create more data and knowledge around the impacts of regenerative agriculture in specific contexts. How are we putting our wool where our mouth is? With the help of partners like The New Zealand Merino Company, who established ZQRX, a scientific index to help growers continuously improve environmental and human outcomes. They connect us with farms like Temple Peak Station on the South Island of New Zealand, where growers Mark and Amanda Hasselman are regenerating the land for generations to come.</p>
+  </div>
+
+  {# --- Changed from url_for to static tag --- #}
+  <img src="{% static 'assets/products/regenerative3.png' %}" alt="Farmer checking on sheep in a regenerative pasture">
+
+</div>
+
+
+<div class="emailnotify">
+  <div>
+    <h2><b>Stay in the Loop</b></h2> {# Simplified heading #}
+    <p>
+      <b>Sign up for email updates on our progress towards our sustainability goals.</b> {# Simplified text #}
+    </p>
+  </div>
+  <div>
+    {# --- Added CSRF token --- #}
+    <form action="#" method="POST">
+      {% csrf_token %}
+      <input type="email" name="email" id="email" placeholder="Enter your email" required /> {# Added required attribute #}
+      <input type="submit" value="SIGN UP" class="btn btn-dark" /> {# Uppercase consistency #}
+    </form>
+  </div>
+</div>
+
+<h2 id="initiativeheading"><b>OakTrek Sustainability Initiatives</b></h2>
+<div class="initiatives">
+  <div class="member">
+    {# --- Changed from url_for to url tag, assuming URL name 'sustainability' --- #}
+    <a href="{% url 'sustainability' %}" class="disnon">
+      <div class="card">
+        {# --- Changed from url_for to static tag --- #}
+        <img src="{% static 'assets/products/member1.png' %}" class="card-img-top cardimage"
+          alt="MO.ONSHOT Shoe - Net Zero Carbon" />
+        <div class="card-body">
+          <h3><b>Introducing MO.ONSHOT</b></h3>
+          <p class="card-text">Learn more about the World's first net zero carbon shoe.</p> {# Ellipsis removed #}
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="member">
+     {# --- Changed from url_for to url tag, assuming URL name 'moonshot' --- #}
+    <a href="{% url 'moonshot' %}" class="disnon">
+      <div class="card">
+         {# --- Changed from url_for to static tag --- #}
+        <img src="{% static 'assets/products/member3.png' %}" class="card-img-top cardimage"
+          alt="Certified B Corporation Logo" />
+        <div class="card-body">
+          <h3><b>We're a Certified B Corp</b></h3>
+          <p class="card-text">From the very beginning, balancing purpose and profit.</p> {# Ellipsis removed #}
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="member">
+     {# --- Changed from url_for to url tag, assuming URL name 'mothernature' --- #}
+    <a href="{% url 'mothernature' %}" class="disnon">
+      <div class="card">
+         {# --- Changed from url_for to static tag --- #}
+        <img src="{% static 'assets/products/member4.png' %}" class="card-img-top cardimage"
+          alt="Illustration of Nature represented at a table" />
+        <div class="card-body">
+          <h3><b>Giving Mother Nature a Seat</b></h3> {# Shortened #}
+          <p class="card-text">We're prioritizing the planet in our decisions.</p> {# Ellipsis removed #}
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="member">
+     {# --- Changed from url_for to url tag, assuming URL name 'adidasxoaktrek' --- #}
+    <a href="{% url 'adidasxoaktrek' %}" class="disnon">
+      <div class="card">
+         {# --- Changed from url_for to static tag --- #}
+        <img src="{% static 'assets/products/member5.png' %}" class="card-img-top cardimage"
+          alt="Adidas and OakTrek Collaboration Shoe" />
+        <div class="card-body">
+          <h3><b>Adidas X OakTrek</b></h3>
+          <p class="card-text">Teaming up to create low-carbon footwear.</p> {# Ellipsis removed #}
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<h2 id="approachhead"><b>The OakTrek Approach</b></h2>
+<div class="parentpara">
+  <div class="childpara">
+    <h4><b>Wear All Day Comfort</b></h4>
+    <p>Lightweight, bouncy, and wildly comfortable shoes that make any outing feel effortless. Slip in, lace up, or slide them on.</p> {# Slightly rephrased #}
+  </div>
+  <div class="childpara">
+    <h4><b>Sustainability in Every Step</b></h4>
+    <p>From materials to transport, we're working to reduce our carbon footprint to near zero. Accountability isn't a future goal—it's now.</p> {# Rephrased #}
+  </div>
+  <div class="childpara">
+    <h4><b>Materials from the Earth</b></h4>
+    <p>We replace petroleum-based synthetics with natural alternatives like wool, tree fiber, and sugar cane. Better for you, better for the planet.</p> {# Rephrased #}
+  </div>
+</div>
+{% endblock %}

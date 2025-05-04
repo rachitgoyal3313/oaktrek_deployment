@@ -1,0 +1,350 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block main_block %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Oaktrek</title>
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/logos/leaf.png' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Vollkorn:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #292f32;
+            --secondary-color: #F7F7F7;
+            --accent-color: #4D5559;
+        }
+
+        body {
+            font-family: 'Vollkorn', serif;
+            background-color: white;
+            color: var(--primary-color);
+            min-height: 100vh; /* May conflict with base.html body styles */
+            display: flex;      /* May conflict with base.html body styles */
+            flex-direction: column; /* May conflict with base.html body styles */
+            overflow-x: hidden;
+        }
+
+        .about-section {
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .section-title {
+            margin-bottom: 3rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .team-container {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            max-width: 100%;
+            margin: 0 auto;
+            overflow-x: auto; /* Allows horizontal scrolling on smaller screens */
+            padding: 1rem;
+            /* Add scrollbar styling if desired */
+             -webkit-overflow-scrolling: touch; /* Smooth scrolling on iOS */
+        }
+
+        /* Optional: Style scrollbar for browsers that support it */
+        .team-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .team-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 10px;
+        }
+        .team-container::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 10px;
+        }
+        .team-container::-webkit-scrollbar-thumb:hover {
+            background: #aaa;
+        }
+
+        .team-card {
+            background: linear-gradient(135deg, var(--secondary-color), white);
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.8s ease forwards;
+            opacity: 0;
+            transform: translateY(20px);
+            min-width: 280px;
+            max-width: 280px;
+            height: auto;
+            min-height: 450px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            flex-shrink: 0;
+            overflow-y: hidden; /* Prevent vertical scrollbar */
+        }
+        .team-card:nth-child(1) { animation-delay: 0.1s; }
+        .team-card:nth-child(2) { animation-delay: 0.2s; }
+        .team-card:nth-child(3) { animation-delay: 0.3s; }
+        .team-card:nth-child(4) { animation-delay: 0.4s; }
+
+
+        .team-card:hover {
+            transform: scale(1.05) translateY(-10px); 
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .team-member-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem;
+            object-fit: cover;
+            border: 3px solid var(--primary-color);
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover .team-member-image {
+            transform: scale(1.1);
+        }
+
+        .team-member-name {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+
+        .team-member-role {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-style: italic;
+        }
+
+        .team-member-bio {
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            flex-grow: 1; /* Allows bio to take up remaining space */
+            overflow-wrap: break-word; /* Ensure long words wrap */
+        }
+
+            .social-links {
+                display: flex;
+                justify-content: center;
+                gap: 0.5rem;
+                flex-wrap: wrap; /* Already present, ensures buttons wrap to next line */
+                width: 100%; /* Ensure container stays within card */
+                box-sizing: border-box; /* Include padding/margins in width */
+                margin-top: auto; /* Push social links to the bottom */
+                padding: 0 0.5rem; /* Optional: add small padding to prevent buttons touching edges */
+            }
+            
+            .social-button {
+                padding: 0.4rem 0.8rem; /* Reduced padding to make buttons smaller */
+                border: none;
+                border-radius: 5px;
+                color: white;
+                text-decoration: none;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+                font-size: 0.85rem; /* Slightly smaller font size */
+                white-space: nowrap; /* Prevent text wrapping inside button */
+                display: inline-flex;
+                align-items: center;
+                gap: 0.3rem;
+                max-width: 120px; /* Constrain button width to fit within card */
+                overflow: hidden; /* Prevent text from spilling out */
+                text-overflow: ellipsis; /* Optional: add ellipsis for long text */
+            }
+            
+            .social-button i {
+                font-size: 0.9rem; /* Slightly smaller icon size */
+            }
+
+        .linkedin { background-color: #0077B5; }
+        .github { background-color: #333; }
+        .resume { background-color: var(--primary-color); } /* If you add a resume button */
+
+        .social-button:hover {
+            opacity: 0.9;
+            color: white;
+            transform: translateY(-2px); /* Slight lift on hover */
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Responsive Adjustments --- */
+
+        @media (max-width: 1200px) {
+            /* On large tablets/small desktops, allow container to scroll */
+             .team-container {
+                 justify-content: flex-start; /* Align items to the start for scrolling */
+                 padding: 1rem 2rem; /* Add some side padding */
+             }
+        }
+
+        @media (max-width: 768px) {
+             .about-section {
+                 padding: 3rem 1rem; /* Reduce padding on smaller screens */
+             }
+             .section-title {
+                 font-size: 1.8rem; /* Adjust title size */
+                 margin-bottom: 2rem;
+             }
+            .team-container {
+                /* Keep horizontal scroll */
+                padding: 1rem;
+            }
+             .team-card {
+                 min-width: 260px; /* Slightly smaller cards */
+                 max-width: 260px;
+                 height: 430px; /* Adjust height if needed */
+                 padding: 1.5rem;
+             }
+             .team-member-image {
+                 width: 120px;
+                 height: 120px;
+             }
+             .team-member-name {
+                 font-size: 1.3rem;
+             }
+        }
+
+        @media (max-width: 576px) {
+            .team-card {
+                 min-width: 240px; /* Even smaller */
+                 max-width: 240px;
+                 height: auto; /* Allow height to adjust based on content */
+                 min-height: 400px; /* Ensure a minimum height */
+            }
+            .team-member-bio {
+                max-height: none; /* Remove max height if height is auto */
+            }
+            .social-links {
+                gap: 0.4rem;
+            }
+            .social-button {
+                padding: 0.4rem 0.8rem;
+                font-size: 0.8rem;
+            }
+            .social-button i {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main>
+        <section class="about-section">
+            <div class="container">
+                <h1 class="section-title">Meet Our Team</h1>
+
+                <div class="team-container">
+                    <!-- Team Member 1 -->
+                    <div class="team-card">
+                        <img src="{% static 'assets/products/rachit.jpg' %}" alt="Rachit Goyal" class="team-member-image">
+                        <h3 class="team-member-name">Rachit Goyal</h3>
+                        <p class="team-member-role">Full Stack Developer</p>
+                        <p class="team-member-bio">Passionate about creating seamless user experiences and scalable
+                            full-stack solutions.</p>
+                        <div class="social-links">
+                            <a href="https://www.linkedin.com/in/rachit-goyal-1a4403301" target="_blank"
+                                rel="noopener noreferrer" class="social-button linkedin">
+                                <i class="fab fa-linkedin-in"></i> LinkedIn
+                            </a>
+                            <a href="https://github.com/rachitgoyal3313/" target="_blank" rel="noopener noreferrer"
+                                class="social-button github">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 2 -->
+                    <div class="team-card">
+                        <img src="{% static 'assets/products/divyansh.jpg' %}" alt="Divyansh Chawla"
+                            class="team-member-image">
+                        <h3 class="team-member-name">Divyansh Chawla</h3>
+                        <p class="team-member-role">Full Stack Developer</p>
+                        <p class="team-member-bio">Proficient in both frontend and backend, optimizing development for
+                            efficiency.</p>
+                        <div class="social-links">
+                            <a href="https://www.linkedin.com/in/divyansh-chawla-6011a0281?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+                                target="_blank" rel="noopener noreferrer" class="social-button linkedin">
+                                <i class="fab fa-linkedin-in"></i> LinkedIn
+                            </a>
+                            <a href="https://github.com/Divy13ansh" target="_blank" rel="noopener noreferrer"
+                                class="social-button github">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 3 -->
+                    <div class="team-card">
+                        <img src="{% static 'assets/products/pushkar.jpg' %}" alt="Pushkar Sharma"
+                            class="team-member-image">
+                        <h3 class="team-member-name">Pushkar Sharma</h3>
+                        <p class="team-member-role">Full Stack Developer</p>
+                        <p class="team-member-bio">Dedicated to creating reliable full stack systems, with expertise in designing secure authorization flows.
+                        </p>
+                        <div class="social-links">
+                            <a href="https://www.linkedin.com/in/pushkar-sharma-80146b332?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+                                target="_blank" rel="noopener noreferrer" class="social-button linkedin">
+                                <i class="fab fa-linkedin-in"></i> LinkedIn
+                            </a>
+                            <a href="https://github.com/PushkarSharma18" target="_blank" rel="noopener noreferrer"
+                                class="social-button github">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Team Member 4 -->
+                    <div class="team-card">
+                        <img src="{% static 'assets/products/pawawni.jpg' %}" alt="Pawani" class="team-member-image">
+                        <h3 class="team-member-name">Pawani</h3>
+                        <p class="team-member-role">UI/UX Designer</p>
+                        <p class="team-member-bio">Creative designer with a keen eye for detail and intuitive user
+                            interfaces.</p>
+                        <div class="social-links">
+                            <a href="https://www.linkedin.com/in/pawni-gogia-456588336/" target="_blank"
+                                rel="noopener noreferrer" class="social-button linkedin">
+                                <i class="fab fa-linkedin-in"></i> LinkedIn
+                            </a>
+                            <a href="https://github.com/Pawani-29" target="_blank" rel="noopener noreferrer"
+                                class="social-button github">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+        </section>
+    </main>
+{% endblock %}

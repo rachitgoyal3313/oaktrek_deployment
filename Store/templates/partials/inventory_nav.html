@@ -1,0 +1,12 @@
+<!-- templates/partials/inventory_nav.html -->
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" href="#" id="inventoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+        Inventory
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="inventoryDropdown">
+        <li><a class="dropdown-item" href="{% url 'inventory_dashboard' %}">Dashboard</a></li>
+        <li><a class="dropdown-item" href="{% url 'low_stock_alerts' %}">Low Stock Alerts</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><a class="dropdown-item" href="#">Inventory Reports</a></li>
+    </ul>
+</li>

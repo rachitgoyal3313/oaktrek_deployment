@@ -1,0 +1,233 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block style_block %}
+  <style>
+    @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
+
+    * {
+      font-family: "Poppins", sans-serif;
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .emailnotify {
+      background-color: rgba(235, 235, 235, 0.738);
+      width: 90%;
+      max-width: 800px;
+      margin: 100px auto 20px;
+      padding: 20px;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    #email {
+      width: 60%;
+      max-width: 300px;
+      border: 1px solid black;
+      border-radius: 3px;
+      padding: 5px;
+      margin-right: 10px;
+    }
+
+    #initiativeheading {
+      text-align: center;
+      margin: 50px 0;
+      font-size: 2em;
+    }
+
+    .initiatives {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .card {
+      width: 18rem;
+      height: auto;
+      text-align: center;
+      border-radius: 10px;
+      overflow: hidden;
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .card-img-top {
+      transition: transform 0.3s ease-in-out;
+    }
+
+    .card:hover .card-img-top {
+      transform: scale(1.1);
+    }
+
+    .disnon {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    #approachhead {
+      margin-top: 50px;
+      text-align: center;
+    }
+
+    .parentpara {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 20px;
+      margin: 50px auto;
+      max-width: 1200px;
+      padding: 0 20px;
+    }
+
+    .childpara {
+      flex: 1;
+      min-width: 300px;
+      padding: 20px;
+      background-color: #f8f9fa;
+      border-radius: 10px;
+      text-align: center;
+    }
+
+    .childpara h4 {
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .emailnotify {
+        width: 95%;
+        margin: 50px auto 20px;
+      }
+
+      #email {
+        width: 100%;
+        margin-bottom: 10px;
+      }
+
+      .initiatives {
+        padding: 10px;
+      }
+
+      .card {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .parentpara {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .childpara {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #initiativeheading {
+        font-size: 1.5em;
+      }
+
+      .emailnotify h2 {
+        font-size: 1.5em;
+      }
+    }
+</style>
+{% endblock %}
+
+{% block main_block %}
+<div class="emailnotify">
+  <div>
+    <h2><b>Sign in the Loop of Our Progress</b></h2>
+    <br />
+    <p>
+      <b>Sign up for email updates and we'll keep you posted as we continue to work towards <br />
+        our long-term sustainability goals.</b>
+    </p>
+  </div>
+  <br />
+  <div>
+    <form action="#" method="POST">
+      {% csrf_token %}
+      <input type="email" name="email" id="email" placeholder="Enter your email" />
+      <input type="submit" value="SIGNUP" class="btn btn-dark" />
+    </form>
+  </div>
+</div>
+
+<h2 id="initiativeheading"><b>OakTrek Sustainability Initiatives</b></h2>
+<div class="initiatives">
+  <div class="member">
+    <a href="{% url 'sustainability' %}" class="disnon">
+      <div class="card">
+        <img src="{% static 'assets/products/member1.png' %}" class="card-img-top cardimage" alt="MO.ONSHOT" />
+        <div class="card-body">
+          <h3><b>Introducing MO.ONSHOT</b></h3>
+          <p class="card-text">Learn more about the World's first net zero carbon shoe...</p>
+        </div>
+      </div>
+    </a>
+  </div>
+
+  <div class="member">
+    <a href="{% url 'moonshot' %}" class="disnon">
+      <div class="card">
+        <img src="{% static 'assets/products/member3.png' %}" class="card-img-top cardimage" alt="MO.ONSHOT" />
+        <div class="card-body">
+          <h3><b>We're a Certified B Corp</b></h3>
+          <p class="card-text">From the very beginning, the environment...</p>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="member">
+    <a href="{% url 'mothernature' %}" class="disnon">
+      <div class="card">
+        <img src="{% static 'assets/products/member4.png' %}" class="card-img-top cardimage" alt="MO.ONSHOT" />
+        <div class="card-body">
+          <h3><b>Giving Mother Nature a seat at the Table</b></h3>
+          <p class="card-text">We're prioritizing the planet...</p>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="member">
+    <a href="{% url 'adidasxoaktrek' %}" class="disnon">
+      <div class="card">
+        <img src="{% static 'assets/products/member5.png' %}" class="card-img-top cardimage" alt="MO.ONSHOT" />
+        <div class="card-body">
+          <h3><b>Adidas X Oaktrek</b></h3>
+          <p class="card-text">We teamed up with Adidas...</p>
+        </div>
+      </div>
+    </a>
+  </div>
+</div>
+
+<h2 id="approachhead"><b>The OakTree Approach</b></h2>
+<div class="parentpara">
+  <div class="childpara">
+    <h4><b>Wear All Day Comfort</b></h4>
+    <p>Lightweight, bouncy, and wildly comfortable, Allbirds shoes make any outing feel effortless. Slip in, lace up, or
+      slide them on and enjoy the comfy support</p>
+  </div>
+  <div class="childpara">
+    <h4><b>Sustainability in Every Step</b></h4>
+    <p>From materials to transport, we're working to reduce our carbon footprint to near zero. Holding ourselves
+      accountable and striving for climate goals isn't a 30-year goal—it's now.</p>
+  </div>
+  <div class="childpara">
+    <h4><b>Materials from the Earth</b></h4>
+    <p>We replace petroleum-based synthetics with natural alternatives wherever we can. Like using wool, tree fiber, and
+      sugar cane. They're soft, breathable, and better for the planet—win, win, win.</p>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+{% endblock %}

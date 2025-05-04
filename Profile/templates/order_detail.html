@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block main_block %}
+
+{% load order_filters %}
+
+<div class="container mt-4">
+    <div class="card p-4 shadow-sm">
+        <h2 class="mb-3">Order #{{ order.id }}</h2>
+        <p><strong>Date:</strong> {{ order.order_date|date:"F d, Y g:i A" }}</p>
+        <p><strong>Total Amount:</strong> ₹{{ order.total_amount }}</p>
+        <p><strong>Payment Status:</strong> {{ order.payment_status }}</p>
+
+        <hr>
+        <h4>Products</h4>
+        <ul>
+            {% for item in order.items.all %}
+                <li class="d-flex align-items-center mb-3">
+                    <!-- Product Image -->
+                    <img src="{{ item.product.image_1.url }}" alt="{{ item.product.product_name }}" style="width: 80px; height: 80px; object-fit: cover; margin-right: 15px;">
+
+                    <!-- Product Name and Price Details -->
+                    <div>
+                        <p><strong>{{ item.product.product_name }}</strong></p>
+                        <p>{{ item.quantity }} × ₹{{ item.price }} = ₹{{ item.quantity|multiply:item.price }}</p>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'profile' %}" class="btn btn-outline-secondary mt-3">Back to Profile</a>
+    </div>
+</div>
+
+
+    
+{% endblock %}

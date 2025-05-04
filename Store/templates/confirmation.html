@@ -1,0 +1,275 @@
+{% extends 'base.html' %}
+
+{% block style_block %}
+    <style>
+        :root {
+            --primary-color: #1C2327;
+            --text-color: #2C3539;
+            --border-color: #E5E7EB;
+            --background-color: #FFFFFF;
+            --secondary-color: #F7F7F7;
+            --success-color: #34D399;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            font-family: 'Vollkorn', serif;
+            overflow-x: hidden;
+        }
+
+        /* Keep all existing styles... */
+        .floating-leaf {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            opacity: 0.05;
+            pointer-events: none;
+            animation: float 20s linear infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(-5vh) translateX(0) rotate(0deg); }
+            100% { transform: translateY(105vh) translateX(100vw) rotate(360deg); }
+        }
+
+        .logo { max-width: 150px; }
+
+        .confirmation-container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-bar {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            position: relative;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .progress-step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            padding-top: 24px;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 12px;
+            left: 60px;
+            right: 60px;
+            height: 2px;
+            background-color: var(--border-color);
+            z-index: -1;
+        }
+
+        .progress-step::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            border: 2px solid var(--border-color);
+            z-index: 1;
+        }
+
+        .progress-step.completed::before {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .confirmation-section {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 32px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background-color: var(--success-color);
+            border-radius: 50%;
+            margin: 0 auto 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .success-icon svg {
+            width: 32px;
+            height: 32px;
+            color: white;
+        }
+
+        .order-details {
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 32px;
+            text-align: left;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .product-mini {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .product-mini-image {
+            width: 60px;
+            height: 60px;
+            background-color: var(--secondary-color);
+            margin-right: 16px;
+            border-radius: 4px;
+        }
+
+        .continue-shopping-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 24px;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .continue-shopping-btn:hover {
+            background-color: #2C3539;
+            color: white;
+        }
+
+        .progress_step{
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .delivery-info {
+            margin-top: 24px;
+            padding: 24px;
+            background-color: var(--secondary-color);
+            border-radius: 8px;
+        }
+    </style>
+{% endblock %}
+
+{% block main_block %}
+    <div id="leaves-container"></div>
+
+    <div class="confirmation-container">
+        
+
+        <div class="progress-bar">
+            <div class="progress-line"></div>
+            <div class="progress_step">
+                <div class="progress-step completed">
+                    <div class="progress-step-text">Cart</div>
+                </div>
+                <div class="progress-step completed">
+                    <div class="progress-step-text">Checkout</div>
+                </div>
+                <div class="progress-step completed">
+                    <div class="progress-step-text">Confirmation</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="confirmation-section">
+            <div class="success-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+            </div>
+            <div class="order-number">Order #{{ order_number }}</div>
+            <div class="thank-you-message">Thank you for your order!</div>
+            <p class="text-muted">We've received your order and will begin processing it right away.</p>
+            <p class="text-muted">A confirmation email has been sent to {{ user.email }}</p>
+
+            <div class="order-details">
+                <h3 class="mb-4">Order Summary</h3>
+                {% for item in order_items %}
+                <div class="product-mini">
+                    
+                    <div class="flex-grow-1">
+                        <div class="fw-500">{{ item.name }}</div>
+                        <div class="text-muted">Quantity: {{ item.quantity }}</div>
+                        <div>₹{{ item.price|floatformat:2 }}</div>
+                    </div>
+                    <div> <img style="height: 150px; margin-left: 145px;" src="{{ item.image }}" alt=""></div>
+                </div>
+                {% endfor %}
+
+                <div class="mt-4">
+                    <div class="detail-row">
+                        <span>Subtotal</span>
+                        <span>₹{{ subtotal|floatformat:2 }}</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Shipping</span>
+                        <span>Free</span>
+                    </div>
+                    <div class="detail-row">
+                        <span>Tax</span>
+                        <span>₹{{ tax|floatformat:2 }}</span>
+                    </div>
+                    <hr>
+                    <div class="detail-row">
+                        <strong>Total</strong>
+                        <strong>₹{{ total|floatformat:2 }}</strong>
+                    </div>
+                </div>
+            </div>
+            {% if addresses %}
+            {% for address in addresses %}
+            <div class="delivery-info">
+                <h3 class="mb-3">Delivery Information</h3>
+                <p class="mb-1">{{ user.name }}</p>
+                <p class="mb-1">{{ address.name }}</p>
+                <p class="mb-1">{{ address.city }}, {{ address.state }} {{ address.zipcode }}</p>
+                <p class="mb-0">India</p>
+            </div>
+            {% endfor %}
+            {% endif %}
+
+            <a href="{% url 'products' collection_name='mens' %}" class="continue-shopping-btn">Continue Shopping</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script_block %}
+    <script>
+        // Create animated leaves
+        const leavesContainer = document.getElementById('leaves-container');
+        for (let i = 0; i < 10; i++) {
+            const leaf = document.createElement('div');
+            leaf.className = 'floating-leaf';
+            leaf.style.left = Math.random() * 100 + 'vw';
+            leaf.style.animationDelay = Math.random() * 20 + 's';
+            leaf.innerHTML = `<svg viewBox="0 0 100 100"><path d="M50 10 C60 30 80 40 90 60 C80 80 60 90 50 95 C40 90 20 80 10 60 C20 40 40 30 50 10" fill="currentColor"/></svg>`;
+            leavesContainer.appendChild(leaf);
+        }
+    </script>
+{% endblock %}

@@ -1,0 +1,129 @@
+<!-- templates/store/inventory/low_stock_alerts.html -->
+{% extends 'base.html' %}
+
+{% block title %}Low Stock Alerts{% endblock %}
+
+{% block main_block %}
+<div class="container mt-4">
+    <h1 class="mb-4">Low Stock Alerts</h1>
+    
+    <!-- Filter Form -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3 align-items-end">
+                <div class="col-md-6">
+                    <label for="threshold" class="form-label">Stock Threshold</label>
+                    <input type="number" class="form-control" id="threshold" name="threshold" value="{{ threshold }}" min="1">
+                    <div class="form-text">Show products with stock at or below this level</div>
+                </div>
+                <div class="col-md-6">
+                    <button type="submit" class="btn btn-primary">Apply Filter</button>
+                    <a href="{% url 'inventory_dashboard' %}" class="btn btn-secondary">Back to Dashboard</a>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Alerts Summary -->
+    <div class="alert {% if alerts.count > 0 %}alert-warning{% else %}alert-success{% endif %}">
+        <h5 class="alert-heading">
+            {% if alerts.count > 0 %}
+            {{ alerts.count }} product(s) need attention!
+            {% else %}
+            All products are well-stocked!
+            {% endif %}
+        </h5>
+        <p>Showing products with stock level at or below {{ threshold }} units.</p>
+    </div>
+    
+    <!-- Low Stock Products -->
+    <div class="card">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">Products Needing Restock</h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Category</th>
+                            <th>Current Stock</th>
+                            <th>Price</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for product in alerts.products %}
+                        <tr>
+                            <td>{{ product.name }}</td>
+                            <td>{{ product.category }}</td>
+                            <td>
+                                <span class="badge {% if product.current_stock <= 5 %}bg-danger{% else %}bg-warning{% endif %}">
+                                    {{ product.current_stock }}
+                                </span>
+                            </td>
+                            <td>${{ product.price }}</td>
+                            <td>
+                                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#updateStockModal{{ product.id }}">
+                                    Update Stock
+                                </button>
+                                
+                                <!-- Modal for updating stock -->
+                                <div class="modal fade" id="updateStockModal{{ product.id }}" tabindex="-1" aria-labelledby="updateStockModalLabel{{ product.id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="updateStockModalLabel{{ product.id }}">Update Stock for {{ product.name }}</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form action="{% url 'update_stock' product.id %}" method="post">
+                                                {% csrf_token %}
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label for="quantity{{ product.id }}" class="form-label">New Stock Quantity</label>
+                                                        <input type="number" class="form-control" id="quantity{{ product.id }}" name="quantity" value="{{ product.current_stock }}" min="0" required>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    <button type="submit" class="btn btn-primary">Update Stock</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No products below the threshold</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Restock Recommendations -->
+    {% if alerts.count > 0 %}
+    <div class="card mt-4">
+        <div class="card-header bg-info text-white">
+            <h5 class="mb-0">Restock Recommendations</h5>
+        </div>
+        <div class="card-body">
+            <p>Based on your current inventory levels, consider restocking the following:</p>
+            <ul class="list-group">
+                {% for product in alerts.products %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ product.name }}
+                    <span class="badge bg-primary rounded-pill">Order {{ threshold|add:"10" }} units</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

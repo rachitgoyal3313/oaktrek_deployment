@@ -1,0 +1,34 @@
+<!-- test.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Test</h1>
+    <div id="messages"></div>
+    <script>
+        const socket = new WebSocket(`ws://${window.location.host}/ws/test/`);
+        
+        socket.onopen = function(e) {
+            console.log("WebSocket connection established");
+            document.getElementById('messages').innerHTML += '<p>Connected!</p>';
+        };
+        
+        socket.onmessage = function(e) {
+            console.log("Message received:", e.data);
+            document.getElementById('messages').innerHTML += `<p>Received: ${e.data}</p>`;
+        };
+        
+        socket.onclose = function(e) {
+            console.log("WebSocket connection closed", e);
+            document.getElementById('messages').innerHTML += '<p>Connection closed</p>';
+        };
+        
+        socket.onerror = function(e) {
+            console.error("WebSocket error:", e);
+            document.getElementById('messages').innerHTML += '<p>Error occurred</p>';
+        };
+    </script>
+</body>
+</html>

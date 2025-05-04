@@ -1,0 +1,546 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title_block %}{{ collection_name|title }} Collection | OakTrek{% endblock %}
+
+{% block style_block %}
+<style>
+    .sort-container {
+        display: flex;
+        justify-content: flex-end;
+        margin: 0 40px 20px 0;
+        position: relative;
+    }
+    
+    .sort-button {
+        background-color: white;
+        border: 1px solid #ddd;
+        padding: 8px 16px;
+        font-size: 14px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    
+    .dropdown1 {
+        position: relative;
+        display: inline-block;
+    }
+    
+    .dropdown1-arrow {
+        font-size: 10px;
+    }
+    
+    .dropdown1-content {
+        display: none;
+        position: absolute;
+        right: 0;
+        background-color: white;
+        min-width: 200px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.1);
+        z-index: 1;
+        border: 1px solid #ddd;
+    }
+    
+    .dropdown1-content.show {
+        display: block;
+    }
+    
+    .sort-option {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+        text-align: left;
+    }
+    
+    .sort-option:hover {
+        background-color: #f9f9f9;
+    }
+    
+    .sort-option.active {
+        font-weight: bold;
+        background-color: #f5f5f5;
+    }
+</style>
+<style>
+    /* [All your CSS remains unchanged here] */
+    /* General Layout */
+    .product-grid {
+        display: grid;
+        grid-template-columns: 280px 1fr;
+        gap: 3rem;
+        padding: 2rem 4rem;
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+
+    /* Breadcrumb Styling */
+    .breadcrumb {
+        padding: 1rem 4rem;
+        background-color: transparent;
+        border-bottom: 1px solid #eee;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    .breadcrumb span:last-child {
+        color: #1a1a1a;
+        font-weight: 500;
+    }
+
+    /* Gender Toggle */
+    .toggle-container {
+        padding: 1rem 4rem;
+        border-bottom: 1px solid #eee;
+    }
+
+    .toggle-buttons {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+    }
+
+    .toggle-button {
+        padding: 0.6rem 2rem;
+        border: 1px solid #ddd;
+        background: white;
+        cursor: pointer;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-radius: 4px;
+    }
+
+    .toggle-button:hover {
+        background: #f8f9fa;
+    }
+
+    .toggle-button.active {
+        background: #1a1a1a;
+        color: white;
+        border-color: #1a1a1a;
+    }
+
+    /* Sidebar Styling */
+    .filters {
+        padding-right: 2rem;
+        border-right: 1px solid #eee;
+    }
+
+    .filters h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+    }
+
+    .nav-item {
+        margin-bottom: 0.5rem;
+    }
+
+    .category-link {
+        color: #666;
+        text-decoration: none;
+        padding: 0.5rem 0;
+        display: block;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+    .category-link:hover {
+        color: #1a1a1a;
+        transform: translateX(5px);
+    }
+
+    .category-link.active {
+        color: #1a1a1a;
+        font-weight: 600;
+    }
+
+    .filter-section {
+        margin-top: 2.5rem;
+    }
+
+    .filter-section h3 {
+        font-size: 1.2rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .sizes-filter h4 {
+        font-size: 1rem;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+    }
+
+    .sizes-filter p {
+        font-size: 0.9rem;
+        color: #666;
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
+
+    .size-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0.5rem;
+    }
+
+    .size-option {
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-size: 0.9rem;
+        border-radius: 4px;
+    }
+
+    .size-option:hover {
+        border-color: #1a1a1a;
+    }
+
+    .size-option.active {
+        background: #1a1a1a;
+        color: white;
+        border-color: #1a1a1a;
+    }
+
+    /* Products Grid */
+    .products-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+    }
+
+    .product-card {
+        border: none;
+        padding: 0;
+        text-align: center;
+        position: relative;
+        transition: all 0.3s ease;
+    }
+
+    .product-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .product-card:hover .product-image {
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+
+    .product-image-container {
+        position: relative;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .product-image {
+        width: 100%;
+        height: 300px;
+        object-fit: cover;
+        transition: all 0.3s ease;
+    }
+
+    .product-badge {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+        padding: 0.4rem 1rem;
+        background-color: #1a1a1a;
+        color: white;
+        font-size: 0.8rem;
+        font-weight: 500;
+        border-radius: 4px;
+        z-index: 1;
+    }
+
+    .product-name {
+        font-size: 1rem;
+        margin: 0.5rem 0;
+        font-weight: 500;
+        color: #1a1a1a;
+    }
+
+    .product-price {
+        font-size: 1rem;
+        color: #666;
+        margin-bottom: 0.5rem;
+    }
+
+    /* Promotional Banner */
+    .promo-banner {
+        background-color: #1a1a1a;
+        color: white;
+        padding: 4rem;
+        text-align: center;
+        margin: 4rem;
+        border-radius: 12px;
+        background-image: linear-gradient(45deg, #1a1a1a, #2c2c2c);
+    }
+
+    .promo-banner h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+
+    .promo-banner p {
+        font-size: 1.1rem;
+        margin-bottom: 2rem;
+        color: #ddd;
+    }
+
+    .banner-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+    }
+
+    .banner-button {
+        padding: 0.8rem 2rem;
+        background-color: white;
+        color: #1a1a1a;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .banner-button:hover {
+        background-color: #f0f0f0;
+        transform: translateY(-2px);
+    }
+
+    /* No Products Message */
+    .no-products {
+        grid-column: 1 / -1;
+        text-align: center;
+        padding: 4rem;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+    }
+
+    .no-products h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        color: #1a1a1a;
+    }
+
+    .no-products p {
+        color: #666;
+    }
+
+    /* Quick View Overlay */
+    .quick-view-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .quick-view-content {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        max-width: 600px;
+        width: 90%;
+        position: relative;
+    }
+
+    .product-link{
+        text-decoration: none;
+        color: inherit;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .product-grid {
+            padding: 2rem;
+        }
+        .breadcrumb, .toggle-container {
+            padding: 1rem 2rem;
+        }
+        .promo-banner {
+            margin: 2rem;
+            padding: 3rem;
+        }
+    }
+
+    @media (max-width: 992px) {
+        .product-grid {
+            grid-template-columns: 1fr;
+        }
+        .filters {
+            border-right: none;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 2rem;
+            margin-bottom: 2rem;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .products-container {
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        }
+        .promo-banner {
+            margin: 1rem;
+            padding: 2rem;
+        }
+        .promo-banner h2 {
+            font-size: 2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block main_block %}
+    <!-- Gender Toggle -->
+    <!--
+    <div class="toggle-container">
+        <div class="toggle-buttons">
+            <a href="{% url 'products' collection_name='womens' %}" 
+               class="toggle-button {% if 'women' in collection_name|lower %}active{% endif %}">
+                WOMEN
+            </a>
+            <a href="{% url 'products' collection_name='mens' %}" 
+               class="toggle-button {% if 'men' in collection_name|lower %}active{% endif %}">
+                MEN
+            </a>
+        </div>
+    </div>
+    -->
+
+    <!-- Breadcrumb -->
+    <nav aria-label="breadcrumb" class="breadcrumb">
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>Home / </span>
+        <span>{{ product_category}}</span>
+    </nav>
+
+    <!-- Sort Button in Top Right -->
+    <div class="sort-container">
+        <div class="dropdown1">
+            <button class="sort-button" id="sortDropdown">
+                Sort By: <span id="currentSort">Featured</span>
+                <span class="dropdown1-arrow">▼</span>
+            </button>
+            <div class="dropdown1-content" id="sortOptions">
+                <a href="?sort=featured" class="sort-option active">Featured</a>
+                <a href="?sort=price_low" class="sort-option">Price: Low to High</a>
+                <a href="?sort=price_high" class="sort-option">Price: High to Low</a>
+                <a href="?sort=relevance" class="sort-option">Relevance</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="product-grid">
+        <!-- Left Sidebar Filters -->
+        <div class="filters">
+            <h2>{{ product_category}}</h2>
+            <nav>
+                <ul class="nav flex-column">
+                    {% for category in categories %}
+                    <li class="nav-item">
+                        <a href="{% url 'products' collection_name=category|lower|slugify %}" 
+                           class="category-link {% if category|lower in collection_name|lower %}active{% endif %}">
+                            {{ category }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </nav>
+
+            <div class="filter-section">
+                <h3>Filter By:</h3>
+                <div class="sizes-filter">
+                    <h4>SIZES</h4>
+                    <p>Most of our shoes only come in full sizes. If you're a half size, select your nearest whole size too.</p>
+                    <div class="size-grid">
+                        {% for size in sizes %}
+                            <div class="size-option">{{ size }}</div>
+                            {% if size != 12 %}
+                                <div class="size-option">{{ size }}.5</div>
+                            {% endif %}
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Product Grid -->
+        <div class="products-container">
+            {% if products.exists %}
+                {% for product in products %}
+                <a href="{% url 'product_page' collection_name=collection_name product_slug=product.slug %}" class="product-link">                
+                    <div class="product-card">
+                    <div class="product-image-container">
+                        {% if forloop.first %}
+                            <span class="product-badge">NEW</span>
+                        {% elif forloop.counter == 2 %}
+                            <span class="product-badge">BESTSELLER</span>
+                        {% endif %}
+                        
+                        <img class="product-image" 
+                            src="{{ product.image_1.url }}" 
+                            alt="{{ product.product_name }}"
+                            loading="lazy">
+                    </div>
+                    <h3 class="product-name">{{ product.product_name }}</h3>
+                    <p class="product-price">₹{{ product.price|floatformat:2 }}</p>
+                </div>
+                </a>
+                {% endfor %}
+                {% else %}
+                <div class="no-products">
+                    <h3>No products available</h3>
+                    <p>Please check back later.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endblock %}
+
+    <!-- JavaScript for Sort Dropdown -->
+    {% block scripts %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sortDropdown = document.getElementById('sortDropdown');
+            const sortOptions = document.getElementById('sortOptions');
+            const currentSort = document.getElementById('currentSort');
+            const options = document.querySelectorAll('.sort-option');
+            
+            // Toggle dropdown visibility
+            sortDropdown.addEventListener('click', function() {
+                sortOptions.classList.toggle('show');
+            });
+            
+            // Close dropdown when clicking outside
+            window.addEventListener('click', function(event) {
+                if (!event.target.matches('.sort-button') && !event.target.parentNode.matches('.sort-button')) {
+                    sortOptions.classList.remove('show');
+                }
+            });
+            
+            // Update current sort text based on URL parameter
+            const urlParams = new URLSearchParams(window.location.search);
+            const sortParam = urlParams.get('sort');
+            if (sortParam) {
+                options.forEach(option => {
+                    option.classList.remove('active');
+                    if (option.getAttribute('href').includes(sortParam)) {
+                        option.classList.add('active');
+                        currentSort.textContent = option.textContent;
+                    }
+                });
+            }
+        });
+    </script>
+    {% endblock %}

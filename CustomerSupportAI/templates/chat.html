@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+
+{% block style_block %}
+<style>
+    /* Chat Container */
+    .chat-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        border-radius: 12px;
+        padding: 0;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        background-color: #fff;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        height: 80vh;
+        max-height: 700px;
+        position: relative;
+    }
+
+    /* Chat Header */
+    .chat-header {
+        padding: 1.25rem 1.5rem;
+        background-color: #1C2327;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .chat-header h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 500;
+    }
+
+    /* Chat Messages Area */
+    .chat-messages {
+        flex: 1;
+        overflow-y: auto;
+        padding: 1.5rem;
+        background-color: #f8f9fa;
+        scrollbar-width: thin;
+        scrollbar-color: #ccc transparent;
+    }
+
+    .chat-messages::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .chat-messages::-webkit-scrollbar-thumb {
+        background-color: #ccc;
+        border-radius: 3px;
+    }
+
+    .chat-messages::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    /* Message Bubbles */
+    .message {
+        padding: 1rem 1.25rem;
+        margin-bottom: 1rem;
+        border-radius: 18px;
+        max-width: 80%;
+        position: relative;
+        line-height: 1.5;
+        transition: transform 0.2s ease;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .message:last-child {
+        margin-bottom: 0.5rem;
+    }
+
+    .message.user {
+        background: #1C2327;
+        color: white;
+        margin-left: auto;
+        border-bottom-right-radius: 4px;
+    }
+
+    .message.bot {
+        background: white;
+        color: #333;
+        margin-right: auto;
+        border-bottom-left-radius: 4px;
+    }
+
+    .message-time {
+        font-size: 0.7rem;
+        opacity: 0.7;
+        margin-top: 0.5rem;
+        text-align: right;
+    }
+
+    /* Chat Form */
+    .chat-form-container {
+        padding: 1rem 1.5rem;
+        background-color: white;
+        border-top: 1px solid #eee;
+    }
+
+    .chat-form {
+        display: flex;
+        gap: 0.75rem;
+        position: relative;
+    }
+
+    .chat-form input {
+        flex: 1;
+        padding: 0.9rem 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 24px;
+        font-size: 0.95rem;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        outline: none;
+    }
+
+    .chat-form input:focus {
+        border-color: #1C2327;
+        box-shadow: 0 0 0 2px rgba(26, 57, 79, 0.1);
+    }
+
+    .chat-form button {
+        padding: 0.9rem 1.5rem;
+        background: #1C2327;
+        color: white;
+        border: none;
+        border-radius: 24px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        min-width: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .chat-form button:hover {
+        background: #2e393f;
+        transform: translateY(-2px);
+    }
+
+    .chat-form button:active {
+        transform: translateY(0);
+    }
+
+    /* Loading Animation */
+    .loading {
+        display: flex;
+        align-items: center;
+        padding: 0.75rem 1rem;
+        color: #666;
+        background: rgba(255, 255, 255, 0.8);
+        border-radius: 18px;
+        margin-bottom: 1rem;
+        max-width: fit-content;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+
+    .loading-dots {
+        display: flex;
+        margin-left: 0.5rem;
+    }
+
+    .loading-dots span {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #666;
+        margin-right: 4px;
+        animation: loadingDot 1.4s infinite ease-in-out;
+    }
+
+    .loading-dots span:nth-child(1) {
+        animation-delay: 0s;
+    }
+
+    .loading-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+
+    .loading-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+
+    @keyframes loadingDot {
+        0%, 80%, 100% {
+            transform: scale(0);
+            opacity: 0.5;
+        }
+        40% {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    /* Welcome Message Animation */
+    .message.bot.welcome {
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .chat-container {
+            margin: 1rem;
+            height: 85vh;
+            border-radius: 10px;
+        }
+
+        .message {
+            max-width: 85%;
+        }
+
+        .chat-form button {
+            min-width: 80px;
+            padding: 0.9rem 1.2rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block main_block %}
+<div class="chat-container">
+    <div class="chat-header">
+        <h2>OakTrek Assistant</h2>
+        <div class="chat-status">Online</div>
+    </div>
+    
+    <div class="chat-messages" id="chat-box">
+        {% if not request.user.chat_messages.exists %}
+        <div class="message bot welcome">
+            Welcome to OakTrek! I'm your virtual assistant. How can I help you today?
+        </div>
+        {% else %}
+            {% for msg in request.user.chat_messages.all %}
+            <div class="message {% if msg.is_bot %}bot{% else %}user{% endif %}">
+                {{ msg.message|linebreaks }}
+                <div class="message-time">
+                    {% if msg.is_bot %}Assistant{% else %}You{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    
+    <div class="chat-form-container">
+        <form id="chat-form" class="chat-form" method="post" action="{% url 'send_message' %}">
+            {% csrf_token %}
+            <input type="text" name="message" placeholder="Type your message..." required>
+            <button type="submit" id="send-button">Send</button>
+        </form>
+    </div>
+</div>
+
+<!-- Move script here to ensure DOM is loaded -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.getElementById('chat-form');
+        const chatBox = document.getElementById('chat-box');
+        
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                const userMessage = formData.get('message');
+                const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+                
+                // Disable form during submission
+                const submitButton = document.getElementById('send-button');
+                const inputField = form.querySelector('input[name="message"]');
+                submitButton.disabled = true;
+                inputField.disabled = true;
+                
+                // Get current time for message timestamp
+                const now = new Date();
+                const timeStr = now.getHours().toString().padStart(2, '0') + ':' + 
+                                now.getMinutes().toString().padStart(2, '0');
+                
+                // Add user message immediately
+                chatBox.innerHTML += `
+                    <div class="message user">
+                        ${userMessage}
+                        <div class="message-time">You · ${timeStr}</div>
+                    </div>
+                `;
+                
+                // Add loading indicator with animation
+                const loadingId = 'loading-' + Date.now();
+                chatBox.innerHTML += `
+                    <div class="loading" id="${loadingId}">
+                        Thinking
+                        <div class="loading-dots">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </div>
+                `;
+                chatBox.scrollTop = chatBox.scrollHeight;
+                
+                fetch(form.action, {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRFToken': csrfToken
+                    }
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Remove loading indicator
+                    document.getElementById(loadingId).remove();
+                    
+                    // Get updated time for bot response
+                    const responseTime = new Date();
+                    const responseTimeStr = responseTime.getHours().toString().padStart(2, '0') + ':' + 
+                                           responseTime.getMinutes().toString().padStart(2, '0');
+                    
+                    // Add bot response
+                    chatBox.innerHTML += `
+                        <div class="message bot">
+                            ${data.response}
+                            <div class="message-time">Divyansh.OakTrek.AI · ${responseTimeStr}</div>
+                        </div>
+                    `;
+                    form.reset();
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Remove loading indicator
+                    document.getElementById(loadingId).remove();
+                    
+                    // Add error message
+                    chatBox.innerHTML += `
+                        <div class="message bot">
+                            Sorry, I encountered an error. Please try again later.
+                            <div class="message-time">System</div>
+                        </div>
+                    `;
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                })
+                .finally(() => {
+                    // Re-enable form
+                    submitButton.disabled = false;
+                    inputField.disabled = false;
+                    inputField.focus();
+                });
+            });
+        } else {
+            console.error('Chat form not found!');
+        }
+        
+        // Scroll to bottom on load
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+</script>
+{% endblock %}
